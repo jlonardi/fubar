@@ -1,0 +1,3 @@
+As a user I want to add a reference 
+
+Reference type: inproceedings

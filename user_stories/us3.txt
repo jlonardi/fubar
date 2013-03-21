@@ -1,0 +1,6 @@
+As a user I want to add a reference
+
+Reference types:
+	book
+	article
+	misc

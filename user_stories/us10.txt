@@ -1,0 +1,4 @@
+As a user I want to add a reference
+
+Reference type:
+	all the rest (defined later)
