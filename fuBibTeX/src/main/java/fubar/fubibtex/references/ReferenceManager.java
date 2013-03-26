@@ -1,7 +1,6 @@
 package fubar.fubibtex.references;
 
-import java.io.Reader;
-import java.io.Writer;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +31,11 @@ public class ReferenceManager {
         return true;
     }
     
-    public boolean importFrom(Reader input) {
+    public boolean importFrom(File file) {
         return false;
     }
     
-    public boolean exportTo(Writer output) {
+    public boolean exportTo(File file) {
         return false;
     }
     
