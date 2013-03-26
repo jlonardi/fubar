@@ -1,7 +1,9 @@
+package fubar.fubibtex;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
-import references.*;
+import fubar.fubibtex.references.*;
 
 /**
  *
