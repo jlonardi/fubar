@@ -1,6 +1,6 @@
 package references;
 
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
@@ -15,6 +15,7 @@ public class Reference {
     private EnumMap<FieldType, String> fields;
     
     public Reference(Type type) {
+        fields = new EnumMap<>(FieldType.class);
         referenceType = type;
     }
     
@@ -42,19 +43,27 @@ public class Reference {
         return missing;
     }
     
-    public boolean save(PrintWriter file) {
+    public boolean save(Writer output) {
         
-        file.write("@" + referenceType.toString().toUpperCase() + " {\n");
+        try {
+            
+            output.write("\n@" + referenceType.toString().toUpperCase() + " {\n");
+
+            for (Map.Entry<FieldType, String> entry : fields.entrySet())
+                output.write("\t" 
+                                + entry.getKey().toString().toUpperCase() 
+                                + " = " 
+                                + entry.getValue()
+                                + "\n");
+
+            output.write("}\n");
+            
+        } catch (Exception e) {
+            System.out.println("Could not save reference to file" + e.getMessage());
+            return false;
+        }
         
-        for (Map.Entry<FieldType, String> entry : fields.entrySet())
-            file.write(entry.getKey().toString().toUpperCase() 
-                        + " = " 
-                        + entry.getValue()
-                        + "\n");
-        
-        file.write("}\n");
-        
-        return false;
+        return true;
     }
     
     public enum Type {
