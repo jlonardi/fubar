@@ -1,7 +1,9 @@
 package references;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -38,6 +40,21 @@ public class Reference {
         }
         
         return missing;
+    }
+    
+    public boolean save(PrintWriter file) {
+        
+        file.write("@" + referenceType.toString().toUpperCase() + " {\n");
+        
+        for (Map.Entry<FieldType, String> entry : fields.entrySet())
+            file.write(entry.getKey().toString().toUpperCase() 
+                        + " = " 
+                        + entry.getValue()
+                        + "\n");
+        
+        file.write("}\n");
+        
+        return false;
     }
     
     public enum Type {
