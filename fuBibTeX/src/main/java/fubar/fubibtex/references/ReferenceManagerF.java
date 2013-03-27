@@ -36,15 +36,31 @@ public class ReferenceManagerF implements IReferenceManager {
         
         return true;
     }
+
+	public File getImportFile() {
+		return importFile;
+	}
+
+	public void setImportFile(File importFile) {
+		this.importFile = importFile;
+	}
+
+	public File getExportFile() {
+		return exportFile;
+	}
+
+	public void setExportFile(File exportFile) {
+		this.exportFile = exportFile;
+	}
     
 	@Override
     public boolean importFrom() {
-        return false;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 	@Override
     public boolean exportTo() {
-        return false;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**

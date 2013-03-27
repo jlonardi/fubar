@@ -13,18 +13,22 @@ import java.util.List;
  *
  * @author aaltotuo
  */
-public class GUIReferenceManager implements IGUIReferenceManager {
+public class GUIReferenceManagerF implements IGUIReferenceManager {
 	ReferenceManagerF dataStoreManager;
 	ReferenceManagerF exportManager;
-	
+
 	File datastore;
-	
-	
-	@Override
-	public void initGUIReferenceManager(File datastore) {
-		this.datastore = datastore;
+
+	public File getDatastore() {
+		return datastore;
 	}
 
+	public void setDatastore(File datastore) {
+		this.datastore = datastore;
+		dataStoreManager.setExportFile(datastore);
+		dataStoreManager.setImportFile(datastore);
+	}	
+	
 	@Override
 	public boolean addReferenceToDatastore(Reference ref) {
 		return dataStoreManager.addReference(ref);
@@ -53,6 +57,7 @@ public class GUIReferenceManager implements IGUIReferenceManager {
 
 	@Override
 	public boolean exportToFile(File file) {
+		exportManager.setExportFile(file);
 		return exportManager.exportTo();
 	}	
 

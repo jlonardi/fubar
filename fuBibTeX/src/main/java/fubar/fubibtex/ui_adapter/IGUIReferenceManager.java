@@ -13,13 +13,7 @@ import java.util.List;
  * @author aaltotuo
  */
 public interface IGUIReferenceManager {
-	
-	/**
-	 * Initializes the GUI ReferenceManager.
-	 * [Solution not optimal (since File is used), might come up with something generic]
-	 */
-	public void initGUIReferenceManager(File datastore);
-	
+		
 	/**
 	 * Tries to add a refence to the datamodel linked with the datastore.
 	 * If the reference does not have all the required fields, the addition will fail.
