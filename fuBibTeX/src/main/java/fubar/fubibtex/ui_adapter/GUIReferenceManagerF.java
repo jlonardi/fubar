@@ -40,6 +40,11 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 	}
 
 	@Override
+	public List<Reference> getReferencesFromDatastore() {
+		return dataStoreManager.getReferences();
+	}	
+	
+	@Override
 	public boolean loadFromDatastore() {
 		return dataStoreManager.importFrom();
 	}
@@ -65,5 +70,6 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 	public boolean clearExportList() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
 	
 }

@@ -81,5 +81,14 @@ public class ReferenceManagerF implements IReferenceManager {
         
         return refsFound;
     }
+
+	/**
+	 * Returns all references contained in the manager
+	 * @return List of references.
+	 */
+	@Override
+	public List<Reference> getReferences() {
+		return referenceList;
+	}
     
 }

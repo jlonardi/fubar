@@ -28,6 +28,13 @@ public interface IReferenceManager {
 	List<Reference> getReferencesByFilter(Reference.FieldType type, String filter);
 
 	/**
+	 * Returns all references contained in the manager
+	 * @return List of references.
+	 */
+	List<Reference> getReferences();
+	
+	
+	/**
 	 * Exports references from data model to some datastore. Datastore type is implementation-specific
 	 * @return Boolean determining if the export succeeded.
 	 */

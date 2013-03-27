@@ -31,6 +31,12 @@ public interface IGUIReferenceManager {
 	List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter);
 	
 	/**
+	 * Returns all references contained in the data model
+	 * @return List of references.
+	 */
+	List<Reference> getReferencesFromDatastore();
+	
+	/**
 	 * Loads references from datastore to internal data model. 
 	 * @return Boolean determining if the import succeeded.
 	 */
