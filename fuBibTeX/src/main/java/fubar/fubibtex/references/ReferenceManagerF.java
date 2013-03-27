@@ -8,10 +8,15 @@ import java.util.List;
  *
  * @author fubar
  */
-public class ReferenceManager {
-    private ArrayList<Reference> referenceList;
+public class ReferenceManagerF implements IReferenceManager {
     
-    public ReferenceManager() {
+	private ArrayList<Reference> referenceList;
+    
+	//This referencemanager uses files as datastores.
+	private File importFile;
+	private File exportFile;
+	
+    public ReferenceManagerF() {
         referenceList = new ArrayList<>();
     }
     
@@ -21,6 +26,7 @@ public class ReferenceManager {
      * @param ref
      * @return Boolean determining if the addition succeeded.
      */
+	@Override
     public boolean addReference(Reference ref) {
         List<Reference.FieldType> reqFields = ReferenceFields.getRequiredFields(ref.getType());
         
@@ -31,11 +37,13 @@ public class ReferenceManager {
         return true;
     }
     
-    public boolean importFrom(File file) {
+	@Override
+    public boolean importFrom() {
         return false;
     }
     
-    public boolean exportTo(File file) {
+	@Override
+    public boolean exportTo() {
         return false;
     }
     
@@ -45,6 +53,7 @@ public class ReferenceManager {
      * @param filter The string to filter with.
      * @return List of references found by filtering.
      */
+	@Override
     public List<Reference> getReferencesByFilter(Reference.FieldType type, String filter) {
         ArrayList<Reference> refsFound = new ArrayList<>();        
         
