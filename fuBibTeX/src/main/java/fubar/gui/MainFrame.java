@@ -1,5 +1,6 @@
 package fubar.gui;
 
+import fubar.fubibtex.ui_adapter.IGUIReferenceManager;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -20,14 +21,16 @@ public class MainFrame {
     private ButtonTray buttonTray;
     private ReferenceListView listView;
     private AddReferenceView addReferenceView;
+    public static IGUIReferenceManager manager;
 
-    public MainFrame() {
+    public MainFrame(IGUIReferenceManager UImanager) {
 
+        manager = UImanager;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenWidth = screenSize.getWidth();
         double screenHeight = screenSize.getHeight();
-        int frameWidth = (int) (0.7 * screenWidth);
-        int frameHeight = (int) (0.7 * screenHeight);
+        int frameWidth = (int) (0.4 * screenWidth);
+        int frameHeight = (int) (0.4 * screenHeight);
         frameSize = new Dimension(frameWidth, frameHeight);
 
         initFrame();

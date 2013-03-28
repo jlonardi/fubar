@@ -14,6 +14,11 @@ public class AddReferenceView extends JPanel implements View{
         // Just for developing the layout
         this.setBackground(Color.red);
     }
+    
+    private JPanel setupTypeListPanel() {
+        JPanel panel = new JPanel();
+        return null;
+    }
     @Override
     public void render(Dimension dimension, Insets inset) {
         this.setSize(dimension);

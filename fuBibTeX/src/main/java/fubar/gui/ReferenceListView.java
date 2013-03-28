@@ -35,11 +35,11 @@ public class ReferenceListView extends JPanel implements View {
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
         
         // Layout visualization for development
-        listPanel.setBackground(Color.red);
-        controlPanel.setBackground(Color.BLUE);
+        //listPanel.setBackground(Color.red);
+        //controlPanel.setBackground(Color.BLUE);
         
         // Set up the list and the scroller
-        referenceList = new JList(dummyList());
+        referenceList = new JList(MainFrame.manager.getReferencesFromDatastore().toArray());
         referenceList.setLayoutOrientation(JList.VERTICAL);
         listScroller = new JScrollPane(referenceList);
         listPanel.add(listScroller);
@@ -63,8 +63,8 @@ public class ReferenceListView extends JPanel implements View {
     @Override
     public void render(Dimension dimension, Insets insets) {
         this.setSize(dimension);
-        listPanel.setBounds(0, 0, (int)(this.getSize().width*0.8), (int)(this.getSize().height));
-        controlPanel.setBounds((int)(this.getSize().width*0.8), 0, (int)(this.getSize().width*0.2), (int)(this.getSize().height));
+        listPanel.setBounds(0, 0, (int)(this.getSize().width*0.6), (int)(this.getSize().height));
+        controlPanel.setBounds((int)(this.getSize().width*0.6), 0, (int)(this.getSize().width*0.4), (int)(this.getSize().height));
         listScroller.setBounds(
                                 (int)(listPanel.getSize().width*0.03),
                                 (int)(listPanel.getSize().height*0.03),
@@ -72,11 +72,5 @@ public class ReferenceListView extends JPanel implements View {
                                 (int)(listPanel.getSize().height*0.94)-insets.top-insets.bottom
                             );
         
-    }
-    
-    private Integer[] dummyList() {
-        Integer[] ints = new Integer[20];
-        for(int i=0; i < ints.length; i++) ints[i] = i;
-        return ints;
     }
 }
