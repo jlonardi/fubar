@@ -258,6 +258,7 @@ public class AddReferenceView extends JPanel implements View {
                 updateFieldPanel();
                 
                 MainFrame.manager.addReferenceToDatastore(ref);
+                frame.dataUpdated();
                 frame.showView(ViewType.REFERENCE_LIST);
             }
         };

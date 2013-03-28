@@ -139,4 +139,8 @@ public class MainFrame {
     public JFrame getFrame() {
         return this.frame;
     }
+    
+    public void dataUpdated() {
+        this.buttonTray.dataChanged();
+    }
 }

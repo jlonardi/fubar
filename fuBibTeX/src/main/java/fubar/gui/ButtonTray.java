@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class ButtonTray extends JPanel implements View {
+public class ButtonTray extends JPanel {
     
     JButton save, exportBibtext, importBibtext;
     
@@ -28,8 +28,10 @@ public class ButtonTray extends JPanel implements View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainFrame.manager.saveToDatastore();
+                save.setEnabled(false);
             }
         });
+        save.setEnabled(false);
         this.add(save);
         
         exportBibtext = new JButton("Export");
@@ -40,7 +42,8 @@ public class ButtonTray extends JPanel implements View {
         
         this.setVisible(true);
     }
-    @Override
-    public void render(Dimension dimension) {
+    
+    public void dataChanged() {
+        save.setEnabled(true);
     }
 }
