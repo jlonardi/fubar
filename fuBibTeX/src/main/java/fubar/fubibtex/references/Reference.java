@@ -74,6 +74,11 @@ public class Reference {
         return true;
     }
     
+    @Override
+    public String toString() {
+        return this.CitationKey;
+    }
+    
     public enum Type {
         Article,
         Book,
