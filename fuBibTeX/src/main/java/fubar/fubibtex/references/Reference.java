@@ -16,7 +16,7 @@ public class Reference {
     private String CitationKey;
     
     public Reference(Type type) {
-        fields = new EnumMap<>(FieldType.class);
+        fields = new EnumMap<FieldType, String>(FieldType.class);
         referenceType = type;
     }
     
@@ -41,7 +41,7 @@ public class Reference {
     }
     public List<FieldType> getMissingFields() {
         List<FieldType> reqFields = ReferenceFields.getRequiredFields(referenceType);
-        ArrayList<FieldType> missing = new ArrayList<>();
+        ArrayList<FieldType> missing = new ArrayList<FieldType>();
         
         for (FieldType req : reqFields) {
             if (!fields.containsKey(req))

@@ -17,7 +17,7 @@ public class ReferenceManagerF implements IReferenceManager {
 	private File exportFile;
 	
     public ReferenceManagerF() {
-        referenceList = new ArrayList<>();
+        referenceList = new ArrayList<Reference>();
     }
     
     /**
@@ -71,7 +71,7 @@ public class ReferenceManagerF implements IReferenceManager {
      */
 	@Override
     public List<Reference> getReferencesByFilter(Reference.FieldType type, String filter) {
-        ArrayList<Reference> refsFound = new ArrayList<>();        
+        ArrayList<Reference> refsFound = new ArrayList<Reference>();        
         
         for (Reference ref : referenceList) {
             String val = ref.getField(type);

@@ -26,11 +26,11 @@ public class ReferenceFields {
     }
     
     private static void initialize() {
-        requiredFields = new EnumMap<>(Reference.Type.class);
-        optionalFields = new EnumMap<>(Reference.Type.class);
+        requiredFields = new EnumMap<Reference.Type, List<Reference.FieldType>>(Reference.Type.class);
+        optionalFields = new EnumMap<Reference.Type, List<Reference.FieldType>>(Reference.Type.class);
         
-        ArrayList<Reference.FieldType> reqFieldTypes = new ArrayList<>();
-        ArrayList<Reference.FieldType> optFieldTypes = new ArrayList<>();
+        ArrayList<Reference.FieldType> reqFieldTypes = new ArrayList<Reference.FieldType>();
+        ArrayList<Reference.FieldType> optFieldTypes = new ArrayList<Reference.FieldType>();
         
         reqFieldTypes.add(Reference.FieldType.Author);
         reqFieldTypes.add(Reference.FieldType.Title);
