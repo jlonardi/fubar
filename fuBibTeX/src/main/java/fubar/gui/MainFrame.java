@@ -102,6 +102,7 @@ public class MainFrame {
             public void componentHidden(ComponentEvent e) {
             }
         });
+        renderAll();
     }
 
     public void showView(ViewType type) {
