@@ -15,22 +15,35 @@ public class ReferenceFields {
     
     private static boolean initialized = false;
     
+    /**
+     * Returns the required fields for a given type of reference.
+     * @param type The type of the reference.
+     * @return List of the required fields.
+     */
     public static List<Reference.FieldType> getRequiredFields(Reference.Type type) {
         if (!initialized) initialize();
         return requiredFields.get(type);
     }
     
+    /**
+     * Returns the optional fields for a given type of reference.
+     * @param type The type of the reference.
+     * @return List of the optional fields.
+     */
     public static List<Reference.FieldType> getOptionalFields(Reference.Type type) {
         if (!initialized) initialize();
         return optionalFields.get(type);
     }
     
+    /**
+     * Initializes the required and optional fields for all types of references.
+     */
     private static void initialize() {
-        requiredFields = new EnumMap<>(Reference.Type.class);
-        optionalFields = new EnumMap<>(Reference.Type.class);
+        requiredFields = new EnumMap<Reference.Type, List<Reference.FieldType>>(Reference.Type.class);
+        optionalFields = new EnumMap<Reference.Type, List<Reference.FieldType>>(Reference.Type.class);
         
-        ArrayList<Reference.FieldType> reqFieldTypes = new ArrayList<>();
-        ArrayList<Reference.FieldType> optFieldTypes = new ArrayList<>();
+        ArrayList<Reference.FieldType> reqFieldTypes = new ArrayList<Reference.FieldType>();
+        ArrayList<Reference.FieldType> optFieldTypes = new ArrayList<Reference.FieldType>();
         
         reqFieldTypes.add(Reference.FieldType.Author);
         reqFieldTypes.add(Reference.FieldType.Title);
