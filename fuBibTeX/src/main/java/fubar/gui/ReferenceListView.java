@@ -1,0 +1,82 @@
+package fubar.gui;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+public class ReferenceListView extends JPanel implements View {
+    private JList referenceList;
+    private JScrollPane listScroller;
+    private JPanel listPanel, controlPanel;
+    private JButton addReferenceButton;
+    private ArrayList<Component> componentList;
+    private MainFrame frame;
+    
+    public ReferenceListView(final MainFrame frame) {
+        this.frame = frame;
+        this.setLayout(null);
+        
+        // Set up the left side of the view that holds the list
+        listPanel = new JPanel();
+        listPanel.setLayout(null);
+        
+        // Set up the right side of the view that holds the control buttons
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+        
+        // Layout visualization for development
+        listPanel.setBackground(Color.red);
+        controlPanel.setBackground(Color.BLUE);
+        
+        // Set up the list and the scroller
+        referenceList = new JList(dummyList());
+        referenceList.setLayoutOrientation(JList.VERTICAL);
+        listScroller = new JScrollPane(referenceList);
+        listPanel.add(listScroller);
+        
+        // Set up the buttons
+        addReferenceButton = new JButton("Add new entry");
+        addReferenceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.showView(ViewType.ADD_REFERENCE);
+            }
+        });
+        controlPanel.add(Box.createHorizontalGlue());
+        controlPanel.add(addReferenceButton);
+        controlPanel.add(Box.createHorizontalGlue());
+        
+        this.add(listPanel);
+        this.add(controlPanel);
+    }
+    
+    @Override
+    public void render(Dimension dimension, Insets insets) {
+        this.setSize(dimension);
+        listPanel.setBounds(0, 0, (int)(this.getSize().width*0.8), (int)(this.getSize().height));
+        controlPanel.setBounds((int)(this.getSize().width*0.8), 0, (int)(this.getSize().width*0.2), (int)(this.getSize().height));
+        listScroller.setBounds(
+                                (int)(listPanel.getSize().width*0.03),
+                                (int)(listPanel.getSize().height*0.03),
+                                (int)(listPanel.getSize().width*0.94),
+                                (int)(listPanel.getSize().height*0.94)-insets.top-insets.bottom
+                            );
+        
+    }
+    
+    private Integer[] dummyList() {
+        Integer[] ints = new Integer[20];
+        for(int i=0; i < ints.length; i++) ints[i] = i;
+        return ints;
+    }
+}
