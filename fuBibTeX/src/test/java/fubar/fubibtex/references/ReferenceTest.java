@@ -5,6 +5,7 @@
 package fubar.fubibtex.references;
 
 import java.util.List;
+import java.io.StringWriter;
 import junit.framework.TestCase;
 
 /**
@@ -45,6 +46,30 @@ public class ReferenceTest extends TestCase {
     
     public void testReturnRightCitationKey() {
         assertEquals("PL09", ref.getCitationKey());
+    }
+    
+    public void testReturnsCitationKeyOnToString() {
+        assertEquals("PL09", ref.toString());
+    }
+    
+    public void testSavesCorrectly() {
+        /**
+         * 
+         * @INPROCEEDINGS {PL09
+         */
+        String properReturn = "\n@" + ref.getType().toString().toUpperCase();
+        properReturn += " {" + ref.getCitationKey() + ",\n";
+        properReturn += "\t" + Reference.FieldType.Author.toString().toUpperCase(); 
+        properReturn += " = {" + ref.getField(Reference.FieldType.Author) + "},\n";
+        properReturn += "\t" + Reference.FieldType.Title.toString().toUpperCase(); 
+        properReturn += " = {" + ref.getField(Reference.FieldType.Title) + "},\n";
+        properReturn += "}\n";
+        
+        StringWriter sw = new StringWriter();
+        
+        ref.save(sw);
+        
+        assertEquals(properReturn, sw.toString());
     }
     
     public void testProperlySetsCitationKey() {

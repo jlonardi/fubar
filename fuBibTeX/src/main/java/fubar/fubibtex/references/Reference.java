@@ -13,7 +13,7 @@ import java.util.List;
 public class Reference {
     private Type referenceType;
     private EnumMap<FieldType, String> fields;
-    private String CitationKey;
+    private String citationKey;
     
     public Reference(Type type) {
         fields = new EnumMap<FieldType, String>(FieldType.class);
@@ -33,11 +33,11 @@ public class Reference {
     }
     
     public void setCitationKey(String key) {
-        this.CitationKey = key;
+        this.citationKey = key;
     }
     
     public String getCitationKey() {
-        return this.CitationKey;
+        return this.citationKey;
     }
     public List<FieldType> getMissingFields() {
         List<FieldType> reqFields = ReferenceFields.getRequiredFields(referenceType);
@@ -55,13 +55,17 @@ public class Reference {
         
         try {
             
-            output.write("\n@" + referenceType.toString().toUpperCase() + " {\n");
+            output.write("\n@" 
+                            + referenceType.toString().toUpperCase() 
+                            + " {" 
+                            + citationKey 
+                            + ",\n");
 
             for (Map.Entry<FieldType, String> entry : fields.entrySet())
                 output.write("\t" 
                                 + entry.getKey().toString().toUpperCase() 
                                 + " = " 
-                                + entry.getValue()
+                                + "{" + entry.getValue() + "},"
                                 + "\n");
 
             output.write("}\n");
@@ -76,7 +80,7 @@ public class Reference {
     
     @Override
     public String toString() {
-        return this.CitationKey;
+        return this.citationKey;
     }
     
     public enum Type {
