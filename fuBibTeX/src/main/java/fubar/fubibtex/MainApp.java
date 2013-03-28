@@ -37,10 +37,12 @@ public class MainApp {
                 Reference ref = new Reference(Reference.Type.InProceedings);
                 ref.setField(Reference.FieldType.Title, "Systeemihommia");
                 ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
+                ref.setCitationKey("Petteri2012");
                 list.add(ref);
                 ref = new Reference(Reference.Type.InProceedings);
                 ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
                 ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
+                ref.setCitationKey("LoL3013");
                 list.add(ref);
                 return list;
             }

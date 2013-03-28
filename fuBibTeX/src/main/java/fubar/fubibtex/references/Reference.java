@@ -13,6 +13,7 @@ import java.util.List;
 public class Reference {
     private Type referenceType;
     private EnumMap<FieldType, String> fields;
+    private String CitationKey;
     
     public Reference(Type type) {
         fields = new EnumMap<>(FieldType.class);
@@ -31,6 +32,13 @@ public class Reference {
         fields.put(type, value);
     }
     
+    public void setCitationKey(String key) {
+        this.CitationKey = key;
+    }
+    
+    public String getCitationKey(String key) {
+        return this.CitationKey;
+    }
     public List<FieldType> getMissingFields() {
         List<FieldType> reqFields = ReferenceFields.getRequiredFields(referenceType);
         ArrayList<FieldType> missing = new ArrayList<>();
