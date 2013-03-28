@@ -36,7 +36,7 @@ public class Reference {
         this.CitationKey = key;
     }
     
-    public String getCitationKey(String key) {
+    public String getCitationKey() {
         return this.CitationKey;
     }
     public List<FieldType> getMissingFields() {
@@ -67,7 +67,7 @@ public class Reference {
             output.write("}\n");
             
         } catch (Exception e) {
-            System.out.println("Could not save reference to file" + e.getMessage());
+            System.out.println("Could not save reference to writer: " + e.getMessage());
             return false;
         }
         

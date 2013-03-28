@@ -25,7 +25,7 @@ public class ReferenceTest extends TestCase {
         ref = new Reference(Reference.Type.InProceedings);
         reqFields = ReferenceFields.getRequiredFields(Reference.Type.InProceedings);
         
-        ref.getCitationKey("PL09");
+        ref.setCitationKey("PL09");
         ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
         ref.setField(Reference.FieldType.Title, "SysteemiJuttuja");
     }
@@ -33,6 +33,23 @@ public class ReferenceTest extends TestCase {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+    }
+    
+    public void testReturnsRightType() {
+        assertEquals(ref.getType(), Reference.Type.InProceedings);
+    }
+    
+    public void testReturnsRightField() {
+        assertEquals("Petteri Linnakangas", ref.getField(Reference.FieldType.Author));
+    }
+    
+    public void testReturnRightCitationKey() {
+        assertEquals("PL09", ref.getCitationKey());
+    }
+    
+    public void testProperlySetsCitationKey() {
+        ref.setCitationKey("PL10");
+        assertEquals("PL10", ref.getCitationKey());
     }
     
     public void testRecognizesMissingFields() {
