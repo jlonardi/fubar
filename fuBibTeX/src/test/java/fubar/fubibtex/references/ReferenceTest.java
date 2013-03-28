@@ -54,8 +54,10 @@ public class ReferenceTest extends TestCase {
     
     public void testSavesCorrectly() {
         /**
-         * 
-         * @INPROCEEDINGS {PL09
+         * @INPROCEEDINGS {PL09,
+         *     AUTHOR = {Petteri Linnakangas},
+         *     TITLE = {SysteemiJuttuja},
+         * }
          */
         String properReturn = "\n@" + ref.getType().toString().toUpperCase();
         properReturn += " {" + ref.getCitationKey() + ",\n";

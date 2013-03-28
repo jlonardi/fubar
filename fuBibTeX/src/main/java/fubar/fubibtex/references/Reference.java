@@ -15,30 +15,61 @@ public class Reference {
     private EnumMap<FieldType, String> fields;
     private String citationKey;
     
+    /**
+     * Constructs a new reference based on the type.
+     * @param type The type of this reference
+     */
     public Reference(Type type) {
         fields = new EnumMap<FieldType, String>(FieldType.class);
         referenceType = type;
     }
     
+    /**
+     * 
+     * @return The type of this reference
+     */
     public Type getType() {
         return referenceType;
     }
 
+    /**
+     * 
+     * @param type The type of the field
+     * @return value of the field
+     */
     public String getField(FieldType type) {
         return fields.get(type);
     }
     
+    /**
+     * 
+     * @param type Type of the field.
+     * @param value Value of the field.
+     */
     public void setField(FieldType type, String value) {
         fields.put(type, value);
     }
     
+    /**
+     * 
+     * @param key New citation key.
+     */
     public void setCitationKey(String key) {
         this.citationKey = key;
     }
     
+    /**
+     * 
+     * @return The citation key of this reference
+     */
     public String getCitationKey() {
         return this.citationKey;
     }
+    
+    /**
+     * Checks the reference for possible required fields that are missing.
+     * @return A list of the missing fields.
+     */
     public List<FieldType> getMissingFields() {
         List<FieldType> reqFields = ReferenceFields.getRequiredFields(referenceType);
         ArrayList<FieldType> missing = new ArrayList<FieldType>();
@@ -51,6 +82,11 @@ public class Reference {
         return missing;
     }
     
+    /**
+     * Tries to save the reference to a Writer stream.
+     * @param output
+     * @return Value indicating success.
+     */
     public boolean save(Writer output) {
         
         try {
@@ -78,6 +114,10 @@ public class Reference {
         return true;
     }
     
+    /**
+     * Returns the citation key of this reference.
+     * @return The citation key of this reference.
+     */
     @Override
     public String toString() {
         return this.citationKey;
