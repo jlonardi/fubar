@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 
 import fubar.fubibtex.references.*;
+import fubar.gui.MainFrame;
 
 /**
  *
@@ -12,6 +13,9 @@ import fubar.fubibtex.references.*;
 public class MainApp {
     
     public static void main(String[] args) {
+        
+        MainFrame frame = new MainFrame();
+        frame.draw();
         
         try {
             System.out.println("Opening file...");
@@ -32,7 +36,7 @@ public class MainApp {
         } catch (Exception e) {
             System.out.println("There was an exception: " + e.getMessage());
         }
-        
+       
     }
     
 }
