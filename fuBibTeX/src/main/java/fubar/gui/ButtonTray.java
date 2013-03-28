@@ -1,28 +1,34 @@
 package fubar.gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ButtonTray extends JPanel {
-    
+
     JButton save, exportBibtext, importBibtext;
-    
+    final JFileChooser fc;
+
     public ButtonTray() {
+
+        fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTeX files .bib", "bib");
+        fc.setFileFilter(filter);
         
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
         this.setLayout(layout);
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
-        
+
         // Just for development
         //this.setBackground(Color.GREEN);
-        
+
         save = new JButton("Save");
         save.addActionListener(new ActionListener() {
             @Override
@@ -33,16 +39,46 @@ public class ButtonTray extends JPanel {
         });
         save.setEnabled(false);
         this.add(save);
-        
+
         exportBibtext = new JButton("Export");
+        exportBibtext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int returnVal = fc.showOpenDialog(ButtonTray.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    MainFrame.manager.exportToFile(file);
+                    System.out.println("Opening: " + file.getName());
+                } else {
+                    System.out.println("Open command cancelled by user.");
+                }
+
+            }
+        });
         this.add(exportBibtext);
-        
+
         importBibtext = new JButton("Import");
+        importBibtext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int returnVal = fc.showOpenDialog(ButtonTray.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    // -----------TODO---------
+                    // GIVE FILE TO MANAGER FOR IMPORT
+                    // ------------------------
+                    System.out.println("Opening: " + file.getName());
+                } else {
+                    System.out.println("Open command cancelled by user.");
+                }
+
+            }
+        });
         this.add(importBibtext);
-        
+
         this.setVisible(true);
     }
-    
+
     public void dataChanged() {
         save.setEnabled(true);
     }
