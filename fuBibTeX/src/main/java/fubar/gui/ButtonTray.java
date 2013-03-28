@@ -44,13 +44,14 @@ public class ButtonTray extends JPanel {
         exportBibtext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int returnVal = fc.showOpenDialog(ButtonTray.this);
+                int returnVal = fc.showSaveDialog(ButtonTray.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
+                    file = new File(file.getName()+".bib");
                     MainFrame.manager.exportToFile(file);
-                    System.out.println("Opening: " + file.getName());
+                    System.out.println("Saving: " + file.getName());
                 } else {
-                    System.out.println("Open command cancelled by user.");
+                    System.out.println("Save command cancelled by user.");
                 }
 
             }
