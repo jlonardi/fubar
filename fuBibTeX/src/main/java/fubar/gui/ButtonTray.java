@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class ButtonTray extends JPanel implements View {
     
@@ -17,6 +18,7 @@ public class ButtonTray extends JPanel implements View {
         
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
         this.setLayout(layout);
+        this.setBorder(new EmptyBorder(10, 10, 10, 10));
         
         // Just for development
         //this.setBackground(Color.GREEN);
@@ -39,6 +41,6 @@ public class ButtonTray extends JPanel implements View {
         this.setVisible(true);
     }
     @Override
-    public void render(Dimension dimension, Insets insets) {
+    public void render(Dimension dimension) {
     }
 }

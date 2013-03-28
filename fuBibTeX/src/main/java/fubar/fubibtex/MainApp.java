@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 
 import fubar.fubibtex.references.*;
-import fubar.fubibtex.ui_adapter.GUIReferenceManagerF;
 import fubar.fubibtex.ui_adapter.IGUIReferenceManager;
 import fubar.gui.MainFrame;
 import java.io.File;
@@ -20,20 +19,9 @@ public class MainApp {
     public static void main(String[] args) {
         
         IGUIReferenceManager manager = new IGUIReferenceManager() {
-
-            @Override
-            public boolean addReferenceToDatastore(Reference ref) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Reference> getReferencesFromDatastore() {
-                ArrayList<Reference> list = new ArrayList();
+            ArrayList<Reference> list = new ArrayList();
+            
+            private void init() {
                 Reference ref = new Reference(Reference.Type.InProceedings);
                 ref.setField(Reference.FieldType.Title, "Systeemihommia");
                 ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
@@ -44,12 +32,27 @@ public class MainApp {
                 ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
                 ref.setCitationKey("LoL3013");
                 list.add(ref);
+            }
+            @Override
+            public boolean addReferenceToDatastore(Reference ref) {
+                list.add(ref);
+                return true;
+            }
+
+            @Override
+            public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public List<Reference> getReferencesFromDatastore() {
                 return list;
             }
 
             @Override
             public boolean loadFromDatastore() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                init();
+                return true;
             }
 
             @Override

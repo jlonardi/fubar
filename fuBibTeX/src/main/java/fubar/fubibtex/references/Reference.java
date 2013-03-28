@@ -36,7 +36,7 @@ public class Reference {
         this.CitationKey = key;
     }
     
-    public String getCitationKey(String key) {
+    public String getCitationKey() {
         return this.CitationKey;
     }
     public List<FieldType> getMissingFields() {

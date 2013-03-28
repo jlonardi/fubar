@@ -1,12 +1,8 @@
 package fubar.gui;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,7 +15,6 @@ public class ReferenceListView extends JPanel implements View {
     private JScrollPane listScroller;
     private JPanel listPanel, controlPanel;
     private JButton addReferenceButton;
-    private ArrayList<Component> componentList;
     private MainFrame frame;
     
     public ReferenceListView(final MainFrame frame) {
@@ -61,16 +56,17 @@ public class ReferenceListView extends JPanel implements View {
     }
     
     @Override
-    public void render(Dimension dimension, Insets insets) {
+    public void render(Dimension dimension) {
         this.setSize(dimension);
         listPanel.setBounds(0, 0, (int)(this.getSize().width*0.6), (int)(this.getSize().height));
         controlPanel.setBounds((int)(this.getSize().width*0.6), 0, (int)(this.getSize().width*0.4), (int)(this.getSize().height));
         listScroller.setBounds(
                                 (int)(listPanel.getSize().width*0.03),
-                                (int)(listPanel.getSize().height*0.03),
+                                10,
                                 (int)(listPanel.getSize().width*0.94),
-                                (int)(listPanel.getSize().height*0.94)-insets.top-insets.bottom
+                                (int)(listPanel.getSize().height*0.94)
                             );
-        
+        referenceList.setListData(MainFrame.manager.getReferencesFromDatastore().toArray());
+        referenceList.revalidate();
     }
 }
