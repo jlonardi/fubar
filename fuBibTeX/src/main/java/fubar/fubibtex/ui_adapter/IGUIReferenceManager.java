@@ -67,6 +67,8 @@ public interface IGUIReferenceManager {
 	 * @return Boolean determining if the list was cleared.
 	 */
 	public boolean clearExportList();
+        
+        public List<Reference> getExportList();
 
 	/**
 	 * Set the datastore-file used by the manager

@@ -21,7 +21,7 @@ public class MainApp {
         
         IGUIReferenceManager manager = new IGUIReferenceManager() {
             ArrayList<Reference> list = new ArrayList();
-            
+            ArrayList<Reference> exportList = new ArrayList();
             private void init() {
                 Reference ref = new Reference(Reference.Type.inproceedings);
                 ref.setField(Reference.FieldType.title, "Systeemihommia");
@@ -63,7 +63,9 @@ public class MainApp {
 
             @Override
             public boolean addToExportList(Reference ref) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                exportList.add(ref);
+                System.out.println(exportList.toString());
+                return true;
             }
 
             @Override
@@ -73,13 +75,19 @@ public class MainApp {
 
             @Override
             public boolean clearExportList() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                exportList = new ArrayList();
+                return true;
             }
 
 			@Override
 			public void setDatastore(File file) {
 				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 			}
+
+            @Override
+            public List<Reference> getExportList() {
+                return exportList;
+            }
             
         };
         

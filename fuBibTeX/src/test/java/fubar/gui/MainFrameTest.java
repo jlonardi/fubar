@@ -59,6 +59,8 @@ public class MainFrameTest extends TestCase {
         unchangedDataButtonTray();
         listViewBaseState();
         testFrame.panel("addReferenceView").requireNotVisible();
+        frame.setVisible(false);
+        frame.setVisible(true);
     }
 
     public void testImport() {
@@ -107,8 +109,8 @@ public class MainFrameTest extends TestCase {
         addReferenceViewBaseState();
 
         testFrame.comboBox("typeList").click();
-        testFrame.comboBox("typeList").selectItem(fubar.fubibtex.references.Reference.Type.Misc.name());
-        testFrame.comboBox("typeList").selectItem(fubar.fubibtex.references.Reference.Type.InProceedings.name());
+        testFrame.comboBox("typeList").selectItem(fubar.fubibtex.references.Reference.Type.misc.name());
+        testFrame.comboBox("typeList").selectItem(fubar.fubibtex.references.Reference.Type.inproceedings.name());
         testFrame.textBox("citationKeyField").enterText("test");
 
         testFrame.button("returnButton").click();
@@ -119,7 +121,7 @@ public class MainFrameTest extends TestCase {
         testFrame.panel("listView").requireNotVisible();
         addReferenceViewBaseState();
 
-        testFrame.comboBox("typeList").requireSelection(fubar.fubibtex.references.Reference.Type.InProceedings.name());
+        testFrame.comboBox("typeList").requireSelection(fubar.fubibtex.references.Reference.Type.inproceedings.name());
         testFrame.textBox("citationKeyField").requireText("");
 
         testFrame.textBox("citationKeyField").enterText("test");
@@ -127,11 +129,11 @@ public class MainFrameTest extends TestCase {
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
         testFrame.panel("listView").requireNotVisible();
         addReferenceViewBaseState();
-        List<FieldType> fieldTypes = fubar.fubibtex.references.ReferenceFields.getRequiredFields(Reference.Type.InProceedings);
+        List<FieldType> fieldTypes = fubar.fubibtex.references.ReferenceFields.getRequiredFields(Reference.Type.inproceedings);
         for (FieldType type : fieldTypes) {
             testFrame.textBox(type.name() + "TextField").setText(type.name());
         }
-        fieldTypes = fubar.fubibtex.references.ReferenceFields.getOptionalFields(Reference.Type.InProceedings);
+        fieldTypes = fubar.fubibtex.references.ReferenceFields.getOptionalFields(Reference.Type.inproceedings);
         for (int i = 0; i < fieldTypes.size(); i++) {
             if (i % 2 == 0) {
                 testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText(fieldTypes.get(i).name());
@@ -146,6 +148,16 @@ public class MainFrameTest extends TestCase {
         testFrame.button("save").requireEnabled();
         testFrame.button("save").click();
         testFrame.button("save").requireDisabled();
+    }
+    
+    public void testExportList() {
+       testFrame.list("exportList").requireItemCount(0);
+       testFrame.list("referenceList").selectItem("LoL3013");
+       testFrame.button("addToExportList").click();
+       testFrame.list("exportList").requireItemCount(1);
+       testFrame.list("exportList").selectItem("LoL3013");
+       testFrame.button("removeFromExportList").click();
+       testFrame.list("exportList").requireItemCount(0);
     }
 
     private void listViewBaseState() {
@@ -183,20 +195,19 @@ public class MainFrameTest extends TestCase {
     private IGUIReferenceManager createManagerStub() {
         return new IGUIReferenceManager() {
             ArrayList<Reference> list = new ArrayList();
-
+            ArrayList<Reference> exportList = new ArrayList();
             private void init() {
-                Reference ref = new Reference(Reference.Type.InProceedings);
-                ref.setField(Reference.FieldType.Title, "Systeemihommia");
-                ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
+                Reference ref = new Reference(Reference.Type.inproceedings);
+                ref.setField(Reference.FieldType.title, "Systeemihommia");
+                ref.setField(Reference.FieldType.author, "Petteri Linnakangas");
                 ref.setCitationKey("Petteri2012");
                 list.add(ref);
-                ref = new Reference(Reference.Type.InProceedings);
-                ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
-                ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
+                ref = new Reference(Reference.Type.inproceedings);
+                ref.setField(Reference.FieldType.title, "Koodia koodia koodia...");
+                ref.setField(Reference.FieldType.author, "Jarno Lonardi");
                 ref.setCitationKey("LoL3013");
                 list.add(ref);
             }
-
             @Override
             public boolean addReferenceToDatastore(Reference ref) {
                 list.add(ref);
@@ -226,7 +237,8 @@ public class MainFrameTest extends TestCase {
 
             @Override
             public boolean addToExportList(Reference ref) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                exportList.add(ref);
+                return true;
             }
 
             @Override
@@ -238,6 +250,17 @@ public class MainFrameTest extends TestCase {
             public boolean clearExportList() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
+
+			@Override
+			public void setDatastore(File file) {
+				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			}
+
+            @Override
+            public List<Reference> getExportList() {
+                return exportList;
+            }
+            
         };
     }
 }
