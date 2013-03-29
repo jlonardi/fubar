@@ -23,14 +23,14 @@ public class MainApp {
             ArrayList<Reference> list = new ArrayList();
             ArrayList<Reference> exportList = new ArrayList();
             private void init() {
-                Reference ref = new Reference(Reference.Type.inproceedings);
-                ref.setField(Reference.FieldType.title, "Systeemihommia");
-                ref.setField(Reference.FieldType.author, "Petteri Linnakangas");
+                Reference ref = new Reference(Reference.Type.INPROCEEDINGS);
+                ref.setField(Reference.FieldType.TITLE, "Systeemihommia");
+                ref.setField(Reference.FieldType.AUTHOR, "Petteri Linnakangas");
                 ref.setCitationKey("Petteri2012");
                 list.add(ref);
-                ref = new Reference(Reference.Type.inproceedings);
-                ref.setField(Reference.FieldType.title, "Koodia koodia koodia...");
-                ref.setField(Reference.FieldType.author, "Jarno Lonardi");
+                ref = new Reference(Reference.Type.INPROCEEDINGS);
+                ref.setField(Reference.FieldType.TITLE, "Koodia koodia koodia...");
+                ref.setField(Reference.FieldType.AUTHOR, "Jarno Lonardi");
                 ref.setCitationKey("LoL3013");
                 list.add(ref);
             }
@@ -98,11 +98,11 @@ public class MainApp {
             System.out.println("Opening file...");
             BufferedWriter file = new BufferedWriter(new FileWriter("bibtexfile.bib", true));
             System.out.println("File opened. Creating reference...");
-            Reference ref = new Reference(Reference.Type.inproceedings);
+            Reference ref = new Reference(Reference.Type.INPROCEEDINGS);
             
             System.out.println("Adding fields to reference...");
-            ref.setField(Reference.FieldType.title, "Systeemihommia");
-            ref.setField(Reference.FieldType.author, "Petteri Linnakangas");
+            ref.setField(Reference.FieldType.TITLE, "Systeemihommia");
+            ref.setField(Reference.FieldType.AUTHOR, "Petteri Linnakangas");
             
             System.out.println("Saving reference to file.");
             ref.save(file);
@@ -114,6 +114,7 @@ public class MainApp {
             System.out.println("There was an exception: " + e.getMessage());
         }
      
+		System.out.println("Testi alkaa...");
 		//Pieni demon ReferenceManagerin import & export -toiminnoista.
 		IGUIReferenceManager m = new GUIReferenceManagerF();
 		
@@ -139,6 +140,7 @@ public class MainApp {
 		
 		n.setDatastore(new File("newbib.bib"));
 		n.loadFromDatastore();
+		
 		File output1 = new File("newbib2.bib");
 
 		m.exportToFile(output1);

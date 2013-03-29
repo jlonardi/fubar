@@ -6,9 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,21 +69,22 @@ public class ReferenceManagerF implements IReferenceManager {
 	public boolean importFrom() {
 		String separator = System.getProperty("line.separator");
 		int separatorLen = separator.length();
-
+		
 		Scanner referenceScanner;
 		Scanner fieldScanner;
 		try {
 			referenceScanner = new Scanner(new BufferedReader(new FileReader(importFile)));
-			referenceScanner.useDelimiter("@");
+			referenceScanner.useDelimiter("@|"+ separator + "@");
 
 			while (referenceScanner.hasNext()) {
 				String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
+				
 				referenceString = cleanStringTerminators(referenceString);
-
+				
 				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
 				String referenceType = buildReferenceType(referenceString);
-
-				Reference r = new Reference(Reference.Type.valueOf(referenceType.toString().toLowerCase().trim()));
+				
+				Reference r = new Reference(Reference.Type.valueOf(referenceType.toString()));
 
 				referenceString = referenceString.substring(referenceType.length() + 1); //Magic +1 to remove unnecessary bracket,parenthesis or comma
 				
@@ -96,7 +95,7 @@ public class ReferenceManagerF implements IReferenceManager {
 				referenceString = referenceString.substring(referenceCitation.length() + 1 + separatorLen); //Magic +1 to remove comma, separatorLen for line separator
 
 				fieldScanner = new Scanner(referenceString);
-				fieldScanner.useDelimiter(separator); //I really, really fucking hate special cases...
+				fieldScanner.useDelimiter(separator);
 
 				while (fieldScanner.hasNext()) {
 					String field = fieldScanner.next();
@@ -105,7 +104,7 @@ public class ReferenceManagerF implements IReferenceManager {
 					field = cleanField(field);
 					field = cleanStringTerminators(field);
 
-					r.setField(Reference.FieldType.valueOf(key.toString().trim().toLowerCase()), field);
+					r.setField(Reference.FieldType.valueOf(key.toString().trim().toUpperCase()), field);
 				}
 				fieldScanner.close();
 
@@ -127,25 +126,7 @@ public class ReferenceManagerF implements IReferenceManager {
 		try {
 			
 			PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
-
-			for (int i = 0; i < referenceList.size(); i++) {
-				Reference r = referenceList.get(i);
-				EnumMap<Reference.FieldType, String> fields = r.getFields();
-				
-				pw.print("@");
-				pw.print(r.getType());
-				pw.print("{");
-				pw.print(r.getCitationKey());
-				pw.println(",");
-				
-				for (Map.Entry<Reference.FieldType, String> entry : fields.entrySet()) {
-					pw.print(entry.getKey().toString());
-					pw.print(" = ");
-					pw.println("{"+ entry.getValue().toString() +"},");					
-				}
-				pw.println("}");
-				pw.println();
-			}
+			for(Reference r : referenceList) r.save(pw);
 			pw.close();
 			
 		} catch (Exception ex) {
@@ -153,10 +134,8 @@ public class ReferenceManagerF implements IReferenceManager {
 			exportFile.delete();
 			return false;
 		}
-		
+
 		return true;
-		
-		
 	}
 
 	/**
@@ -201,7 +180,7 @@ public class ReferenceManagerF implements IReferenceManager {
 	 * @param String to be cleaned
 	 * @ret Cleaned string.
 	 */
-	private String cleanStringTerminators(String string) {
+	protected String cleanStringTerminators(String string) {
 		String ret = string;
 		if (string.endsWith("\",") || string.endsWith("},")) {
 			ret = string.substring(0, string.length() - 2);
@@ -221,16 +200,20 @@ public class ReferenceManagerF implements IReferenceManager {
 	 * @param String Input data from the Scanner
 	 * @return reference key name as a string
 	 */
-	private String buildKey(String field) {
+	protected String buildKey(String field) {
 		StringBuilder key = new StringBuilder();
-
+		String ret = "";
+		
 		for (int i = 0; i < field.length(); i++) {
 			if (field.charAt(i) == '=') {
+				ret = key.toString().toUpperCase().trim();
 				break;
 			}
-			key.append(field.charAt(i));
+			else {
+				key.append(field.charAt(i));
+			}
 		}
-		return key.toString();
+		return ret;
 	}
 
 	/**
@@ -238,16 +221,21 @@ public class ReferenceManagerF implements IReferenceManager {
 	 * @param String Input data from the Scanner
 	 * @return reference type name as a string
 	 */	
-	private String buildReferenceType(String referenceString) {
+	protected String buildReferenceType(String referenceString) {
 		StringBuilder referenceType = new StringBuilder();
-		
+		String ret = "";
+
 		for (int i = 0; i < referenceString.length(); i++) {
 			if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(') {
+				ret = referenceType.toString().toUpperCase().trim();
 				break;
 			}
-			referenceType.append(referenceString.charAt(i));
+			else 
+			{
+				referenceType.append(referenceString.charAt(i));
+			}
 		}
-		return referenceType.toString();
+		return ret;
 	}
 
 	/**
@@ -255,16 +243,21 @@ public class ReferenceManagerF implements IReferenceManager {
 	 * @param String Input data from the Scanner
 	 * @return reference citation name as a string
 	 */	
-	private String buildCitation(String referenceString) {
+	protected String buildCitation(String referenceString) {
 		StringBuilder citationKey = new StringBuilder();
+		String ret = "";
+		
 		for (int i = 0; i < referenceString.length(); i++) {
 			if (referenceString.charAt(i) == ',') {
+				ret = citationKey.toString().trim();
 				break;
 			}
-			citationKey.append(referenceString.charAt(i));
+			else
+			{
+				citationKey.append(referenceString.charAt(i));
+			}
 		}
-		return citationKey.toString();
-
+		return ret;
 	}
 
 	/**
@@ -272,7 +265,7 @@ public class ReferenceManagerF implements IReferenceManager {
 	 * @param String string with crap
 	 * @return string without crap
 	 */
-	private String cleanField(String field) {
+	protected String cleanField(String field) {
 		String ret = field;
 		if (field.indexOf('{') > 0) {
 			ret = field.substring(field.indexOf('{') + 1);

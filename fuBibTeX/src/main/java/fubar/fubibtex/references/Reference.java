@@ -40,14 +40,7 @@ public class Reference {
     public String getField(FieldType type) {
         return fields.get(type);
     }
-    
-	/**
-     * @return field map
-     */
-	public EnumMap<FieldType, String> getFields() {
-		return fields;
-	}
-	
+
     /**
      * 
      * @param type Type of the field.
@@ -131,47 +124,47 @@ public class Reference {
     }
     
     public enum Type {
-        article,
-        book,
-        booklet,
-        conference,
-        inbook,
-        incollection,
-        inproceedings,
-        manual,
-        mastersthesis,
-        misc,
-        phdthesis,
-        proceedings,
-        techreport,
-        unpublished,
+        ARTICLE,
+        BOOK,
+        BOOKLET,
+		CONFERENCE,
+		INBOOK,
+		INCOLLECTION,
+		INPROCEEDINGS,
+        MANUAL,
+        MASTERSTHESIS,
+        MISC,
+        PHDTHESIS,
+        PROCEEDINGS,
+        TECHREPORT,
+        UNPUBLISHED,
     }
     
     public enum FieldType {
-        address,
-        annote,
-        author,
-        booktitle,
-        chapter,
-        crossref,
-        edition,
-        editor,
-        howpublished,
-        institution,
-        journal,
-        key,
-        keywords,
-        month,
-        note,
-        number,
-        organization,
-        pages,
-        publisher,
-        school,
-        series,
-        title,
-        type,
-        volume,
-        year
+        ADDRESS,
+        ANNOTE,
+        AUTHOR,
+        BOOKTITLE,
+        CHAPTER,
+        CROSSREF,
+        EDITION,
+        EDITOR,
+        HOWPUBLISHED,
+		INSTITUTION,
+        JOURNAL,
+        KEY,
+        KEYWORDS,
+        MONTH,
+        NOTE,
+        NUMBER,
+        ORGANIZATION,
+        PAGES,
+        PUBLISHER,
+        SCHOOL,
+        SERIES,
+        TITLE,
+        TYPE,
+        VOLUME,
+		YEAR
     }
 }
