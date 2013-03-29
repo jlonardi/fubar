@@ -14,8 +14,8 @@ import java.util.List;
  * @author aaltotuo
  */
 public class GUIReferenceManagerF implements IGUIReferenceManager {
-	ReferenceManagerF dataStoreManager;
-	ReferenceManagerF exportManager;
+	ReferenceManagerF dataStoreManager = new ReferenceManagerF();
+	ReferenceManagerF exportManager = new ReferenceManagerF();
 
 	File datastore;
 
@@ -23,6 +23,7 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 		return datastore;
 	}
 
+	@Override
 	public void setDatastore(File datastore) {
 		this.datastore = datastore;
 		dataStoreManager.setExportFile(datastore);
@@ -70,6 +71,4 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 	public boolean clearExportList() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-
-	
 }

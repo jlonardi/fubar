@@ -45,22 +45,22 @@ public class ReferenceFields {
         ArrayList<Reference.FieldType> reqFieldTypes = new ArrayList<Reference.FieldType>();
         ArrayList<Reference.FieldType> optFieldTypes = new ArrayList<Reference.FieldType>();
         
-        reqFieldTypes.add(Reference.FieldType.Author);
-        reqFieldTypes.add(Reference.FieldType.Title);
-        reqFieldTypes.add(Reference.FieldType.BookTitle);
-        reqFieldTypes.add(Reference.FieldType.Year);
+        reqFieldTypes.add(Reference.FieldType.author);
+        reqFieldTypes.add(Reference.FieldType.title);
+        reqFieldTypes.add(Reference.FieldType.booktitle);
+        reqFieldTypes.add(Reference.FieldType.year);
         
-        optFieldTypes.add(Reference.FieldType.Editor);
-        optFieldTypes.add(Reference.FieldType.Pages);
-        optFieldTypes.add(Reference.FieldType.Organization);
-        optFieldTypes.add(Reference.FieldType.Publisher);
-        optFieldTypes.add(Reference.FieldType.Address);
-        optFieldTypes.add(Reference.FieldType.Month);
-        optFieldTypes.add(Reference.FieldType.Note);
-        optFieldTypes.add(Reference.FieldType.Key);
+        optFieldTypes.add(Reference.FieldType.editor);
+        optFieldTypes.add(Reference.FieldType.pages);
+        optFieldTypes.add(Reference.FieldType.organization);
+        optFieldTypes.add(Reference.FieldType.publisher);
+        optFieldTypes.add(Reference.FieldType.address);
+        optFieldTypes.add(Reference.FieldType.month);
+        optFieldTypes.add(Reference.FieldType.note);
+        optFieldTypes.add(Reference.FieldType.key);
         
-        requiredFields.put(Reference.Type.InProceedings, reqFieldTypes);
-        optionalFields.put(Reference.Type.InProceedings, optFieldTypes);
+        requiredFields.put(Reference.Type.inproceedings, reqFieldTypes);
+        optionalFields.put(Reference.Type.inproceedings, optFieldTypes);
         
         initialized = true;
     }
