@@ -33,28 +33,28 @@ public class ReferenceManagerFTest extends TestCase {
 		rmExp = new ReferenceManagerF();
 		rmExp.setExportFile(output);
 	
-		Reference r1 = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r1 = new Reference(Reference.Type.Inproceedings);
 		r1.setCitationKey("TEST1");
-		r1.setField(Reference.FieldType.AUTHOR, "Timo Testaaja");
-		r1.setField(Reference.FieldType.TITLE, "Testaamisen sietämätön keveys");
-		r1.setField(Reference.FieldType.BOOKTITLE, "How I stopped worrying and learned to love unit testing.");
-		r1.setField(Reference.FieldType.YEAR, "2010");
+		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r1.setField(Reference.FieldType.Year, "2010");
 		rmExp.addReference(r1);
 		
-		Reference r2 = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r2 = new Reference(Reference.Type.Inproceedings);
 		r2.setCitationKey("TEST2");
-		r2.setField(Reference.FieldType.AUTHOR, "Timo Testaaja");
-		r2.setField(Reference.FieldType.TITLE, "Testaamisen sietämätön keveys, part II - Paluu");
-		r2.setField(Reference.FieldType.BOOKTITLE, "What made me the tester I am today.");
-		r2.setField(Reference.FieldType.YEAR, "2013");
+		r2.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		r2.setField(Reference.FieldType.Booktitle, "What made me the tester I am today.");
+		r2.setField(Reference.FieldType.Year, "2013");
 		rmExp.addReference(r2);
 		
-		Reference r3 = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r3 = new Reference(Reference.Type.Inproceedings);
 		r3.setCitationKey("TEST3");
-		r3.setField(Reference.FieldType.AUTHOR, "Tiina Testaaja");
-		r3.setField(Reference.FieldType.TITLE, "Testaa, testaa, hyvä tulee.");
-		r3.setField(Reference.FieldType.BOOKTITLE, "Your easy guide to unit testing");
-		r3.setField(Reference.FieldType.YEAR, "2013");
+		r3.setField(Reference.FieldType.Author, "Tiina Testaaja");
+		r3.setField(Reference.FieldType.Title, "Testaa, testaa, hyvä tulee.");
+		r3.setField(Reference.FieldType.Booktitle, "Your easy guide to unit testing");
+		r3.setField(Reference.FieldType.Year, "2013");
 		rmExp.addReference(r3);
 	}
 	
@@ -73,12 +73,12 @@ public class ReferenceManagerFTest extends TestCase {
 	public void testAddReferenceReturnValueWithCorrectFields() {
 
 		rm = new ReferenceManagerF();
-		Reference r = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r = new Reference(Reference.Type.Inproceedings);
 		r.setCitationKey("TEST1");
-		r.setField(Reference.FieldType.AUTHOR, "Timo Testaaja");
-		r.setField(Reference.FieldType.TITLE, "Testaamisen sietämätön keveys");
-		r.setField(Reference.FieldType.BOOKTITLE, "How I stopped worrying and learned to love unit testing.");
-		r.setField(Reference.FieldType.YEAR, "2013");
+		r.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r.setField(Reference.FieldType.Year, "2013");
 
 		assertTrue(rm.addReference(r));
 		rm = null;
@@ -86,7 +86,7 @@ public class ReferenceManagerFTest extends TestCase {
 
 	public void testAddReferenceReturnValueWithMissingRequiredFields() {
 		rm = new ReferenceManagerF();
-		Reference r = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r = new Reference(Reference.Type.Inproceedings);
 		assertFalse(rm.addReference(r));
 		rm = null;
 	}
@@ -99,12 +99,12 @@ public class ReferenceManagerFTest extends TestCase {
 
 	public void testListSizeAfterInsert() {
 		rm = new ReferenceManagerF();
-		Reference r = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r = new Reference(Reference.Type.Inproceedings);
 		r.setCitationKey("TEST1");
-		r.setField(Reference.FieldType.AUTHOR, "Timo Testaaja");
-		r.setField(Reference.FieldType.TITLE, "Testaamisen sietämätön keveys");
-		r.setField(Reference.FieldType.BOOKTITLE, "How I stopped worrying and learned to love unit testing.");
-		r.setField(Reference.FieldType.YEAR, "2013");
+		r.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r.setField(Reference.FieldType.Year, "2013");
 		rm.addReference(r);
 
 		assert (rm.getReferences().size() > 0);
@@ -153,35 +153,35 @@ public class ReferenceManagerFTest extends TestCase {
 		List<Reference> rl;
 		
 		
-		Reference r1 = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r1 = new Reference(Reference.Type.Inproceedings);
 		r1.setCitationKey("TEST1");
-		r1.setField(Reference.FieldType.AUTHOR, "Timo Testaaja");
-		r1.setField(Reference.FieldType.TITLE, "Testaamisen sietämätön keveys");
-		r1.setField(Reference.FieldType.BOOKTITLE, "How I stopped worrying and learned to love unit testing.");
-		r1.setField(Reference.FieldType.YEAR, "2010");
+		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r1.setField(Reference.FieldType.Year, "2010");
 		rm.addReference(r1);
 		
-		Reference r2 = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r2 = new Reference(Reference.Type.Inproceedings);
 		r2.setCitationKey("TEST2");
-		r2.setField(Reference.FieldType.AUTHOR, "Timo Testaaja");
-		r2.setField(Reference.FieldType.TITLE, "Testaamisen sietämätön keveys, part II - Paluu");
-		r2.setField(Reference.FieldType.BOOKTITLE, "What made me the tester I am today.");
-		r2.setField(Reference.FieldType.YEAR, "2013");
+		r2.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		r2.setField(Reference.FieldType.Booktitle, "What made me the tester I am today.");
+		r2.setField(Reference.FieldType.Year, "2013");
 		rm.addReference(r2);
 		
-		Reference r3 = new Reference(Reference.Type.INPROCEEDINGS);
+		Reference r3 = new Reference(Reference.Type.Inproceedings);
 		r3.setCitationKey("TEST3");
-		r3.setField(Reference.FieldType.AUTHOR, "Tiina Testaaja");
-		r3.setField(Reference.FieldType.TITLE, "Testaa, testaa, hyvä tulee.");
-		r3.setField(Reference.FieldType.BOOKTITLE, "Your easy guide to unit testing");
-		r3.setField(Reference.FieldType.YEAR, "2013");
+		r3.setField(Reference.FieldType.Author, "Tiina Testaaja");
+		r3.setField(Reference.FieldType.Title, "Testaa, testaa, hyvä tulee.");
+		r3.setField(Reference.FieldType.Booktitle, "Your easy guide to unit testing");
+		r3.setField(Reference.FieldType.Year, "2013");
 		rm.addReference(r3);
 
-		rl = rm.getReferencesByFilter(Reference.FieldType.YEAR, "2010");
+		rl = rm.getReferencesByFilter(Reference.FieldType.Year, "2010");
 		assertEquals(rl.size(), 1);
-		assertEquals(rl.get(0).getField(Reference.FieldType.YEAR), "2010");
+		assertEquals(rl.get(0).getField(Reference.FieldType.Year), "2010");
 		
-		rl = rm.getReferencesByFilter(Reference.FieldType.AUTHOR, "Timo Testaaja");
+		rl = rm.getReferencesByFilter(Reference.FieldType.Author, "Timo Testaaja");
 		assertEquals(rl.size(), 2);
 		
 	}
@@ -191,7 +191,7 @@ public class ReferenceManagerFTest extends TestCase {
 		rm = new ReferenceManagerF();
 		List<Reference> rl;
 		
-		rl = rm.getReferencesByFilter(Reference.FieldType.YEAR, "2000");
+		rl = rm.getReferencesByFilter(Reference.FieldType.Year, "2000");
 		
 		assertTrue(rl.isEmpty());
 	}

@@ -23,12 +23,12 @@ public class ReferenceTest extends TestCase {
     
     @Override
     protected void setUp() throws Exception {
-        ref = new Reference(Reference.Type.INPROCEEDINGS);
-        reqFields = ReferenceFields.getRequiredFields(Reference.Type.INPROCEEDINGS);
+        ref = new Reference(Reference.Type.Inproceedings);
+        reqFields = ReferenceFields.getRequiredFields(Reference.Type.Inproceedings);
         
         ref.setCitationKey("PL09");
-        ref.setField(Reference.FieldType.AUTHOR, "Petteri Linnakangas");
-        ref.setField(Reference.FieldType.TITLE, "SysteemiJuttuja");
+        ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
+        ref.setField(Reference.FieldType.Title, "SysteemiJuttuja");
     }
     
     @Override
@@ -37,11 +37,11 @@ public class ReferenceTest extends TestCase {
     }
     
     public void testReturnsRightType() {
-        assertEquals(ref.getType(), Reference.Type.INPROCEEDINGS);
+        assertEquals(ref.getType(), Reference.Type.Inproceedings);
     }
     
     public void testReturnsRightField() {
-        assertEquals("Petteri Linnakangas", ref.getField(Reference.FieldType.AUTHOR));
+        assertEquals("Petteri Linnakangas", ref.getField(Reference.FieldType.Author));
     }
     
     public void testReturnRightCitationKey() {
@@ -54,17 +54,17 @@ public class ReferenceTest extends TestCase {
     
     public void testSavesCorrectly() {
         /**
-         * @INPROCEEDINGS {PL09,
-         *     AUTHOR = {Petteri Linnakangas},
-         *     TITLE = {SysteemiJuttuja},
+         * @Inproceedings {PL09,
+         *     Author = {Petteri Linnakangas},
+         *     Title = {SysteemiJuttuja},
          * }
          */
         String properReturn = "\n@" + ref.getType().toString().toUpperCase();
         properReturn += " {" + ref.getCitationKey() + ",\n";
-        properReturn += "\t" + Reference.FieldType.AUTHOR.toString().toUpperCase(); 
-        properReturn += " = {" + ref.getField(Reference.FieldType.AUTHOR) + "},\n";
-        properReturn += "\t" + Reference.FieldType.TITLE.toString().toUpperCase(); 
-        properReturn += " = {" + ref.getField(Reference.FieldType.TITLE) + "},\n";
+        properReturn += "\t" + Reference.FieldType.Author.toString().toUpperCase(); 
+        properReturn += " = {" + ref.getField(Reference.FieldType.Author) + "},\n";
+        properReturn += "\t" + Reference.FieldType.Title.toString().toUpperCase(); 
+        properReturn += " = {" + ref.getField(Reference.FieldType.Title) + "},\n";
         properReturn += "}\n";
         
         StringWriter sw = new StringWriter();
@@ -83,8 +83,8 @@ public class ReferenceTest extends TestCase {
         // The InProceedings now misses BookTitle and Year
         List<Reference.FieldType> missing = ref.getMissingFields();
         
-        assertTrue(missing.contains(Reference.FieldType.BOOKTITLE));
-        assertTrue(missing.contains(Reference.FieldType.YEAR));
-        assertFalse(missing.contains(Reference.FieldType.CROSSREF));
+        assertTrue(missing.contains(Reference.FieldType.Booktitle));
+        assertTrue(missing.contains(Reference.FieldType.Year));
+        assertFalse(missing.contains(Reference.FieldType.Crossref));
     }
 }

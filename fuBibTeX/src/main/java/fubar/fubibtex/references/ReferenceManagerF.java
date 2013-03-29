@@ -78,13 +78,12 @@ public class ReferenceManagerF implements IReferenceManager {
 
 			while (referenceScanner.hasNext()) {
 				String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
-				
 				referenceString = cleanStringTerminators(referenceString);
 				
 				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
 				String referenceType = buildReferenceType(referenceString);
-				
-				Reference r = new Reference(Reference.Type.valueOf(referenceType.toString()));
+
+				Reference r = new Reference(Reference.Type.valueOf(referenceType.toString().toLowerCase().trim()));
 
 				referenceString = referenceString.substring(referenceType.length() + 1); //Magic +1 to remove unnecessary bracket,parenthesis or comma
 				
@@ -104,7 +103,7 @@ public class ReferenceManagerF implements IReferenceManager {
 					field = cleanField(field);
 					field = cleanStringTerminators(field);
 
-					r.setField(Reference.FieldType.valueOf(key.toString().trim().toUpperCase()), field);
+					r.setField(Reference.FieldType.getFieldTypeByString(key), field);
 				}
 				fieldScanner.close();
 

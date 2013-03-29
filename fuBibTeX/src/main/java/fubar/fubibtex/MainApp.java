@@ -18,19 +18,19 @@ import java.util.List;
 public class MainApp {
     
     public static void main(String[] args) {
-        
+        System.out.println("");
         IGUIReferenceManager manager = new IGUIReferenceManager() {
             ArrayList<Reference> list = new ArrayList();
             ArrayList<Reference> exportList = new ArrayList();
             private void init() {
-                Reference ref = new Reference(Reference.Type.INPROCEEDINGS);
-                ref.setField(Reference.FieldType.TITLE, "Systeemihommia");
-                ref.setField(Reference.FieldType.AUTHOR, "Petteri Linnakangas");
+                Reference ref = new Reference(Reference.Type.Inproceedings);
+                ref.setField(Reference.FieldType.Title, "Systeemihommia");
+                ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
                 ref.setCitationKey("Petteri2012");
                 list.add(ref);
-                ref = new Reference(Reference.Type.INPROCEEDINGS);
-                ref.setField(Reference.FieldType.TITLE, "Koodia koodia koodia...");
-                ref.setField(Reference.FieldType.AUTHOR, "Jarno Lonardi");
+                ref = new Reference(Reference.Type.Inproceedings);
+                ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
+                ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
                 ref.setCitationKey("LoL3013");
                 list.add(ref);
             }
@@ -98,11 +98,11 @@ public class MainApp {
             System.out.println("Opening file...");
             BufferedWriter file = new BufferedWriter(new FileWriter("bibtexfile.bib", true));
             System.out.println("File opened. Creating reference...");
-            Reference ref = new Reference(Reference.Type.INPROCEEDINGS);
+            Reference ref = new Reference(Reference.Type.Inproceedings);
             
             System.out.println("Adding fields to reference...");
-            ref.setField(Reference.FieldType.TITLE, "Systeemihommia");
-            ref.setField(Reference.FieldType.AUTHOR, "Petteri Linnakangas");
+            ref.setField(Reference.FieldType.Title, "Systeemihommia");
+            ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
             
             System.out.println("Saving reference to file.");
             ref.save(file);
