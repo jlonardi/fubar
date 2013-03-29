@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -39,7 +38,6 @@ public class ReferenceManagerF implements IReferenceManager {
 	 */
 	@Override
 	public boolean addReference(Reference ref) {
-		System.out.println("addReference");
 		List<Reference.FieldType> reqFields = ReferenceFields.getRequiredFields(ref.getType());
 
 		for (Reference.FieldType type : reqFields) {
@@ -71,7 +69,6 @@ public class ReferenceManagerF implements IReferenceManager {
 
 	@Override
 	public boolean importFrom() {
-		System.out.println("Wut?");
 		String separator = System.getProperty("line.separator");
 		int separatorLen = separator.length();
 
@@ -117,13 +114,11 @@ public class ReferenceManagerF implements IReferenceManager {
 			referenceScanner.close();
 		} catch (Exception ex) {
 			Logger.getLogger(ReferenceManagerF.class.getName()).log(Level.SEVERE, null, ex);
-			ex.printStackTrace();
-			System.out.println("WTF?!");
+
 			referenceList.clear();
 			return false;
 		}
 		
-		System.out.println("referenceList.size(): " + referenceList.size());
 		return true;
 	}
 
