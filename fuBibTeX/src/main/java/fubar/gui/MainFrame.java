@@ -10,31 +10,42 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class MainFrame {
+public class MainFrame extends JFrame{
 
-    private JFrame frame;
+    private static JFrame frame;
     private ArrayList<View> views;
     private ArrayList<JPanel> panels;
-    private Dimension frameSize;
+    private Dimension frameSize, size;
     private ButtonTray buttonTray;
     private ReferenceListView listView;
     private AddReferenceView addReferenceView;
     public static IGUIReferenceManager manager;
-
+    Dimension screenSize;
+    Insets frameInsets;
+    
+    /**
+     * Sets up a new frame for the application.
+     * @param UImanager a manager to handle Reference resources.
+     */
     public MainFrame(IGUIReferenceManager UImanager) {
 
         manager = UImanager;
         manager.loadFromDatastore();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenWidth = screenSize.getWidth();
         double screenHeight = screenSize.getHeight();
         int frameWidth = (int) (0.4 * screenWidth);
         int frameHeight = (int) (0.4 * screenHeight);
         frameSize = new Dimension(frameWidth, frameHeight);
-
+        
         initFrame();
+        
+        this.pack();
+        setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
     private void initPanels(JLayeredPane pane) {
@@ -43,12 +54,14 @@ public class MainFrame {
 
         listView = new ReferenceListView(this);
         listView.setVisible(true);
+        listView.setName("listView");
         panels.add(listView);
         views.add(listView);
 
 
         addReferenceView = new AddReferenceView(this);
         addReferenceView.setVisible(false);
+        addReferenceView.setName("addReferenceView");
         panels.add(addReferenceView);
         views.add(addReferenceView);
 
@@ -59,10 +72,10 @@ public class MainFrame {
 
     private void initFrame() {
         // Frame setup
-        frame = new JFrame("fuBibTeX");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(frameSize);
-        frame.setMinimumSize(new Dimension(500, 500));
+        this.setTitle("fuBibTeX");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(frameSize);
+        this.setMinimumSize(new Dimension(500, 500));
 
         // Setup for the main panel.
         JPanel mainPanel = new JPanel();
@@ -72,18 +85,19 @@ public class MainFrame {
         // Setup the button tray
         buttonTray = new ButtonTray();
         buttonTray.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        buttonTray.setName("buttonTray");
         mainPanel.add(buttonTray);
 
         // Setup of the content pane for the frame.
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(frame.getSize());
+        layeredPane.setPreferredSize(this.getSize());
         layeredPane.setOpaque(true);
         mainPanel.add(layeredPane);
 
         initPanels(layeredPane);
 
-        frame.setContentPane(mainPanel);
-        frame.addComponentListener(new ComponentListener() {
+        this.setContentPane(mainPanel);
+        this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent evt) {
                 renderAll();
@@ -113,22 +127,17 @@ public class MainFrame {
         switch (type) {
             case REFERENCE_LIST:
                 this.listView.setVisible(true);
-                return;
+                break;
             case ADD_REFERENCE:
                 this.addReferenceView.setVisible(true);
-                return;
+                break;
         }
-    }
-
-    public void draw() {
-        frame.pack();
-        frame.setVisible(true);
     }
 
     public void renderAll() {
         // Resize of all the views on frame render.
-        Insets frameInsets = frame.getInsets();
-        Dimension size = frame.getSize();
+        frameInsets = this.getInsets();
+        size = this.getSize();
         size.height -= buttonTray.getSize().height;
         size.height -= frameInsets.top + frameInsets.bottom;
         size.width -= frameInsets.left + frameInsets.right;
@@ -137,8 +146,8 @@ public class MainFrame {
         }
     }
 
-    public JFrame getFrame() {
-        return this.frame;
+    public void showMessage(String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(this,message,title,messageType);
     }
     
     public void dataUpdated() {
