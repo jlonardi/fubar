@@ -84,7 +84,7 @@ public class MainApp {
         };
         
         MainFrame frame = new MainFrame(manager);
-        frame.draw();
+        //frame.draw();
         
         try {
             System.out.println("Opening file...");

@@ -30,6 +30,7 @@ public class ButtonTray extends JPanel {
         //this.setBackground(Color.GREEN);
 
         save = new JButton("Save");
+        save.setName("save");
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,6 +42,7 @@ public class ButtonTray extends JPanel {
         this.add(save);
 
         exportBibtext = new JButton("Export");
+        exportBibtext.setName("exportBibtext");
         exportBibtext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,6 +61,7 @@ public class ButtonTray extends JPanel {
         this.add(exportBibtext);
 
         importBibtext = new JButton("Import");
+        importBibtext.setName("importBibtext");
         importBibtext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

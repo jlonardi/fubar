@@ -36,11 +36,14 @@ public class ReferenceListView extends JPanel implements View {
         // Set up the list and the scroller
         referenceList = new JList(MainFrame.manager.getReferencesFromDatastore().toArray());
         referenceList.setLayoutOrientation(JList.VERTICAL);
+        referenceList.setName("referenceList");
         listScroller = new JScrollPane(referenceList);
+        listScroller.setName("listScroller");
         listPanel.add(listScroller);
         
         // Set up the buttons
         addReferenceButton = new JButton("Add new entry");
+        addReferenceButton.setName("addReferenceButton");
         addReferenceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

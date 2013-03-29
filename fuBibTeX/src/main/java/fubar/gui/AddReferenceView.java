@@ -4,7 +4,6 @@ import fubar.fubibtex.references.Reference;
 import fubar.fubibtex.references.Reference.FieldType;
 import fubar.fubibtex.references.Reference.Type;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -67,6 +66,7 @@ public class AddReferenceView extends JPanel implements View {
         typeSelectionPanel = new JPanel();
         typeSelectionPanel.setLayout(new BoxLayout(typeSelectionPanel, BoxLayout.X_AXIS));
         typeSelectionPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        typeSelectionPanel.setName("typeSelectionPanel");
         basePanel.add(typeSelectionPanel);
 
         Type[] types = fubar.fubibtex.references.Reference.Type.values();
@@ -74,6 +74,7 @@ public class AddReferenceView extends JPanel implements View {
         typeList.setMaximumSize(new Dimension(500, 20));
         typeList.addActionListener(selectionListener);
         typeList.setSelectedIndex(0);
+        typeList.setName("typeList");
 
         typeSelectionPanel.add(typeList);
         typeSelectionPanel.add(Box.createHorizontalGlue());
@@ -91,6 +92,7 @@ public class AddReferenceView extends JPanel implements View {
         fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.Y_AXIS));
 
         requiredPanel = new JPanel();
+        requiredPanel.setName("requiredPanel");
         requiredPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
         requiredPanel.setBorder(BorderFactory.createTitledBorder(
                 "Required fields"));
@@ -113,15 +115,18 @@ public class AddReferenceView extends JPanel implements View {
     private void setupControlPanel() {
 
         controlPanel = new JPanel();
+        controlPanel.setName("controlPanel");
         controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
         controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         Dimension buttonSize = new Dimension(100, 30);
 
         JButton returnButton = new JButton("Return");
+        returnButton.setName("returnButton");
         returnButton.setPreferredSize(buttonSize);
         returnButton.addActionListener(returnListener);
         JButton addButton = new JButton("Add");
+        addButton.setName("addButton");
         addButton.addActionListener(addListener);
         addButton.setPreferredSize(buttonSize);
 
@@ -149,8 +154,10 @@ public class AddReferenceView extends JPanel implements View {
         }
         requiredPanel.removeAll();
         requiredPanel.revalidate();
+        requiredPanel.repaint();
         optionalPanel.removeAll();
         optionalPanel.revalidate();
+        optionalPanel.repaint();
 
         if (requiredFields == null) {
             return;
@@ -159,8 +166,10 @@ public class AddReferenceView extends JPanel implements View {
         JPanel panel = new JPanel();
         JLabel label = new JLabel();
         label.setText("Citation key");
+        label.setName("citationKeyLabel");
         label.setPreferredSize(new Dimension(80, 20));
         citationKeyField = new JTextField(20);
+        citationKeyField.setName("citationKeyField");
         panel.add(label);
         panel.add(citationKeyField);
         requiredPanel.add(panel);
@@ -171,18 +180,24 @@ public class AddReferenceView extends JPanel implements View {
             panel = new JPanel();
             label = new JLabel();
             label.setText(type.name());
+            label.setName(type.name()+"Label");
             label.setPreferredSize(new Dimension(80, 20));
             JTextField textField = new JTextField(20);
+            textField.setName(type.name()+"TextField");
             panel.add(label);
             panel.add(textField);
             requiredPanel.add(panel);
             map.put(type, textField);
         }
         requiredPanel.revalidate();
-
+        requiredPanel.repaint();
+/*
+ * It should not be possible to run in a situation where you would have only
+ * mapped required fields for a reference type and left out the optional ones.
         if (optionalFields == null) {
             return;
         }
+*/
 
         for (FieldType type : optionalFields) {
             panel = new JPanel();
@@ -190,12 +205,14 @@ public class AddReferenceView extends JPanel implements View {
             label.setText(type.name());
             label.setPreferredSize(new Dimension(80, 20));
             JTextField textField = new JTextField(20);
+            textField.setName(type.name()+"TextField");
             panel.add(label);
             panel.add(textField);
             optionalPanel.add(panel);
             map.put(type, textField);
         }
         optionalPanel.revalidate();
+        optionalPanel.repaint();
 
     }
 
@@ -214,6 +231,7 @@ public class AddReferenceView extends JPanel implements View {
         returnListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                updateFieldPanel();
                 frame.showView(ViewType.REFERENCE_LIST);
             }
         };
@@ -223,25 +241,19 @@ public class AddReferenceView extends JPanel implements View {
             public void actionPerformed(ActionEvent e) {
 
                 Type type = (Type) typeList.getSelectedItem();
-                ArrayList<JTextField> textfields = new ArrayList();
                 Reference ref = new Reference(type);
-                if (citationKeyField == null) {
-                    return;
-                }
                 ref.setCitationKey(citationKeyField.getText());
-                textfields.add(citationKeyField);
 
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getRequiredFields(type)) {
                     JTextField field = map.get(key);
                     if (field.getText().equals("") || citationKeyField.getText().equals("")) {
-                        JOptionPane.showMessageDialog(frame.getFrame(),
+                        frame.showMessage(
                                 "You must fill all the required fields to proceed.",
                                 "Add reference error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     } else {
                         ref.setField(key, field.getText());
-                        textfields.add(field);
                     }
                 }
 
@@ -252,11 +264,10 @@ public class AddReferenceView extends JPanel implements View {
                     } else {
                         ref.setField(key, field.getText());
                     }
-                    textfields.add(field);
                 }
-                
+
                 updateFieldPanel();
-                
+
                 MainFrame.manager.addReferenceToDatastore(ref);
                 frame.dataUpdated();
                 frame.showView(ViewType.REFERENCE_LIST);
