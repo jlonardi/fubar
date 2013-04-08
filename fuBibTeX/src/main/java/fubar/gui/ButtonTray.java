@@ -6,17 +6,20 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ButtonTray extends JPanel {
 
-    JButton save, exportBibtext, importBibtext;
-    final JFileChooser fc;
+    private JButton save, exportBibtext, importBibtext;
+    private final JFileChooser fc;
+    private MainFrame mainFrame;
 
-    public ButtonTray() {
+    public ButtonTray(MainFrame main) {
 
+        mainFrame = main;
         fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTeX files .bib", "bib");
@@ -71,6 +74,8 @@ public class ButtonTray extends JPanel {
                     // -----------TODO---------
                     // GIVE FILE TO MANAGER FOR IMPORT
                     // ------------------------
+                    
+                    mainFrame.renderAll();
                     System.out.println("Opening: " + file.getName());
                 } else {
                     System.out.println("Open command cancelled by user.");

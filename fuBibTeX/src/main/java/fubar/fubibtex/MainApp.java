@@ -91,7 +91,9 @@ public class MainApp {
             
         };
         
-        MainFrame frame = new MainFrame(manager);
+        GUIReferenceManagerF rm = new GUIReferenceManagerF();
+        rm.setDatastore(new File("fubitex.data"));
+        MainFrame frame = new MainFrame(rm);
         //frame.draw();
         
         try {

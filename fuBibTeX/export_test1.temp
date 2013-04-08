@@ -2,20 +2,20 @@
 @INPROCEEDINGS {TEST1,
 	AUTHOR = {Timo Testaaja},
 	BOOKTITLE = {How I stopped worrying and learned to love unit testing.},
-	TITLE = {Testaamisen siet‰m‰tˆn keveys},
+	TITLE = {Testaamisen siet√§m√§t√∂n keveys},
 	YEAR = {2010},
 }
 
 @INPROCEEDINGS {TEST2,
 	AUTHOR = {Timo Testaaja},
 	BOOKTITLE = {What made me the tester I am today.},
-	TITLE = {Testaamisen siet‰m‰tˆn keveys, part II - Paluu},
+	TITLE = {Testaamisen siet√§m√§t√∂n keveys, part II - Paluu},
 	YEAR = {2013},
 }
 
 @INPROCEEDINGS {TEST3,
 	AUTHOR = {Tiina Testaaja},
 	BOOKTITLE = {Your easy guide to unit testing},
-	TITLE = {Testaa, testaa, hyv‰ tulee.},
+	TITLE = {Testaa, testaa, hyv√§ tulee.},
 	YEAR = {2013},
 }

@@ -83,7 +83,7 @@ public class ReferenceManagerF implements IReferenceManager {
 				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
 				String referenceType = buildReferenceType(referenceString);
 
-				Reference r = new Reference(Reference.Type.valueOf(referenceType.toString().toLowerCase().trim()));
+				Reference r = new Reference(Reference.Type.getTypeByString(referenceType));
 
 				referenceString = referenceString.substring(referenceType.length() + 1); //Magic +1 to remove unnecessary bracket,parenthesis or comma
 				

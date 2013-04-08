@@ -83,7 +83,7 @@ public class MainFrame extends JFrame{
         mainPanel.setVisible(true);
 
         // Setup the button tray
-        buttonTray = new ButtonTray();
+        buttonTray = new ButtonTray(this);
         buttonTray.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         buttonTray.setName("buttonTray");
         mainPanel.add(buttonTray);
