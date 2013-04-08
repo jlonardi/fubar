@@ -116,36 +116,36 @@ public class MainApp {
             System.out.println("There was an exception: " + e.getMessage());
         }
      
-		System.out.println("Testi alkaa...");
-		//Pieni demon ReferenceManagerin import & export -toiminnoista.
-		IGUIReferenceManager m = new GUIReferenceManagerF();
-		
-		m.setDatastore(new File("file1.bib"));
-		m.loadFromDatastore();
-		
-		List<Reference> rl = m.getReferencesFromDatastore();
-		
-		System.out.println("Siirretään referencet exportlistalle");
-		for (int i = 0; i < rl.size(); i++) {
-			if (m.addToExportList(rl.get(i)) == false)
-			{
-				System.out.println("Virhe indeksissä " + i);
-				System.exit(-1);
-			}
-		}
-
-		File output = new File("newbib.bib");
-
-		m.exportToFile(output);
-		
-		IGUIReferenceManager n = new GUIReferenceManagerF();
-		
-		n.setDatastore(new File("newbib.bib"));
-		n.loadFromDatastore();
-		
-		File output1 = new File("newbib2.bib");
-
-		m.exportToFile(output1);
+//		System.out.println("Testi alkaa...");
+//		//Pieni demon ReferenceManagerin import & export -toiminnoista.
+//		IGUIReferenceManager m = new GUIReferenceManagerF();
+//		
+//		m.setDatastore(new File("file1.bib"));
+//		m.loadFromDatastore();
+//		
+//		List<Reference> rl = m.getReferencesFromDatastore();
+//		
+//		System.out.println("Siirretään referencet exportlistalle");
+//		for (int i = 0; i < rl.size(); i++) {
+//			if (m.addToExportList(rl.get(i)) == false)
+//			{
+//				System.out.println("Virhe indeksissä " + i);
+//				System.exit(-1);
+//			}
+//		}
+//
+//		File output = new File("newbib.bib");
+//
+//		m.exportToFile(output);
+//		
+//		IGUIReferenceManager n = new GUIReferenceManagerF();
+//		
+//		n.setDatastore(new File("newbib.bib"));
+//		n.loadFromDatastore();
+//		
+//		File output1 = new File("newbib2.bib");
+//
+//		m.exportToFile(output1);
 				
 		
     }

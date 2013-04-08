@@ -85,14 +85,16 @@ public class ReferenceManagerF implements IReferenceManager {
 
 				Reference r = new Reference(Reference.Type.getTypeByString(referenceType));
 
-				referenceString = referenceString.substring(referenceType.length() + 1); //Magic +1 to remove unnecessary bracket,parenthesis or comma
+				referenceString = referenceString.substring(referenceType.length());
 				
 				String referenceCitation = buildCitation(referenceString);
 
 				r.setCitationKey(referenceCitation.toString());
 
-				referenceString = referenceString.substring(referenceCitation.length() + 1 + separatorLen); //Magic +1 to remove comma, separatorLen for line separator
-
+				referenceString = referenceString.substring(referenceString.indexOf(separator));
+				
+				System.out.println("RefStr: <" + referenceString + ">" );
+				
 				fieldScanner = new Scanner(referenceString);
 				fieldScanner.useDelimiter(separator);
 
@@ -103,6 +105,9 @@ public class ReferenceManagerF implements IReferenceManager {
 					field = cleanField(field);
 					field = cleanStringTerminators(field);
 
+					System.out.println("key  : <" + key + ">");
+					System.out.println("field: <" + field + ">");
+					
 					r.setField(Reference.FieldType.getFieldTypeByString(key), field);
 				}
 				fieldScanner.close();
@@ -246,16 +251,25 @@ public class ReferenceManagerF implements IReferenceManager {
 		StringBuilder citationKey = new StringBuilder();
 		String ret = "";
 		
+		System.out.println("referenceString: <<" + referenceString + ">>");
+		
+		
 		for (int i = 0; i < referenceString.length(); i++) {
 			if (referenceString.charAt(i) == ',') {
 				ret = citationKey.toString().trim();
 				break;
+			}
+			else if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(' || referenceString.charAt(i) == ' ')
+			{
+				continue;
 			}
 			else
 			{
 				citationKey.append(referenceString.charAt(i));
 			}
 		}
+		
+		System.out.println("Paluu: <<" + ret + ">>");
 		return ret;
 	}
 

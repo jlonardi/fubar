@@ -141,7 +141,7 @@ public class ReferenceManagerFTest extends TestCase {
 		
 		rl = in.getReferences();
 		
-		assertEquals(rl.size(), 3);
+		assertEquals(3, rl.size());
 		
 		tearDownExportTests();
 	}
@@ -195,14 +195,7 @@ public class ReferenceManagerFTest extends TestCase {
 		
 		assertTrue(rl.isEmpty());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 	//Test helper classes
 	public void testCleanStringTerminatosWithBracketAndComma() {
 		rm = new ReferenceManagerF();
@@ -275,6 +268,15 @@ public class ReferenceManagerFTest extends TestCase {
 		rm = null;
 	}
 
+	public void testBuildReferenceTypeWithBracketAndSpace() {
+		rm = new ReferenceManagerF();
+		String stringContainingType = "INPROCEEDINGS {TAA1,";
+		String result = rm.buildReferenceType(stringContainingType);
+		assertEquals("INPROCEEDINGS", result);
+		rm = null;
+	}
+	
+	
 	public void testBuildReferenceTypeWithParenthesis() {
 		rm = new ReferenceManagerF();
 		String stringContainingType = "inproceedings(VPL11,";
