@@ -93,8 +93,6 @@ public class ReferenceManagerF implements IReferenceManager {
 
 				referenceString = referenceString.substring(referenceString.indexOf(separator));
 				
-				System.out.println("RefStr: <" + referenceString + ">" );
-				
 				fieldScanner = new Scanner(referenceString);
 				fieldScanner.useDelimiter(separator);
 
@@ -104,9 +102,6 @@ public class ReferenceManagerF implements IReferenceManager {
 
 					field = cleanField(field);
 					field = cleanStringTerminators(field);
-
-					System.out.println("key  : <" + key + ">");
-					System.out.println("field: <" + field + ">");
 					
 					r.setField(Reference.FieldType.getFieldTypeByString(key), field);
 				}
@@ -251,9 +246,6 @@ public class ReferenceManagerF implements IReferenceManager {
 		StringBuilder citationKey = new StringBuilder();
 		String ret = "";
 		
-		System.out.println("referenceString: <<" + referenceString + ">>");
-		
-		
 		for (int i = 0; i < referenceString.length(); i++) {
 			if (referenceString.charAt(i) == ',') {
 				ret = citationKey.toString().trim();
@@ -269,7 +261,6 @@ public class ReferenceManagerF implements IReferenceManager {
 			}
 		}
 		
-		System.out.println("Paluu: <<" + ret + ">>");
 		return ret;
 	}
 
