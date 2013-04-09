@@ -61,7 +61,60 @@ public class ReferenceFields {
         
         requiredFields.put(Reference.Type.Inproceedings, reqFieldTypes);
         optionalFields.put(Reference.Type.Inproceedings, optFieldTypes);
+
+        ArrayList<Reference.FieldType> reqFieldTypesBook = new ArrayList<Reference.FieldType>();
+        ArrayList<Reference.FieldType> optFieldTypesBook = new ArrayList<Reference.FieldType>();
+
+		//Required fields: author or editor, title, publisher, year
+		//Optional fields: volume, series, address, edition, month, note, key
+        reqFieldTypesBook.add(Reference.FieldType.Author);
+        reqFieldTypesBook.add(Reference.FieldType.Title);
+        reqFieldTypesBook.add(Reference.FieldType.Publisher);
+		reqFieldTypesBook.add(Reference.FieldType.Year);
         
+        optFieldTypesBook.add(Reference.FieldType.Volume);
+        optFieldTypesBook.add(Reference.FieldType.Series);
+        optFieldTypesBook.add(Reference.FieldType.Address);
+        optFieldTypesBook.add(Reference.FieldType.Edition);
+        optFieldTypesBook.add(Reference.FieldType.Month);
+        optFieldTypesBook.add(Reference.FieldType.Note);
+        optFieldTypesBook.add(Reference.FieldType.Key);
+
+        requiredFields.put(Reference.Type.book, reqFieldTypesBook);
+        optionalFields.put(Reference.Type.book, optFieldTypesBook);
+
+		ArrayList<Reference.FieldType> reqFieldTypesArticle = new ArrayList<Reference.FieldType>();
+		ArrayList<Reference.FieldType> optFieldTypesArticle = new ArrayList<Reference.FieldType>();
+
+		reqFieldTypesArticle.add(Reference.FieldType.Author);
+        reqFieldTypesArticle.add(Reference.FieldType.Title);
+        reqFieldTypesArticle.add(Reference.FieldType.Journal);
+		reqFieldTypesArticle.add(Reference.FieldType.Year);
+        
+        optFieldTypesArticle.add(Reference.FieldType.Volume);
+        optFieldTypesArticle.add(Reference.FieldType.Number);
+        optFieldTypesArticle.add(Reference.FieldType.Pages);
+        optFieldTypesArticle.add(Reference.FieldType.Month);
+        optFieldTypesArticle.add(Reference.FieldType.Note);
+        optFieldTypesArticle.add(Reference.FieldType.Key);
+
+        requiredFields.put(Reference.Type.article, reqFieldTypesArticle);
+        optionalFields.put(Reference.Type.article, optFieldTypesArticle);
+
+		//Optional fields: author, title, howpublished, month, year, note, key
+		
+		ArrayList<Reference.FieldType> optFieldTypesMisc = new ArrayList<Reference.FieldType>();
+        
+        optFieldTypesMisc.add(Reference.FieldType.Author);
+        optFieldTypesMisc.add(Reference.FieldType.Title);
+        optFieldTypesMisc.add(Reference.FieldType.Howpublished);
+        optFieldTypesMisc.add(Reference.FieldType.Month);
+		optFieldTypesMisc.add(Reference.FieldType.Year);
+        optFieldTypesMisc.add(Reference.FieldType.Note);
+        optFieldTypesMisc.add(Reference.FieldType.Key);
+
+        optionalFields.put(Reference.Type.article, optFieldTypesMisc);		
+
         initialized = true;
     }
     
