@@ -52,9 +52,10 @@ public class ButtonTray extends JPanel {
                 int returnVal = fc.showSaveDialog(ButtonTray.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
-                    file = new File(file.getName()+".bib");
+                    String path = file.getAbsoluteFile()+".bib";
+                    file = new File(path);
                     MainFrame.manager.exportToFile(file);
-                    System.out.println("Saving: " + file.getName());
+                    System.out.println("Saving: " + path);
                 } else {
                     System.out.println("Save command cancelled by user.");
                 }
