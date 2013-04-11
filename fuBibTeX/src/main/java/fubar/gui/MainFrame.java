@@ -17,7 +17,7 @@ public class MainFrame extends JFrame{
 
     private static JFrame frame;
     private ArrayList<View> views;
-    private ArrayList<JPanel> panels;
+//    private ArrayList<JPanel> panels;
     private Dimension frameSize, size;
     private ButtonTray buttonTray;
     private ReferenceListView listView;
@@ -50,24 +50,19 @@ public class MainFrame extends JFrame{
 
     private void initPanels(JLayeredPane pane) {
         views = new ArrayList();
-        panels = new ArrayList();
 
         listView = new ReferenceListView(this);
         listView.setVisible(true);
         listView.setName("listView");
-        panels.add(listView);
         views.add(listView);
+        pane.add(listView);
 
 
         addReferenceView = new AddReferenceView(this);
         addReferenceView.setVisible(false);
         addReferenceView.setName("addReferenceView");
-        panels.add(addReferenceView);
         views.add(addReferenceView);
-
-        for (JPanel panel : panels) {
-            pane.add(panel);
-        }
+        pane.add(addReferenceView);
     }
 
     private void initFrame() {
@@ -120,8 +115,8 @@ public class MainFrame extends JFrame{
     }
 
     public void showView(ViewType type) {
-        for (JPanel panel : panels) {
-            panel.setVisible(false);
+        for (View view : views) {
+            view.setVisible(false);
         }
         renderAll();
         switch (type) {

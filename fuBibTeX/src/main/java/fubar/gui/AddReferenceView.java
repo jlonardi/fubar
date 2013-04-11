@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class AddReferenceView extends JPanel implements View {
+public class AddReferenceView extends View {
 
     private MainFrame frame;
     private JPanel basePanel, typeSelectionPanel, fieldPanel, requiredPanel,
@@ -263,9 +263,7 @@ public class AddReferenceView extends JPanel implements View {
 
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getOptionalFields(type)) {
                     JTextField field = map.get(key);
-                    if (field.getText().equals("")) {
-                        ref.setField(key, null);
-                    } else {
+                    if (!field.getText().equals("")) {
                         ref.setField(key, field.getText());
                     }
                 }

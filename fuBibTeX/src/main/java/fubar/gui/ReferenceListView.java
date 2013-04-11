@@ -15,7 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-public class ReferenceListView extends JPanel implements View {
+public class ReferenceListView extends View {
 
     private JList referenceList, exportList;
     private JScrollPane listScroller, exportScroller;
