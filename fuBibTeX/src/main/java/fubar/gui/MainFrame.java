@@ -75,7 +75,7 @@ public class MainFrame extends JFrame{
         this.setTitle("fuBibTeX");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(frameSize);
-        this.setMinimumSize(new Dimension(500, 500));
+        this.setMinimumSize(new Dimension(750, 500));
 
         // Setup for the main panel.
         JPanel mainPanel = new JPanel();

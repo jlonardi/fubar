@@ -4,6 +4,7 @@ import fubar.fubibtex.references.Reference;
 import fubar.fubibtex.references.Reference.FieldType;
 import fubar.fubibtex.references.Reference.Type;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -281,6 +282,8 @@ public class AddReferenceView extends JPanel implements View {
         basePanel.setSize(this.getSize());
         typeSelectionPanel.setBounds(0, 0, (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.1));
         fieldPanel.setBounds(0, (int) (basePanel.getSize().height * 0.1), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.75));
-        controlPanel.setBounds(0, (int) (basePanel.getSize().height * 0.85), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.15));
+        controlPanel.setBounds(0, (int) (basePanel.getSize().height * 0.9), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.15));
+        requiredPanel.setBounds(0, (int) 0, (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75))/2);
+        optionalPanel.setBounds(0, (int) (0 + requiredPanel.getHeight()), (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75))/2);
     }
 }

@@ -35,6 +35,7 @@ public class ReferenceListView extends JPanel implements View {
         // Set up the central area of the view that holds the control buttons
         controlPanel = new JPanel();
         controlPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        controlPanel.setMinimumSize(new Dimension(150,20));
 
         // Set up the right side of the view that holds the export list.
         exportPanel = new JPanel();
@@ -65,8 +66,8 @@ public class ReferenceListView extends JPanel implements View {
         exportPanel.add(exportListHolder);
 
         // Set up the buttons
-        Dimension buttonSize = new Dimension(120, 30);
-        addReferenceButton = new JButton("Add new entry");
+        Dimension buttonSize = new Dimension(140, 30);
+        addReferenceButton = new JButton("New reference");
         addReferenceButton.setName("addReferenceButton");
         addReferenceButton.setPreferredSize(buttonSize);
         addReferenceButton.addActionListener(new ActionListener() {
@@ -106,6 +107,11 @@ public class ReferenceListView extends JPanel implements View {
             }
         });
         
+        JPanel dummyPanel = new JPanel();
+        dummyPanel.setMinimumSize(new Dimension(150,20));
+        dummyPanel.setPreferredSize(new Dimension(150,20));
+        
+        controlPanel.add(dummyPanel);
         controlPanel.add(addReferenceButton);
         controlPanel.add(addToExportList);
         controlPanel.add(removeFromExportList);
