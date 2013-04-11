@@ -113,7 +113,7 @@ public class ReferenceFields {
         optFieldTypesMisc.add(Reference.FieldType.Note);
         optFieldTypesMisc.add(Reference.FieldType.Key);
 
-        optionalFields.put(Reference.Type.article, optFieldTypesMisc);		
+        optionalFields.put(Reference.Type.Misc, optFieldTypesMisc);		
 
         initialized = true;
     }

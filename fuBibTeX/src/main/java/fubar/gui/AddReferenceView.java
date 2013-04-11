@@ -160,7 +160,7 @@ public class AddReferenceView extends JPanel implements View {
         optionalPanel.revalidate();
         optionalPanel.repaint();
 
-        if (requiredFields == null) {
+        if (requiredFields == null && optionalFields == null) {
             return;
         }
 
@@ -176,22 +176,24 @@ public class AddReferenceView extends JPanel implements View {
         requiredPanel.add(panel);
 
         map.clear();
-
-        for (FieldType type : requiredFields) {
-            panel = new JPanel();
-            label = new JLabel();
-            label.setText(type.name());
-            label.setName(type.name()+"Label");
-            label.setPreferredSize(new Dimension(80, 20));
-            JTextField textField = new JTextField(20);
-            textField.setName(type.name()+"TextField");
-            panel.add(label);
-            panel.add(textField);
-            requiredPanel.add(panel);
-            map.put(type, textField);
-        }
-        requiredPanel.revalidate();
-        requiredPanel.repaint();
+		if (requiredFields != null)
+		{
+			for (FieldType type : requiredFields) {
+				panel = new JPanel();
+				label = new JLabel();
+				label.setText(type.name());
+				label.setName(type.name()+"Label");
+				label.setPreferredSize(new Dimension(80, 20));
+				JTextField textField = new JTextField(20);
+				textField.setName(type.name()+"TextField");
+				panel.add(label);
+				panel.add(textField);
+				requiredPanel.add(panel);
+				map.put(type, textField);
+			}
+			requiredPanel.revalidate();
+			requiredPanel.repaint();
+		}
 /*
  * It should not be possible to run in a situation where you would have only
  * mapped required fields for a reference type and left out the optional ones.
@@ -199,22 +201,23 @@ public class AddReferenceView extends JPanel implements View {
             return;
         }
 */
-
-        for (FieldType type : optionalFields) {
-            panel = new JPanel();
-            label = new JLabel();
-            label.setText(type.name());
-            label.setPreferredSize(new Dimension(80, 20));
-            JTextField textField = new JTextField(20);
-            textField.setName(type.name()+"TextField");
-            panel.add(label);
-            panel.add(textField);
-            optionalPanel.add(panel);
-            map.put(type, textField);
-        }
-        optionalPanel.revalidate();
-        optionalPanel.repaint();
-
+		if (optionalFields != null)
+		{
+			for (FieldType type : optionalFields) {
+				panel = new JPanel();
+				label = new JLabel();
+				label.setText(type.name());
+				label.setPreferredSize(new Dimension(80, 20));
+				JTextField textField = new JTextField(20);
+				textField.setName(type.name()+"TextField");
+				panel.add(label);
+				panel.add(textField);
+				optionalPanel.add(panel);
+				map.put(type, textField);
+			}
+			optionalPanel.revalidate();
+			optionalPanel.repaint();
+		}
     }
 
     /**
