@@ -76,4 +76,6 @@ public interface IGUIReferenceManager {
 	 */
 	public void setDatastore(File file);
 	
+	public boolean dataStoreContainsCitationKey(String citationKey);
+	
 }

@@ -280,4 +280,16 @@ public class ReferenceManagerF implements IReferenceManager {
 		}
 		return ret;
 	}
+
+	@Override
+	public boolean containsCitationKey(String citationKey) {
+		for (Reference reference : referenceList) 
+		{
+			if (reference.getCitationKey().compareTo(citationKey)==0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

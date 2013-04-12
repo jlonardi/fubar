@@ -151,8 +151,7 @@ public class ReferenceManagerFTest extends TestCase {
 	{
 		rm = new ReferenceManagerF();
 		List<Reference> rl;
-		
-		
+				
 		Reference r1 = new Reference(Reference.Type.Inproceedings);
 		r1.setCitationKey("TEST1");
 		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
@@ -341,4 +340,45 @@ public class ReferenceManagerFTest extends TestCase {
 		rm = null;
 	}	
 	
+	public void testContainsCitationKeyWhenCKExists()
+	{
+		Reference r1 = new Reference(Reference.Type.Inproceedings);
+		r1.setCitationKey("TEST1");
+		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r1.setField(Reference.FieldType.Year, "2010");
+		rm.addReference(r1);
+		
+		Reference r2 = new Reference(Reference.Type.Inproceedings);
+		r2.setCitationKey("TEST2");
+		r2.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		r2.setField(Reference.FieldType.Booktitle, "What made me the tester I am today.");
+		r2.setField(Reference.FieldType.Year, "2013");
+		rm.addReference(r2);
+		
+		Reference r3 = new Reference(Reference.Type.Inproceedings);
+		r3.setCitationKey("TEST3");
+		r3.setField(Reference.FieldType.Author, "Tiina Testaaja");
+		r3.setField(Reference.FieldType.Title, "Testaa, testaa, hyvä tulee.");
+		r3.setField(Reference.FieldType.Booktitle, "Your easy guide to unit testing");
+		r3.setField(Reference.FieldType.Year, "2013");
+		rm.addReference(r3);
+		
+		assertTrue(rm.containsCitationKey("TEST2"));	
+	}
+	
+	public void testContainsCitationKeyWhenCKDoesntExist()
+	{
+		Reference r1 = new Reference(Reference.Type.Inproceedings);
+		r1.setCitationKey("TEST1");
+		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r1.setField(Reference.FieldType.Year, "2010");
+		rm.addReference(r1);
+	
+		assertFalse(rm.containsCitationKey("TEST2"));
+	}
 }

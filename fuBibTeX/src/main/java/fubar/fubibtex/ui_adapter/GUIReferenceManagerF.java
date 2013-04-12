@@ -75,4 +75,9 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
     public List<Reference> getExportList() {
         return exportManager.getReferences();
     }
+
+	@Override
+	public boolean dataStoreContainsCitationKey(String citationKey) {
+		return dataStoreManager.containsCitationKey(citationKey);
+	}
 }

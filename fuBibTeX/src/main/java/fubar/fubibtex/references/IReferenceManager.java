@@ -46,5 +46,12 @@ public interface IReferenceManager {
 	 */
 	boolean importFrom();
 	
+	/**
+	 * Checks if a citation key is already in a reference saved into the manager
+	 * @param citationKey existance of which needs to be checked 
+	 * @return Boolean true if Reference with given key exists, otherwise false
+	 */
+	boolean containsCitationKey(String citationKey);
+	
 }
 
