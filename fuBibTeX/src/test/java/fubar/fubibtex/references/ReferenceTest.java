@@ -6,6 +6,7 @@ package fubar.fubibtex.references;
 
 import java.util.List;
 import java.io.StringWriter;
+import static junit.framework.Assert.assertEquals;
 import junit.framework.TestCase;
 
 /**
@@ -87,4 +88,35 @@ public class ReferenceTest extends TestCase {
         assertTrue(missing.contains(Reference.FieldType.Year));
         assertFalse(missing.contains(Reference.FieldType.Crossref));
     }
+	
+	public void testConvertAccented(){
+		Reference r = new Reference(Reference.Type.Inproceedings);
+		
+		assertEquals("\\\"{A}", r.convertAccented('Ä'));
+		assertEquals("\\\"{a}", r.convertAccented('ä'));
+		assertEquals("\\r{A}" , r.convertAccented('Å'));
+		assertEquals("\\r{a}" , r.convertAccented('å'));
+		assertEquals("\\\"{O}", r.convertAccented('Ö'));
+		assertEquals("\\\"{o}", r.convertAccented('ö'));
+	}
+	
+	public void testPrepareForPrint(){
+		Reference r = new Reference(Reference.Type.Inproceedings);
+		
+		r.setCitationKey("ÄÄ05");
+		r.setField(Reference.FieldType.Author,    "Äku Änkkä");
+		r.setField(Reference.FieldType.Title,     "Ääkkösten alkeet");
+		r.setField(Reference.FieldType.Booktitle, "Öökkösten alkeet");
+		r.setField(Reference.FieldType.Editor,    "Örån Årmät");
+
+		r = r.prepareForPrint();
+		
+		assertEquals("\\\"{A}ku \\\"{A}nkk\\\"{a}",        r.getField(Reference.FieldType.Author));
+		assertEquals("\\\"{A}\\\"{a}kk\\\"{o}sten alkeet", r.getField(Reference.FieldType.Title));
+		assertEquals("\\\"{O}\\\"{o}kk\\\"{o}sten alkeet", r.getField(Reference.FieldType.Booktitle));
+		assertEquals("\\\"{O}r\\r{a}n \\r{A}rm\\\"{a}t",   r.getField(Reference.FieldType.Editor));
+		
+		
+	}
+	
 }

@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author fubar
  */
-public class Reference {
+public class Reference implements Cloneable{
 
     private Type referenceType;
     private EnumMap<FieldType, String> fields;
@@ -93,16 +95,26 @@ public class Reference {
      * @return Value indicating success.
      */
     public boolean save(Writer output) {
+		
+		//So that we wont mess up References with print-related crap, we'll make a copy of the Reference and only modify that
+		Reference rfp=null;
+		try {
+			rfp = (Reference)this.clone();
+		} catch (CloneNotSupportedException ex) {
+			Logger.getLogger(Reference.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
+		rfp = rfp.prepareForPrint();
+		
         try {
 
             output.write("\n@"
-                    + referenceType.toString().toUpperCase()
+                    + rfp.referenceType.toString().toUpperCase()
                     + " {"
-                    + citationKey
+                    + rfp.citationKey
                     + ",\n");
 
-            for (Map.Entry<FieldType, String> entry : fields.entrySet()) {
+            for (Map.Entry<FieldType, String> entry : rfp.fields.entrySet()) {
                 output.write("\t"
                         + entry.getKey().toString().toUpperCase()
                         + " = "
@@ -120,6 +132,33 @@ public class Reference {
         return true;
     }
 
+	/**
+	 * Returns a copy of this reference readied for printing into file.
+	 * This basically means that all Nordic characters are morphed into format that Bibtex wants.
+	 */
+	protected Reference prepareForPrint() {
+		Reference referenceForPrinting = this;
+		StringBuilder citKeySB = new StringBuilder();
+		
+		for (int i = 0; i < referenceForPrinting.citationKey.length(); i++) {
+			char c = referenceForPrinting.citationKey.charAt(i);
+			citKeySB.append(convertAccented(c));
+		}
+		referenceForPrinting.setCitationKey(citKeySB.toString());
+		
+		for (Map.Entry<FieldType, String> entry : fields.entrySet()) {
+			String key = entry.getValue();
+			StringBuilder keySB = new StringBuilder();
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.charAt(i);
+				keySB.append(convertAccented(c));
+			}
+			entry.setValue(keySB.toString());
+		}
+
+		return referenceForPrinting;
+	}
+	
     /**
      * Returns the citation key of this reference.
      *
@@ -130,6 +169,36 @@ public class Reference {
         return this.citationKey;
     }
 
+	protected String convertAccented(char c) {
+		String retVal = "";
+		
+		switch (c)
+		{	
+			case 'Ä':
+				retVal = "\\\"{A}";
+				break;
+			case 'ä':
+				retVal = "\\\"{a}";
+				break;
+			case 'Å':
+				retVal = "\\r{A}";
+				break;
+			case 'å':
+				retVal = "\\r{a}";
+				break;
+			case 'Ö':
+				retVal = "\\\"{O}";
+				break;
+			case 'ö':
+				retVal = "\\\"{o}";
+				break;
+			default:
+				retVal = String.valueOf(c);
+		}
+		
+		return retVal;
+	}
+	
     public enum Type {
 
         article,

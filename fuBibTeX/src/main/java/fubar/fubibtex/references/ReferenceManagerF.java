@@ -3,7 +3,6 @@ package fubar.fubibtex.references;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ public class ReferenceManagerF implements IReferenceManager {
 	//This referencemanager uses files as datastores.
 	private File importFile;
 	private File exportFile;
-	private boolean isDebug = false;
 
 	public ReferenceManagerF() {
 		referenceList = new ArrayList<Reference>();
@@ -79,6 +77,7 @@ public class ReferenceManagerF implements IReferenceManager {
 			while (referenceScanner.hasNext()) {
 				String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
 				referenceString = cleanStringTerminators(referenceString);
+				referenceString = convertAccented(referenceString);
 				
 				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
 				String referenceType = buildReferenceType(referenceString);
@@ -124,7 +123,9 @@ public class ReferenceManagerF implements IReferenceManager {
 	public boolean exportTo() {
 		try {
 			
-			PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
+			//PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
+			PrintWriter pw = new PrintWriter(exportFile,"UTF-8");
+
 			for(Reference r : referenceList) r.save(pw);
 			pw.close();
 			
@@ -261,6 +262,8 @@ public class ReferenceManagerF implements IReferenceManager {
 			}
 		}
 		
+		
+		
 		return ret;
 	}
 
@@ -292,4 +295,28 @@ public class ReferenceManagerF implements IReferenceManager {
 		}
 		return false;
 	}
+	
+	protected String convertAccented(String input){
+		
+		if(input.contains("\\\"{A}"))
+			input = input.replace("\\\"{A}", "Ä");
+		
+		if (input.contains("\\\"{a}"))
+			input = input.replace("\\\"{a}", "ä");
+		
+		if (input.contains("\\r{A}"))
+			input = input.replace("\\r{A}", "Å");
+
+		if (input.contains("\\r{a}"))
+			input = input.replace("\\r{a}", "å");
+		
+		if (input.contains("\\\"{O}"))
+			input = input.replace("\\\"{O}", "Ö");
+		
+		if (input.contains("\\\"{o}"))
+			input = input.replace("\\\"{o}", "ö");
+				
+		return input;
+	}
+	
 }

@@ -381,4 +381,12 @@ public class ReferenceManagerFTest extends TestCase {
 	
 		assertFalse(rm.containsCitationKey("TEST2"));
 	}
+	
+	public void testConvertAccented(){
+		assertEquals("Äku Änkkä",        rm.convertAccented("\\\"{A}ku \\\"{A}nkk\\\"{a}"));
+		assertEquals("Ääkkösten alkeet", rm.convertAccented("\\\"{A}\\\"{a}kk\\\"{o}sten alkeet"));
+		assertEquals("Öökkösten alkeet", rm.convertAccented("\\\"{O}\\\"{o}kk\\\"{o}sten alkeet"));
+		assertEquals("Örån Årmät",       rm.convertAccented("\\\"{O}r\\r{a}n \\r{A}rm\\\"{a}t"));
+	}
+	
 }

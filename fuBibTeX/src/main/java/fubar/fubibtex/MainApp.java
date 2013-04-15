@@ -88,6 +88,11 @@ public class MainApp {
             public List<Reference> getExportList() {
                 return exportList;
             }
+
+			@Override
+			public boolean dataStoreContainsCitationKey(String citationKey) {
+				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			}
             
         };
         
