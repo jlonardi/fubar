@@ -74,7 +74,7 @@ public class AddReferenceView extends View {
      */
     private void setupTypeSelectionPanel() {
         typeSelectionPanel = new JPanel();
-        typeSelectionPanel.setLayout(new BoxLayout(typeSelectionPanel, BoxLayout.X_AXIS));
+        typeSelectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         typeSelectionPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         typeSelectionPanel.setName("typeSelectionPanel");
         basePanel.add(typeSelectionPanel);
@@ -87,10 +87,20 @@ public class AddReferenceView extends View {
         typeList.setName("typeList");
 
         typeSelectionPanel.add(typeList);
-        typeSelectionPanel.add(Box.createHorizontalGlue());
         
         // A panel that contains the citation key field, key label and error label
         JPanel panel = new JPanel();
+        
+        // Sets up the input field for the citation key
+        JLabel label = new JLabel();
+        label.setText("Citation key");
+        label.setName("citationKeyLabel");
+        label.setPreferredSize(new Dimension(80, 20));
+        citationKeyField = new JTextField(20);
+        citationKeyField.setName("citationKeyField");
+        citationKeyField.getDocument().addDocumentListener(citationKeyListener);
+        panel.add(label);
+        panel.add(citationKeyField);
         
         // Sets up the error label
         citationKeyError = new JLabel();
@@ -105,24 +115,7 @@ public class AddReferenceView extends View {
         citationKeyError.setMinimumSize(new Dimension(30,30));
         panel.add(citationKeyError);
         
-        // Sets up the input field for the citation key
-        JLabel label = new JLabel();
-        label.setText("Citation key");
-        label.setName("citationKeyLabel");
-        label.setPreferredSize(new Dimension(80, 20));
-        citationKeyField = new JTextField(20);
-        citationKeyField.setName("citationKeyField");
-        citationKeyField.getDocument().addDocumentListener(citationKeyListener);
-        panel.add(label);
-        panel.add(citationKeyField);
-
         typeSelectionPanel.add(panel);
-       
-        typeSelectionPanel.add(Box.createHorizontalGlue());
-        typeSelectionPanel.add(Box.createHorizontalGlue());
-        typeSelectionPanel.add(Box.createHorizontalGlue());
-        typeSelectionPanel.add(Box.createHorizontalGlue());
-        typeSelectionPanel.add(Box.createHorizontalGlue());
     }
 
     /**
