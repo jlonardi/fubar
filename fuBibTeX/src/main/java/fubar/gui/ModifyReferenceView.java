@@ -40,6 +40,7 @@ public class ModifyReferenceView extends AddReferenceView {
     public void setEditedReference(Reference ref) {
         editedReference = ref;
         selectedType = editedReference.getType();
+        super.updateView();
         fillFields();
     }
     
