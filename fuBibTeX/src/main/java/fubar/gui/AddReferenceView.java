@@ -31,15 +31,18 @@ import javax.swing.event.DocumentListener;
 
 public class AddReferenceView extends View {
 
-    private MainFrame frame;
-    private JPanel basePanel, typeSelectionPanel, fieldPanel, requiredPanel,
+    protected MainFrame frame;
+    protected JPanel basePanel, typeSelectionPanel, fieldPanel, requiredPanel,
             optionalPanel, controlPanel;
-    private ActionListener selectionListener, returnListener, addListener;
-    private DocumentListener citationKeyListener;
-    private JLabel citationKeyError;
-    private JComboBox typeList;
-    private JTextField citationKeyField;
-    private EnumMap<FieldType, JTextField> map;
+    protected ActionListener selectionListener, returnListener, addListener;
+    protected DocumentListener citationKeyListener;
+    protected JLabel citationKeyError;
+    protected JButton addButton, returnButton;
+    protected JComboBox typeList;
+    protected JTextField citationKeyField;
+    protected EnumMap<FieldType, JTextField> map;
+    protected Type selectedType;
+    protected Dimension buttonSize;
 
     public AddReferenceView(MainFrame frame) {
         this.frame = frame;
@@ -56,7 +59,7 @@ public class AddReferenceView extends View {
         setupTypeSelectionPanel();
         setupFieldPanel();
         setupControlPanel();
-        updateFieldPanel();
+        updateView();
 
         // Just for developing the layout
         /*
@@ -87,10 +90,10 @@ public class AddReferenceView extends View {
         typeList.setName("typeList");
 
         typeSelectionPanel.add(typeList);
-        
+
         // A panel that contains the citation key field, key label and error label
         JPanel panel = new JPanel();
-        
+
         // Sets up the input field for the citation key
         JLabel label = new JLabel();
         label.setText("Citation key");
@@ -101,7 +104,7 @@ public class AddReferenceView extends View {
         citationKeyField.getDocument().addDocumentListener(citationKeyListener);
         panel.add(label);
         panel.add(citationKeyField);
-        
+
         // Sets up the error label
         citationKeyError = new JLabel();
         try {
@@ -112,9 +115,9 @@ public class AddReferenceView extends View {
         }
         citationKeyError.setToolTipText("Key not unique");
         citationKeyError.setVisible(false);
-        citationKeyError.setMinimumSize(new Dimension(30,30));
+        citationKeyError.setMinimumSize(new Dimension(30, 30));
         panel.add(citationKeyError);
-        
+
         typeSelectionPanel.add(panel);
     }
 
@@ -155,13 +158,13 @@ public class AddReferenceView extends View {
         controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
         controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        Dimension buttonSize = new Dimension(100, 30);
+        buttonSize = new Dimension(100, 30);
 
-        JButton returnButton = new JButton("Return");
+        returnButton = new JButton("Return");
         returnButton.setName("returnButton");
         returnButton.setPreferredSize(buttonSize);
         returnButton.addActionListener(returnListener);
-        JButton addButton = new JButton("Add");
+        addButton = new JButton("Add");
         addButton.setName("addButton");
         addButton.addActionListener(addListener);
         addButton.setPreferredSize(buttonSize);
@@ -179,9 +182,8 @@ public class AddReferenceView extends View {
      * @param requiredFields
      * @param optionalFields
      */
-    private void updateFieldPanel() {
-
-        Type selectedType = (Type) typeList.getSelectedItem();
+    protected void updateView() {
+        
         List<FieldType> requiredFields = fubar.fubibtex.references.ReferenceFields.getRequiredFields(selectedType);
         List<FieldType> optionalFields = fubar.fubibtex.references.ReferenceFields.getOptionalFields(selectedType);
 
@@ -201,50 +203,48 @@ public class AddReferenceView extends View {
 
         JPanel panel;
         JLabel label;
-        
+
         map.clear();
-		if (requiredFields != null)
-		{
-			for (FieldType type : requiredFields) {
-				panel = new JPanel();
-				label = new JLabel();
-				label.setText(type.name());
-				label.setName(type.name()+"Label");
-				label.setPreferredSize(new Dimension(80, 20));
-				JTextField textField = new JTextField(20);
-				textField.setName(type.name()+"TextField");
-				panel.add(label);
-				panel.add(textField);
-				requiredPanel.add(panel);
-				map.put(type, textField);
-			}
-			requiredPanel.revalidate();
-			requiredPanel.repaint();
-		}
-/*
-    It should not be possible to run in a situation where you would have only
-    mapped required fields for a reference type and left out the optional ones.
-          if (optionalFields == null) {
-              return;
-          }
-*/
-		if (optionalFields != null)
-		{
-			for (FieldType type : optionalFields) {
-				panel = new JPanel();
-				label = new JLabel();
-				label.setText(type.name());
-				label.setPreferredSize(new Dimension(80, 20));
-				JTextField textField = new JTextField(20);
-				textField.setName(type.name()+"TextField");
-				panel.add(label);
-				panel.add(textField);
-				optionalPanel.add(panel);
-				map.put(type, textField);
-			}
-			optionalPanel.revalidate();
-			optionalPanel.repaint();
-		}
+        if (requiredFields != null) {
+            for (FieldType type : requiredFields) {
+                panel = new JPanel();
+                label = new JLabel();
+                label.setText(type.name());
+                label.setName(type.name() + "Label");
+                label.setPreferredSize(new Dimension(80, 20));
+                JTextField textField = new JTextField(20);
+                textField.setName(type.name() + "TextField");
+                panel.add(label);
+                panel.add(textField);
+                requiredPanel.add(panel);
+                map.put(type, textField);
+            }
+            requiredPanel.revalidate();
+            requiredPanel.repaint();
+        }
+        /*
+         It should not be possible to run in a situation where you would have only
+         mapped required fields for a reference type and left out the optional ones.
+         if (optionalFields == null) {
+         return;
+         }
+         */
+        if (optionalFields != null) {
+            for (FieldType type : optionalFields) {
+                panel = new JPanel();
+                label = new JLabel();
+                label.setText(type.name());
+                label.setPreferredSize(new Dimension(80, 20));
+                JTextField textField = new JTextField(20);
+                textField.setName(type.name() + "TextField");
+                panel.add(label);
+                panel.add(textField);
+                optionalPanel.add(panel);
+                map.put(type, textField);
+            }
+            optionalPanel.revalidate();
+            optionalPanel.repaint();
+        }
     }
 
     /**
@@ -255,14 +255,15 @@ public class AddReferenceView extends View {
         selectionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateFieldPanel();
+                selectedType = (Type) typeList.getSelectedItem();
+                updateView();
             }
         };
         // The listener for returning to the listing view.
         returnListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateFieldPanel();
+                updateView();
                 citationKeyField.setText("");
                 frame.showView(ViewType.REFERENCE_LIST);
             }
@@ -271,9 +272,17 @@ public class AddReferenceView extends View {
         addListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 Type type = (Type) typeList.getSelectedItem();
                 Reference ref = new Reference(type);
+                
+                if(MainFrame.manager.dataStoreContainsCitationKey(
+                        citationKeyField.getText())) {
+                    frame.showMessage(
+                                "Citation key is allready in use.",
+                                "Add reference error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                }
                 ref.setCitationKey(citationKeyField.getText());
 
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getRequiredFields(type)) {
@@ -296,7 +305,7 @@ public class AddReferenceView extends View {
                     }
                 }
 
-                updateFieldPanel();
+                updateView();
                 citationKeyField.setText("");
 
                 MainFrame.manager.addReferenceToDatastore(ref);
@@ -304,24 +313,24 @@ public class AddReferenceView extends View {
                 frame.showView(ViewType.REFERENCE_LIST);
             }
         };
-        
+
         // A listener that checks if the currently entered citation key is used or not
         citationKeyListener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if(MainFrame.manager.dataStoreContainsCitationKey(
-                                            citationKeyField.getText())) {
+                if (MainFrame.manager.dataStoreContainsCitationKey(
+                        citationKeyField.getText())) {
                     citationKeyError.setVisible(true);
                 } else {
                     citationKeyError.setVisible(false);
                 }
-                
+
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if(MainFrame.manager.dataStoreContainsCitationKey(
-                                            citationKeyField.getText())) {
+                if (MainFrame.manager.dataStoreContainsCitationKey(
+                        citationKeyField.getText())) {
                     citationKeyError.setVisible(true);
                 } else {
                     citationKeyError.setVisible(false);
@@ -330,13 +339,13 @@ public class AddReferenceView extends View {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if(MainFrame.manager.dataStoreContainsCitationKey(
-                                            citationKeyField.getText())) {
+                if (MainFrame.manager.dataStoreContainsCitationKey(
+                        citationKeyField.getText())) {
                     citationKeyError.setVisible(true);
                 } else {
                     citationKeyError.setVisible(false);
                 }
-                
+
             }
         };
     }
@@ -348,7 +357,7 @@ public class AddReferenceView extends View {
         typeSelectionPanel.setBounds(0, 0, (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.1));
         fieldPanel.setBounds(0, (int) (basePanel.getSize().height * 0.1), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.75));
         controlPanel.setBounds(0, (int) (basePanel.getSize().height * 0.9), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.15));
-        requiredPanel.setBounds(0, (int) 0, (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75))/2);
-        optionalPanel.setBounds(0, (int) (0 + requiredPanel.getHeight()), (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75))/2);
+        requiredPanel.setBounds(0, (int) 0, (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75)) / 2);
+        optionalPanel.setBounds(0, (int) (0 + requiredPanel.getHeight()), (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75)) / 2);
     }
 }

@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,15 +22,18 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class ReferenceListView extends View {
 
     private JList referenceList, exportList;
     private JScrollPane listScroller, exportScroller;
-    private JPanel listPanel, controlPanel, exportPanel, exportListHolder, buttonPanel;
-    private JButton addReferenceButton, addToExportList, removeFromExportList;
+    private JPanel listPanel, controlPanel, exportPanel, exportListHolder;
+    private JButton addReferenceButton, modifyReferenceButton, addToExportList, removeFromExportList;
     private JLabel exportLabel;
     private MainFrame frame;
+    private Reference selectedReference;
 
     public ReferenceListView(final MainFrame frame) {
         this.frame = frame;
@@ -59,6 +64,15 @@ public class ReferenceListView extends View {
         referenceList = new JList(MainFrame.manager.getReferencesFromDatastore().toArray());
         referenceList.setLayoutOrientation(JList.VERTICAL);
         referenceList.setName("referenceList");
+        // Listener that enables the modify button only when a value is selected
+        referenceList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(referenceList.getSelectedValue() != null) {
+                    modifyReferenceButton.setEnabled(true);
+                }
+            }
+        });
         listScroller = new JScrollPane(referenceList);
         listScroller.setName("listScroller");
         listPanel.add(listScroller);
@@ -87,6 +101,21 @@ public class ReferenceListView extends View {
                 frame.showView(ViewType.ADD_REFERENCE);
             }
         });
+        
+        modifyReferenceButton = new JButton("Edit reference");
+        modifyReferenceButton.setName("editReferenceButton");
+        modifyReferenceButton.setPreferredSize(buttonSize);
+        modifyReferenceButton.setEnabled(false);
+        modifyReferenceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyReferenceButton.setEnabled(false);
+                selectedReference = (Reference) referenceList.getSelectedValue();
+                System.out.println("selected reference " + selectedReference);
+                frame.showView(ViewType.MODIFY_REFERENCE);
+            }
+        });
+        
         addToExportList = new JButton();
         try {
             File imageFile = new File("src/main/resources/gui/add.png");
@@ -130,13 +159,8 @@ public class ReferenceListView extends View {
             }
         });
         
-//        JPanel dummyPanel = new JPanel();
-//        dummyPanel.setMinimumSize(new Dimension(150,20));
-//        dummyPanel.setPreferredSize(new Dimension(150,20));
-//        dummyPanel.setBackground(Color.CYAN);
-//        
-//        controlPanel.add(dummyPanel);
         controlPanel.add(addReferenceButton);
+        controlPanel.add(modifyReferenceButton);
         controlPanel.add(addToExportList);
         controlPanel.add(removeFromExportList);
 
@@ -145,6 +169,9 @@ public class ReferenceListView extends View {
         this.add(exportPanel);
     }
 
+    public Reference getSelectedReference() {
+        return selectedReference;
+    }
     @Override
     public void render(Dimension dimension) {
         this.setSize(dimension);

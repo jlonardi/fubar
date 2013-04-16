@@ -1,13 +1,19 @@
 package fubar.gui;
 
 import fubar.fubibtex.ui_adapter.IGUIReferenceManager;
+import static fubar.gui.ViewType.ADD_REFERENCE;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -22,9 +28,10 @@ public class MainFrame extends JFrame{
     private ButtonTray buttonTray;
     private ReferenceListView listView;
     private AddReferenceView addReferenceView;
+    private ModifyReferenceView modifyReferenceView;
     public static IGUIReferenceManager manager;
-    Dimension screenSize;
-    Insets frameInsets;
+    private Dimension screenSize;
+    private Insets frameInsets;
     
     /**
      * Sets up a new frame for the application.
@@ -63,6 +70,12 @@ public class MainFrame extends JFrame{
         addReferenceView.setName("addReferenceView");
         views.add(addReferenceView);
         pane.add(addReferenceView);
+        
+        modifyReferenceView = new ModifyReferenceView(this);
+        modifyReferenceView.setVisible(false);
+        modifyReferenceView.setName("modifyReferenceView");
+        views.add(modifyReferenceView);
+        pane.add(modifyReferenceView);
     }
 
     private void initFrame() {
@@ -70,7 +83,10 @@ public class MainFrame extends JFrame{
         this.setTitle("fuBibTeX");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(frameSize);
-        this.setMinimumSize(new Dimension(750, 500));
+        this.setMinimumSize(new Dimension(750, 550));
+        ImageIcon imgIcon = new ImageIcon("src/main/resources/gui/icon.png");
+        this.setIconImage(imgIcon.getImage());
+        
 
         // Setup for the main panel.
         JPanel mainPanel = new JPanel();
@@ -125,6 +141,11 @@ public class MainFrame extends JFrame{
                 break;
             case ADD_REFERENCE:
                 this.addReferenceView.setVisible(true);
+                break;
+            case MODIFY_REFERENCE:
+                this.modifyReferenceView.setEditedReference(
+                        this.listView.getSelectedReference());
+                this.modifyReferenceView.setVisible(true);
                 break;
         }
     }

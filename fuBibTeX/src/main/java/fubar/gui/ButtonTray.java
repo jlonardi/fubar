@@ -3,7 +3,11 @@ package fubar.gui;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -34,6 +38,12 @@ public class ButtonTray extends JPanel {
 
         save = new JButton("Save");
         save.setName("save");
+        try {
+            File imageFile = new File("src/main/resources/gui/save.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            save.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,6 +56,12 @@ public class ButtonTray extends JPanel {
 
         exportBibtext = new JButton("Export");
         exportBibtext.setName("exportBibtext");
+        try {
+            File imageFile = new File("src/main/resources/gui/export.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            exportBibtext.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
         exportBibtext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,6 +82,12 @@ public class ButtonTray extends JPanel {
 
         importBibtext = new JButton("Import");
         importBibtext.setName("importBibtext");
+        try {
+            File imageFile = new File("src/main/resources/gui/import.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            importBibtext.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
         importBibtext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
