@@ -4,11 +4,17 @@ import fubar.fubibtex.references.Reference;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -28,19 +34,21 @@ public class ReferenceListView extends View {
         this.frame = frame;
         this.setLayout(null);
 
-        // Set up the left side of the view that holds the list
+        // Set up the top of the view that holds the list
         listPanel = new JPanel();
         listPanel.setLayout(null);
 
         // Set up the central area of the view that holds the control buttons
         controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         controlPanel.setMinimumSize(new Dimension(150,20));
-
-        // Set up the right side of the view that holds the export list.
+        
+        // Set up the bottom of the view that holds the export list.
         exportPanel = new JPanel();
+        //exportPanel.setLayout(null);
         exportPanel.setLayout(new BoxLayout(exportPanel, BoxLayout.Y_AXIS));
         exportListHolder = new JPanel();
+        exportListHolder.setLayout(null);
+        //exportListHolder.setLayout(new BoxLayout(exportListHolder, BoxLayout.Y_AXIS));
 
         // Layout visualization for development
 //        listPanel.setBackground(Color.red);
@@ -54,19 +62,22 @@ public class ReferenceListView extends View {
         listScroller = new JScrollPane(referenceList);
         listScroller.setName("listScroller");
         listPanel.add(listScroller);
-
-        exportLabel = new JLabel("References to be exported");
+        
+        // Set up the list for the references to be exported
+        exportLabel = new JLabel("          References to be exported");
         exportPanel.add(exportLabel);
         exportList = new JList(MainFrame.manager.getExportList().toArray());
+        exportList.setLayoutOrientation(JList.VERTICAL);
         exportList.setName("exportList");
         exportScroller = new JScrollPane(exportList);
-
+        exportScroller.setName("exportScroller");
+        
         exportListHolder.add(exportScroller);
-
+        
         exportPanel.add(exportListHolder);
 
         // Set up the buttons
-        Dimension buttonSize = new Dimension(140, 30);
+        Dimension buttonSize = new Dimension(140, 35);
         addReferenceButton = new JButton("New reference");
         addReferenceButton.setName("addReferenceButton");
         addReferenceButton.setPreferredSize(buttonSize);
@@ -76,7 +87,18 @@ public class ReferenceListView extends View {
                 frame.showView(ViewType.ADD_REFERENCE);
             }
         });
-        addToExportList = new JButton("\u25BA");
+        addToExportList = new JButton();
+        try {
+            
+            File imageFile = new File("src/main/resources/gui/add.png");
+            if(imageFile.exists()) 
+                System.out.println("Image file found!");
+            else 
+                System.out.println("Image file not found!");
+            BufferedImage img = ImageIO.read(imageFile);
+            addToExportList.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
         addToExportList.setPreferredSize(buttonSize);
         addToExportList.setName("addToExportList");
         addToExportList.addActionListener(new ActionListener() {
@@ -90,7 +112,18 @@ public class ReferenceListView extends View {
             }
         });
 
-        removeFromExportList = new JButton("\u25C4");
+        removeFromExportList = new JButton();
+        try {
+            
+            File imageFile = new File("src/main/resources/gui/remove.png");
+            if(imageFile.exists()) 
+                System.out.println("Image file found!");
+            else 
+                System.out.println("Image file not found!");
+            BufferedImage img = ImageIO.read(imageFile);
+            removeFromExportList.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
         removeFromExportList.setPreferredSize(buttonSize);
         removeFromExportList.setName("removeFromExportList");
         removeFromExportList.addActionListener(new ActionListener() {
@@ -107,11 +140,12 @@ public class ReferenceListView extends View {
             }
         });
         
-        JPanel dummyPanel = new JPanel();
-        dummyPanel.setMinimumSize(new Dimension(150,20));
-        dummyPanel.setPreferredSize(new Dimension(150,20));
-        
-        controlPanel.add(dummyPanel);
+//        JPanel dummyPanel = new JPanel();
+//        dummyPanel.setMinimumSize(new Dimension(150,20));
+//        dummyPanel.setPreferredSize(new Dimension(150,20));
+//        dummyPanel.setBackground(Color.CYAN);
+//        
+//        controlPanel.add(dummyPanel);
         controlPanel.add(addReferenceButton);
         controlPanel.add(addToExportList);
         controlPanel.add(removeFromExportList);
@@ -124,19 +158,22 @@ public class ReferenceListView extends View {
     @Override
     public void render(Dimension dimension) {
         this.setSize(dimension);
-        listPanel.setBounds(0, 0, (int) (this.getSize().width * 0.4), (int) (this.getSize().height));
-        controlPanel.setBounds((int) (this.getSize().width * 0.4), 0, (int) (this.getSize().width * 0.2), (int) (this.getSize().height));
-        exportPanel.setBounds((int) (this.getSize().width * 0.6), 0, (int) (this.getSize().width * 0.4), (int) (this.getSize().height));
+        listPanel.setBounds(0, 0, (int) (this.getSize().width ), (int) (this.getSize().height * 0.5));
+        controlPanel.setBounds(0 ,(int) (this.getSize().height * 0.5), 
+                               (int) (this.getSize().width), (int) (this.getSize().height * 0.1));
+        exportPanel.setBounds(0, (int) (this.getSize().height * 0.6), 
+                               (int) (this.getSize().width), (int) (this.getSize().height * 0.4));
         listScroller.setBounds(
                 (int) (listPanel.getSize().width * 0.03),
                 10,
                 (int) (listPanel.getSize().width * 0.94),
                 (int) (listPanel.getSize().height * 0.94));
-//        exportScroller.setBounds(
-//                (int) (exportScroller.getSize().width * 0.03),
-//                (int) (exportScroller.getSize().width * 0.10),
-//                (int) (exportScroller.getSize().width * 0.80),
-//                (int) (exportScroller.getSize().height * 0.80));
+        exportScroller.setSize(listScroller.getSize());
+        exportScroller.setBounds(
+                (int) (exportPanel.getSize().width * 0.03),
+                (int) (exportPanel.getSize().height * 0.07),
+                (int) (exportPanel.getWidth() * 0.94 ),
+                (int) (exportPanel.getHeight() * 0.8));
         referenceList.setListData(MainFrame.manager.getReferencesFromDatastore().toArray());
         referenceList.revalidate();
     }
