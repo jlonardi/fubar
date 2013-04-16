@@ -247,33 +247,4 @@ public class GUIReferenceManagerFTest extends TestCase {
 		rl = grm.getExportList();
 		assertEquals(1, rl.size());
 	}
-	
-	public void testDataStoreContainsCitationKeyWhenKeyIsPresent(){
-		GUIReferenceManagerF grm = new GUIReferenceManagerF();
-
-		Reference r1 = new Reference(Reference.Type.Inproceedings);
-		r1.setCitationKey("TEST1");
-		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
-		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
-		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
-		r1.setField(Reference.FieldType.Year, "2010");	
-		grm.addReferenceToDatastore(r1);
-		
-		assertTrue(grm.dataStoreContainsCitationKey("TEST1"));
-	}
-	
-	public void testDataStoreContainsCitationKeyWhenKeyIsNotPresent(){
-		GUIReferenceManagerF grm = new GUIReferenceManagerF();
-
-		Reference r1 = new Reference(Reference.Type.Inproceedings);
-		r1.setCitationKey("TEST1");
-		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
-		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
-		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
-		r1.setField(Reference.FieldType.Year, "2010");	
-		grm.addReferenceToDatastore(r1);
-		
-		assertFalse(grm.dataStoreContainsCitationKey("TEST2"));	
-	}
-	
 }

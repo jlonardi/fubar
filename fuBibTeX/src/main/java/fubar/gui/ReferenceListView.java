@@ -89,12 +89,7 @@ public class ReferenceListView extends View {
         });
         addToExportList = new JButton();
         try {
-            
             File imageFile = new File("src/main/resources/gui/add.png");
-            if(imageFile.exists()) 
-                System.out.println("Image file found!");
-            else 
-                System.out.println("Image file not found!");
             BufferedImage img = ImageIO.read(imageFile);
             addToExportList.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
@@ -113,13 +108,8 @@ public class ReferenceListView extends View {
         });
 
         removeFromExportList = new JButton();
-        try {
-            
+        try {     
             File imageFile = new File("src/main/resources/gui/remove.png");
-            if(imageFile.exists()) 
-                System.out.println("Image file found!");
-            else 
-                System.out.println("Image file not found!");
             BufferedImage img = ImageIO.read(imageFile);
             removeFromExportList.setIcon(new ImageIcon(img));
         } catch (IOException ex) {

@@ -9,12 +9,16 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -22,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class AddReferenceView extends View {
 
@@ -29,6 +35,8 @@ public class AddReferenceView extends View {
     private JPanel basePanel, typeSelectionPanel, fieldPanel, requiredPanel,
             optionalPanel, controlPanel;
     private ActionListener selectionListener, returnListener, addListener;
+    private DocumentListener citationKeyListener;
+    private JLabel citationKeyError;
     private JComboBox typeList;
     private JTextField citationKeyField;
     private EnumMap<FieldType, JTextField> map;
@@ -48,6 +56,7 @@ public class AddReferenceView extends View {
         setupTypeSelectionPanel();
         setupFieldPanel();
         setupControlPanel();
+        updateFieldPanel();
 
         // Just for developing the layout
         /*
@@ -78,6 +87,39 @@ public class AddReferenceView extends View {
         typeList.setName("typeList");
 
         typeSelectionPanel.add(typeList);
+        typeSelectionPanel.add(Box.createHorizontalGlue());
+        
+        // A panel that contains the citation key field, key label and error label
+        JPanel panel = new JPanel();
+        
+        // Sets up the error label
+        citationKeyError = new JLabel();
+        try {
+            File imageFile = new File("src/main/resources/gui/error.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            citationKeyError.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
+        citationKeyError.setToolTipText("Key not unique");
+        citationKeyError.setVisible(false);
+        citationKeyError.setMinimumSize(new Dimension(30,30));
+        panel.add(citationKeyError);
+        
+        // Sets up the input field for the citation key
+        JLabel label = new JLabel();
+        label.setText("Citation key");
+        label.setName("citationKeyLabel");
+        label.setPreferredSize(new Dimension(80, 20));
+        citationKeyField = new JTextField(20);
+        citationKeyField.setName("citationKeyField");
+        citationKeyField.getDocument().addDocumentListener(citationKeyListener);
+        panel.add(label);
+        panel.add(citationKeyField);
+
+        typeSelectionPanel.add(panel);
+       
+        typeSelectionPanel.add(Box.createHorizontalGlue());
+        typeSelectionPanel.add(Box.createHorizontalGlue());
         typeSelectionPanel.add(Box.createHorizontalGlue());
         typeSelectionPanel.add(Box.createHorizontalGlue());
         typeSelectionPanel.add(Box.createHorizontalGlue());
@@ -164,17 +206,9 @@ public class AddReferenceView extends View {
             return;
         }
 
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-        label.setText("Citation key");
-        label.setName("citationKeyLabel");
-        label.setPreferredSize(new Dimension(80, 20));
-        citationKeyField = new JTextField(20);
-        citationKeyField.setName("citationKeyField");
-        panel.add(label);
-        panel.add(citationKeyField);
-        requiredPanel.add(panel);
-
+        JPanel panel;
+        JLabel label;
+        
         map.clear();
 		if (requiredFields != null)
 		{
@@ -195,11 +229,11 @@ public class AddReferenceView extends View {
 			requiredPanel.repaint();
 		}
 /*
- * It should not be possible to run in a situation where you would have only
- * mapped required fields for a reference type and left out the optional ones.
-        if (optionalFields == null) {
-            return;
-        }
+    It should not be possible to run in a situation where you would have only
+    mapped required fields for a reference type and left out the optional ones.
+          if (optionalFields == null) {
+              return;
+          }
 */
 		if (optionalFields != null)
 		{
@@ -236,6 +270,7 @@ public class AddReferenceView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateFieldPanel();
+                citationKeyField.setText("");
                 frame.showView(ViewType.REFERENCE_LIST);
             }
         };
@@ -250,7 +285,7 @@ public class AddReferenceView extends View {
 
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getRequiredFields(type)) {
                     JTextField field = map.get(key);
-                    if (field.getText().equals("") || citationKeyField.getText().equals("")) {
+                    if (field.getText().equals("")) {
                         frame.showMessage(
                                 "You must fill all the required fields to proceed.",
                                 "Add reference error",
@@ -269,10 +304,46 @@ public class AddReferenceView extends View {
                 }
 
                 updateFieldPanel();
+                citationKeyField.setText("");
 
                 MainFrame.manager.addReferenceToDatastore(ref);
                 frame.dataUpdated();
                 frame.showView(ViewType.REFERENCE_LIST);
+            }
+        };
+        
+        // A listener that checks if the currently entered citation key is used or not
+        citationKeyListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if(MainFrame.manager.dataStoreContainsCitationKey(
+                                            citationKeyField.getText())) {
+                    citationKeyError.setVisible(true);
+                } else {
+                    citationKeyError.setVisible(false);
+                }
+                
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(MainFrame.manager.dataStoreContainsCitationKey(
+                                            citationKeyField.getText())) {
+                    citationKeyError.setVisible(true);
+                } else {
+                    citationKeyError.setVisible(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if(MainFrame.manager.dataStoreContainsCitationKey(
+                                            citationKeyField.getText())) {
+                    citationKeyError.setVisible(true);
+                } else {
+                    citationKeyError.setVisible(false);
+                }
+                
             }
         };
     }
