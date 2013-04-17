@@ -36,6 +36,7 @@ public class ReferenceListView extends View {
     private Reference selectedReference;
     private ActionListener addReferenceListener, modifyReferenceListener,
             addToExportListener, removeFromExportListener;
+    private ListSelectionListener referenceListListener;
 
     public ReferenceListView(final MainFrame frame) {
         this.frame = frame;
@@ -51,11 +52,11 @@ public class ReferenceListView extends View {
         
         // Set up the bottom of the view that holds the export list.
         exportPanel = new JPanel();
-        //exportPanel.setLayout(null);
         exportPanel.setLayout(new BoxLayout(exportPanel, BoxLayout.Y_AXIS));
         exportListHolder = new JPanel();
         exportListHolder.setLayout(null);
-        //exportListHolder.setLayout(new BoxLayout(exportListHolder, BoxLayout.Y_AXIS));
+        // Set up the listeners.
+        setUpListeners();
 
         // Layout visualization for development
 //        listPanel.setBackground(Color.red);
@@ -67,14 +68,7 @@ public class ReferenceListView extends View {
         referenceList.setLayoutOrientation(JList.VERTICAL);
         referenceList.setName("referenceList");
         // Listener that enables the modify button only when a value is selected
-        referenceList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if(referenceList.getSelectedValue() != null) {
-                    modifyReferenceButton.setEnabled(true);
-                }
-            }
-        });
+        referenceList.addListSelectionListener(referenceListListener);
         listScroller = new JScrollPane(referenceList);
         listScroller.setName("listScroller");
         listPanel.add(listScroller);
@@ -182,6 +176,16 @@ public class ReferenceListView extends View {
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
                     exportList.validate();
                     exportList.repaint();
+                }
+            }
+        };
+        // A listener that enables the modify button only when a reference is
+        // selected from the list.
+        referenceListListener = new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(referenceList.getSelectedValue() != null) {
+                    modifyReferenceButton.setEnabled(true);
                 }
             }
         };
