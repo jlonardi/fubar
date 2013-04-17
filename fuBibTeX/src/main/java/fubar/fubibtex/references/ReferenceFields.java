@@ -12,16 +12,13 @@ import java.util.List;
 public class ReferenceFields {
     private static EnumMap<Reference.Type, List<Reference.FieldType>> requiredFields;
     private static EnumMap<Reference.Type, List<Reference.FieldType>> optionalFields;
-    
-    private static boolean initialized = false;
-    
+
     /**
      * Returns the required fields for a given type of reference.
      * @param type The type of the reference.
      * @return List of the required fields.
      */
     public static List<Reference.FieldType> getRequiredFields(Reference.Type type) {
-        if (!initialized) initialize();
         return requiredFields.get(type);
     }
     
@@ -31,14 +28,13 @@ public class ReferenceFields {
      * @return List of the optional fields.
      */
     public static List<Reference.FieldType> getOptionalFields(Reference.Type type) {
-        if (!initialized) initialize();
         return optionalFields.get(type);
     }
     
     /**
      * Initializes the required and optional fields for all types of references.
      */
-    private static void initialize() {
+    static {
         requiredFields = new EnumMap<Reference.Type, List<Reference.FieldType>>(Reference.Type.class);
         optionalFields = new EnumMap<Reference.Type, List<Reference.FieldType>>(Reference.Type.class);
         
@@ -83,13 +79,13 @@ public class ReferenceFields {
         requiredFields.put(Reference.Type.book, reqFieldTypesBook);
         optionalFields.put(Reference.Type.book, optFieldTypesBook);
 
-		ArrayList<Reference.FieldType> reqFieldTypesArticle = new ArrayList<Reference.FieldType>();
-		ArrayList<Reference.FieldType> optFieldTypesArticle = new ArrayList<Reference.FieldType>();
+	ArrayList<Reference.FieldType> reqFieldTypesArticle = new ArrayList<Reference.FieldType>();
+	ArrayList<Reference.FieldType> optFieldTypesArticle = new ArrayList<Reference.FieldType>();
 
-		reqFieldTypesArticle.add(Reference.FieldType.Author);
+	reqFieldTypesArticle.add(Reference.FieldType.Author);
         reqFieldTypesArticle.add(Reference.FieldType.Title);
         reqFieldTypesArticle.add(Reference.FieldType.Journal);
-		reqFieldTypesArticle.add(Reference.FieldType.Year);
+	reqFieldTypesArticle.add(Reference.FieldType.Year);
         
         optFieldTypesArticle.add(Reference.FieldType.Volume);
         optFieldTypesArticle.add(Reference.FieldType.Number);
@@ -101,21 +97,19 @@ public class ReferenceFields {
         requiredFields.put(Reference.Type.article, reqFieldTypesArticle);
         optionalFields.put(Reference.Type.article, optFieldTypesArticle);
 
-		//Optional fields: author, title, howpublished, month, year, note, key
+	//Optional fields: author, title, howpublished, month, year, note, key
 		
-		ArrayList<Reference.FieldType> optFieldTypesMisc = new ArrayList<Reference.FieldType>();
+	ArrayList<Reference.FieldType> optFieldTypesMisc = new ArrayList<Reference.FieldType>();
         
         optFieldTypesMisc.add(Reference.FieldType.Author);
         optFieldTypesMisc.add(Reference.FieldType.Title);
         optFieldTypesMisc.add(Reference.FieldType.Howpublished);
         optFieldTypesMisc.add(Reference.FieldType.Month);
-		optFieldTypesMisc.add(Reference.FieldType.Year);
+	optFieldTypesMisc.add(Reference.FieldType.Year);
         optFieldTypesMisc.add(Reference.FieldType.Note);
         optFieldTypesMisc.add(Reference.FieldType.Key);
 
-        optionalFields.put(Reference.Type.Misc, optFieldTypesMisc);		
-
-        initialized = true;
+        optionalFields.put(Reference.Type.Misc, optFieldTypesMisc);
     }
     
 }
