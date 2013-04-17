@@ -34,6 +34,8 @@ public class ReferenceListView extends View {
     private JLabel exportLabel;
     private MainFrame frame;
     private Reference selectedReference;
+    private ActionListener addReferenceListener, modifyReferenceListener,
+            addToExportListener, removeFromExportListener;
 
     public ReferenceListView(final MainFrame frame) {
         this.frame = frame;
@@ -95,26 +97,13 @@ public class ReferenceListView extends View {
         addReferenceButton = new JButton("New reference");
         addReferenceButton.setName("addReferenceButton");
         addReferenceButton.setPreferredSize(buttonSize);
-        addReferenceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.showView(ViewType.ADD_REFERENCE);
-            }
-        });
+        addReferenceButton.addActionListener(addReferenceListener);
         
         modifyReferenceButton = new JButton("Edit reference");
         modifyReferenceButton.setName("editReferenceButton");
         modifyReferenceButton.setPreferredSize(buttonSize);
         modifyReferenceButton.setEnabled(false);
-        modifyReferenceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modifyReferenceButton.setEnabled(false);
-                selectedReference = (Reference) referenceList.getSelectedValue();
-                System.out.println("selected reference " + selectedReference);
-                frame.showView(ViewType.MODIFY_REFERENCE);
-            }
-        });
+        modifyReferenceButton.addActionListener(modifyReferenceListener);
         
         addToExportList = new JButton();
         try {
@@ -125,16 +114,7 @@ public class ReferenceListView extends View {
         }
         addToExportList.setPreferredSize(buttonSize);
         addToExportList.setName("addToExportList");
-        addToExportList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(referenceList.getSelectedValue() != null) {
-                    MainFrame.manager.addToExportList((Reference)referenceList.getSelectedValue());
-                    exportList.removeAll();
-                    exportList.setListData(MainFrame.manager.getExportList().toArray());
-                } 
-            }
-        });
+        addToExportList.addActionListener(addToExportListener);
 
         removeFromExportList = new JButton();
         try {     
@@ -145,19 +125,7 @@ public class ReferenceListView extends View {
         }
         removeFromExportList.setPreferredSize(buttonSize);
         removeFromExportList.setName("removeFromExportList");
-        removeFromExportList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(exportList.getSelectedValue() != null) {
-                    MainFrame.manager.getExportList().remove(
-                            (Reference)exportList.getSelectedValue());
-                    exportList.removeAll();
-                    exportList.setListData(MainFrame.manager.getExportList().toArray());
-                    exportList.validate();
-                    exportList.repaint();
-                }
-            }
-        });
+        removeFromExportList.addActionListener(removeFromExportListener);
         
         controlPanel.add(addReferenceButton);
         controlPanel.add(modifyReferenceButton);
@@ -172,6 +140,53 @@ public class ReferenceListView extends View {
     public Reference getSelectedReference() {
         return selectedReference;
     }
+    
+    private void setUpListeners() {
+        // Listener for the "add new reference" button.
+        addReferenceListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyReferenceButton.setEnabled(false);
+                frame.showView(ViewType.ADD_REFERENCE);
+            }
+        };
+        // Listener for the "modify" button.
+        modifyReferenceListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyReferenceButton.setEnabled(false);
+                selectedReference = (Reference) referenceList.getSelectedValue();
+                System.out.println("selected reference " + selectedReference);
+                frame.showView(ViewType.MODIFY_REFERENCE);
+            }
+        };
+        // Listener for "add to export" button
+        addToExportListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(referenceList.getSelectedValue() != null) {
+                    MainFrame.manager.addToExportList((Reference)referenceList.getSelectedValue());
+                    exportList.removeAll();
+                    exportList.setListData(MainFrame.manager.getExportList().toArray());
+                } 
+            }
+        };
+        // Listener for "remove from export" button
+        removeFromExportListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(exportList.getSelectedValue() != null) {
+                    MainFrame.manager.getExportList().remove(
+                            (Reference)exportList.getSelectedValue());
+                    exportList.removeAll();
+                    exportList.setListData(MainFrame.manager.getExportList().toArray());
+                    exportList.validate();
+                    exportList.repaint();
+                }
+            }
+        };
+    }
+    
     @Override
     public void render(Dimension dimension) {
         this.setSize(dimension);
