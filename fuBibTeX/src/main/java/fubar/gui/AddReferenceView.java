@@ -184,7 +184,7 @@ public class AddReferenceView extends View {
         citationBuilderButton = new JButton("Suggest Citation Key");
         citationBuilderButton.setName("citationBuilderButton");
         citationBuilderButton.addActionListener(citationBuilderListener);
-        citationBuilderButton.setPreferredSize(buttonSize);
+        citationBuilderButton.setPreferredSize(new Dimension(180, 30));
         
         controlPanel.add(returnButton);
         controlPanel.add(addButton);
