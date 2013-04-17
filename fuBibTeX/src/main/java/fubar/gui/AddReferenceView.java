@@ -1,5 +1,6 @@
 package fubar.gui;
 
+import fubar.fubibtex.references.CitationKeyBuilder;
 import fubar.fubibtex.references.Reference;
 import fubar.fubibtex.references.Reference.FieldType;
 import fubar.fubibtex.references.Reference.Type;
@@ -43,10 +44,11 @@ public class AddReferenceView extends View {
     protected MainFrame frame;
     protected JPanel basePanel, typeSelectionPanel, fieldPanel, requiredPanel,
             optionalPanel, controlPanel;
-    protected ActionListener selectionListener, returnListener, addListener;
+    protected ActionListener selectionListener, returnListener, addListener,
+            citationBuilderListener;
     protected DocumentListener citationKeyListener;
     protected JLabel citationKeyError;
-    protected JButton addButton, returnButton;
+    protected JButton addButton, returnButton, citationBuilderButton;
     protected JComboBox typeList;
     protected JTextField citationKeyField;
     protected EnumMap<FieldType, JTextField> map;
@@ -179,9 +181,14 @@ public class AddReferenceView extends View {
         addButton.setName("addButton");
         addButton.addActionListener(addListener);
         addButton.setPreferredSize(buttonSize);
-
+        citationBuilderButton = new JButton("Suggest Citation Key");
+        citationBuilderButton.setName("citationBuilderButton");
+        citationBuilderButton.addActionListener(citationBuilderListener);
+        citationBuilderButton.setPreferredSize(buttonSize);
+        
         controlPanel.add(returnButton);
         controlPanel.add(addButton);
+        controlPanel.add(citationBuilderButton);
 
         basePanel.add(controlPanel);
     }
@@ -327,6 +334,7 @@ public class AddReferenceView extends View {
                 frame.dataUpdated();
                 frame.showView(ViewType.REFERENCE_LIST);
             }
+            
         };
 
         // A listener that checks if the currently entered citation key is used or not
@@ -344,6 +352,27 @@ public class AddReferenceView extends View {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 checkIfUnique();
+            }
+        };
+        
+        citationBuilderListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Type type = (Type) typeList.getSelectedItem();
+                Reference ref = new Reference(type);
+                
+                JTextField field = map.get(Reference.FieldType.Year);
+                if (!field.getText().equals("")) {
+                    ref.setField(Reference.FieldType.Year, field.getText());
+                }
+                
+                field = map.get(Reference.FieldType.Author);
+                if (!field.getText().equals("")) {
+                    ref.setField(Reference.FieldType.Author, field.getText());
+                }
+                
+                String suggestion = CitationKeyBuilder.suggestCitation(ref);
+                citationKeyField.setText(suggestion);
             }
         };
     }
