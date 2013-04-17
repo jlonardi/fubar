@@ -12,6 +12,11 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ *  View for the modification of a selected reference.
+ *  @author Jarno Lonardi
+ */
+
 public class ModifyReferenceView extends AddReferenceView {
     
     protected Reference editedReference;
@@ -37,13 +42,22 @@ public class ModifyReferenceView extends AddReferenceView {
         super.citationKeyField.getDocument().addDocumentListener(modifyCitationKeyListener);
     }
     
+    /**
+     *  Sets the reference that is going under modification.
+     * @param ref Reference to be modified.
+     */
     public void setEditedReference(Reference ref) {
         editedReference = ref;
         selectedType = editedReference.getType();
         super.updateView();
         fillFields();
     }
-    
+    /**
+     *  Fills the view's typefields with the selected reference information.
+     *  The parent class map is used to achieve this since that class maps all the 
+     *  text fields with the reference type fields.
+     *   
+     */
     private void fillFields() {
         List<FieldType> requiredFields = fubar.fubibtex.references.ReferenceFields.getRequiredFields(selectedType);
         List<FieldType> optionalFields = fubar.fubibtex.references.ReferenceFields.getOptionalFields(selectedType);
@@ -52,12 +66,16 @@ public class ModifyReferenceView extends AddReferenceView {
         
         for(FieldType ft : requiredFields) {
             JTextField textField = map.get(ft);
-            if(textField != null) textField.setText(editedReference.getField(ft));
+            if(textField != null) {
+                textField.setText(editedReference.getField(ft));
+            }
         }
         
         for(FieldType ft : optionalFields) {
             JTextField textField = map.get(ft);
-            if(textField != null) textField.setText(editedReference.getField(ft));
+            if(textField != null) {
+                textField.setText(editedReference.getField(ft));
+            }
         }
     }
     
@@ -125,7 +143,6 @@ public class ModifyReferenceView extends AddReferenceView {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                System.out.println(!editedReference.getCitationKey().equals(citationKeyField.getText()));
                 if (MainFrame.manager.dataStoreContainsCitationKey(
                         citationKeyField.getText()) && 
                         !editedReference.getCitationKey().equals(citationKeyField.getText())) {

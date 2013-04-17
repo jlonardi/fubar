@@ -29,6 +29,15 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ *  A view that shows the part of the UI where you can create new references.
+ *  The view contains 3 main parts, the top section where reisdes the type selector
+ *  and a field for the id. The middle section contains the fields for the selected
+ *  type. This section is divided in two parts, the required and optional fields.
+ *  The bottom part contains the control buttons to return in the list view and
+ *  the button to add the reference.
+ *  @author Jarno Lonardi
+ */
 public class AddReferenceView extends View {
 
     protected MainFrame frame;
@@ -47,8 +56,9 @@ public class AddReferenceView extends View {
     public AddReferenceView(MainFrame frame) {
         this.frame = frame;
         this.setLayout(new BorderLayout());
+        // A map that maps the field types into the textfields that are drawn
         map = new EnumMap(fubar.fubibtex.references.Reference.FieldType.class);
-
+        // The "main" panel of the view
         basePanel = new JPanel();
         basePanel.setLayout(null);
         basePanel.setBorder(new EmptyBorder(30, 30, 30, 30));
@@ -152,14 +162,15 @@ public class AddReferenceView extends View {
      * database.
      */
     private void setupControlPanel() {
-
+        // Sets up the panel where the buttons reside
         controlPanel = new JPanel();
         controlPanel.setName("controlPanel");
         controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
         controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         buttonSize = new Dimension(100, 30);
-
+        
+        // Creartes the buttons and adds them into the panel
         returnButton = new JButton("Return");
         returnButton.setName("returnButton");
         returnButton.setPreferredSize(buttonSize);
@@ -176,11 +187,7 @@ public class AddReferenceView extends View {
     }
 
     /**
-     * Updates the field panel to correspond the selected reference types
-     * fields.
-     *
-     * @param requiredFields
-     * @param optionalFields
+     * Updates the view.
      */
     protected void updateView() {
         
@@ -190,12 +197,12 @@ public class AddReferenceView extends View {
         if (requiredPanel == null) {
             return;
         }
+        // Removes all the elements from the field panels
         requiredPanel.removeAll();
         requiredPanel.revalidate();
-        requiredPanel.repaint();
+        
         optionalPanel.removeAll();
         optionalPanel.revalidate();
-        optionalPanel.repaint();
 
         if (requiredFields == null && optionalFields == null) {
             return;
@@ -205,6 +212,7 @@ public class AddReferenceView extends View {
         JLabel label;
 
         map.clear();
+        // Sets up the required fields
         if (requiredFields != null) {
             for (FieldType type : requiredFields) {
                 panel = new JPanel();
@@ -219,16 +227,10 @@ public class AddReferenceView extends View {
                 requiredPanel.add(panel);
                 map.put(type, textField);
             }
-            requiredPanel.revalidate();
             requiredPanel.repaint();
         }
-        /*
-         It should not be possible to run in a situation where you would have only
-         mapped required fields for a reference type and left out the optional ones.
-         if (optionalFields == null) {
-         return;
-         }
-         */
+        
+        // Sets up the optional fields
         if (optionalFields != null) {
             for (FieldType type : optionalFields) {
                 panel = new JPanel();
@@ -242,7 +244,6 @@ public class AddReferenceView extends View {
                 optionalPanel.add(panel);
                 map.put(type, textField);
             }
-            optionalPanel.revalidate();
             optionalPanel.repaint();
         }
     }
@@ -274,7 +275,7 @@ public class AddReferenceView extends View {
             public void actionPerformed(ActionEvent e) {
                 Type type = (Type) typeList.getSelectedItem();
                 Reference ref = new Reference(type);
-                
+                // Checks if the citation key is unique
                 if(MainFrame.manager.dataStoreContainsCitationKey(
                         citationKeyField.getText())) {
                     frame.showMessage(
@@ -284,7 +285,8 @@ public class AddReferenceView extends View {
                         return;
                 }
                 ref.setCitationKey(citationKeyField.getText());
-
+                // Picks up all the data from the required text fields and
+                // shows an error if all fields are not filled.
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getRequiredFields(type)) {
                     JTextField field = map.get(key);
                     if (field.getText().equals("")) {
@@ -297,17 +299,18 @@ public class AddReferenceView extends View {
                         ref.setField(key, field.getText());
                     }
                 }
-
+                // Creates the optional fields from the optional section's
+                // text panels.
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getOptionalFields(type)) {
                     JTextField field = map.get(key);
                     if (!field.getText().equals("")) {
                         ref.setField(key, field.getText());
                     }
                 }
-
+                // Clears the view
                 updateView();
                 citationKeyField.setText("");
-
+                // And changes the view into the list view
                 MainFrame.manager.addReferenceToDatastore(ref);
                 frame.dataUpdated();
                 frame.showView(ViewType.REFERENCE_LIST);
