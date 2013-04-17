@@ -13,22 +13,22 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- *  View for the modification of a selected reference.
- *  @author Jarno Lonardi
+ * View for the modification of a selected reference.
+ *
+ * @author Jarno Lonardi
  */
-
 public class ModifyReferenceView extends AddReferenceView {
-    
+
     protected Reference editedReference;
     protected JButton modifyButton;
     protected ActionListener modifyListener;
     protected DocumentListener modifyCitationKeyListener;
-    
+
     public ModifyReferenceView(final MainFrame frame) {
         super(frame);
         super.typeList.setVisible(false);
         super.addButton.setVisible(false);
-        
+
         modifyListeners();
         modifyButton = new JButton("Modify");
         modifyButton.setName("modifyButton");
@@ -36,14 +36,15 @@ public class ModifyReferenceView extends AddReferenceView {
         modifyButton.setPreferredSize(super.buttonSize);
 
         controlPanel.add(modifyButton);
-        
+
         super.citationKeyError.setVisible(false);
         super.citationKeyField.getDocument().removeDocumentListener(super.citationKeyListener);
         super.citationKeyField.getDocument().addDocumentListener(modifyCitationKeyListener);
     }
-    
+
     /**
-     *  Sets the reference that is going under modification.
+     * Sets the reference that is going under modification.
+     *
      * @param ref Reference to be modified.
      */
     public void setEditedReference(Reference ref) {
@@ -52,50 +53,67 @@ public class ModifyReferenceView extends AddReferenceView {
         super.updateView();
         fillFields();
     }
+
     /**
-     *  Fills the view's typefields with the selected reference information.
-     *  The parent class map is used to achieve this since that class maps all the 
-     *  text fields with the reference type fields.
-     *   
+     * Fills the view's typefields with the selected reference information. The
+     * parent class map is used to achieve this since that class maps all the
+     * text fields with the reference type fields.
+     *
      */
     private void fillFields() {
         List<FieldType> requiredFields = fubar.fubibtex.references.ReferenceFields.getRequiredFields(selectedType);
         List<FieldType> optionalFields = fubar.fubibtex.references.ReferenceFields.getOptionalFields(selectedType);
-        
+
         super.citationKeyField.setText(editedReference.getCitationKey());
-        
-        for(FieldType ft : requiredFields) {
+
+        for (FieldType ft : requiredFields) {
             JTextField textField = map.get(ft);
-            if(textField != null) {
+            if (textField != null) {
                 textField.setText(editedReference.getField(ft));
             }
         }
-        
-        for(FieldType ft : optionalFields) {
+
+        for (FieldType ft : optionalFields) {
             JTextField textField = map.get(ft);
-            if(textField != null) {
+            if (textField != null) {
                 textField.setText(editedReference.getField(ft));
             }
         }
     }
-    
+    /**
+     *  Cheks if the currently inserted value in the citation key field
+     *  is unique.
+     */
+    private void checkIfUnique() {
+        if (MainFrame.manager.dataStoreContainsCitationKey(
+                citationKeyField.getText())
+                && !editedReference.getCitationKey().equals(citationKeyField.getText())) {
+            citationKeyError.setVisible(true);
+        } else {
+            citationKeyError.setVisible(false);
+        }
+    }
+
+    /**
+     * Sets up the listeners used in this view.
+     */
     private void modifyListeners() {
         // Now the add listener insteaf of adding a new Reference just sets new values
         modifyListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Type type = editedReference.getType();
-                
-                if(MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText()) && 
-                        !editedReference.getCitationKey().equals(citationKeyField.getText())) {
+
+                if (MainFrame.manager.dataStoreContainsCitationKey(
+                        citationKeyField.getText())
+                        && !editedReference.getCitationKey().equals(citationKeyField.getText())) {
                     frame.showMessage(
-                                "Citation key is allready in use.",
-                                "Add reference error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
+                            "Citation key is allready in use.",
+                            "Add reference error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                
+
                 editedReference.setCitationKey(citationKeyField.getText());
 
                 for (FieldType key : fubar.fubibtex.references.ReferenceFields.getRequiredFields(type)) {
@@ -125,44 +143,23 @@ public class ModifyReferenceView extends AddReferenceView {
                 frame.showView(ViewType.REFERENCE_LIST);
             }
         };
-        
+
         // Now it is allowed to have a non unique key assuming that the key is
         // the same as in the Reference that is under modification
         modifyCitationKeyListener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText()) && 
-                        !editedReference.getCitationKey().equals(citationKeyField.getText())) {
-                    citationKeyError.setVisible(true);
-                } else {
-                    citationKeyError.setVisible(false);
-                }
-
+                checkIfUnique();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText()) && 
-                        !editedReference.getCitationKey().equals(citationKeyField.getText())) {
-                    citationKeyError.setVisible(true);
-                } else {
-                    citationKeyError.setVisible(false);
-                }
+                checkIfUnique();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                System.out.println(!editedReference.getCitationKey().equals(citationKeyField.getText()));
-                if (MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText()) && 
-                        !editedReference.getCitationKey().equals(citationKeyField.getText())) {
-                    citationKeyError.setVisible(true);
-                } else {
-                    citationKeyError.setVisible(false);
-                }
-
+                checkIfUnique();
             }
         };
     }

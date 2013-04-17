@@ -247,7 +247,19 @@ public class AddReferenceView extends View {
             optionalPanel.repaint();
         }
     }
-
+    
+    /**
+     *  Cheks if the currently inserted value in the citation key field
+     *  is unique.
+     */
+    private void checkIfUnique() {
+        if (MainFrame.manager.dataStoreContainsCitationKey(citationKeyField.getText())) {
+            citationKeyError.setVisible(true);
+        } else {
+            citationKeyError.setVisible(false);
+        }
+    }
+    
     /**
      * Sets up all the listeners used in this views components.
      */
@@ -321,34 +333,17 @@ public class AddReferenceView extends View {
         citationKeyListener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText())) {
-                    citationKeyError.setVisible(true);
-                } else {
-                    citationKeyError.setVisible(false);
-                }
-
+                checkIfUnique();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText())) {
-                    citationKeyError.setVisible(true);
-                } else {
-                    citationKeyError.setVisible(false);
-                }
+                checkIfUnique();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if (MainFrame.manager.dataStoreContainsCitationKey(
-                        citationKeyField.getText())) {
-                    citationKeyError.setVisible(true);
-                } else {
-                    citationKeyError.setVisible(false);
-                }
-
+                checkIfUnique();
             }
         };
     }
