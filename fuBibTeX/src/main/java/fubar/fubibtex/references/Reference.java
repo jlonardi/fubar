@@ -14,6 +14,18 @@ import java.util.logging.Logger;
  */
 public class Reference implements Cloneable{
 
+    private static ArrayList<FieldType> ToStringPreferenceList;
+    
+    static {
+        ToStringPreferenceList = new ArrayList<FieldType>();
+        ToStringPreferenceList.add(FieldType.Author);
+        ToStringPreferenceList.add(FieldType.Title);
+        ToStringPreferenceList.add(FieldType.Booktitle);
+        ToStringPreferenceList.add(FieldType.Chapter);
+        ToStringPreferenceList.add(FieldType.Year);
+        ToStringPreferenceList.add(FieldType.Keywords);
+    }
+    
     private Type referenceType;
     private EnumMap<FieldType, String> fields;
     private String citationKey;
@@ -39,7 +51,7 @@ public class Reference implements Cloneable{
     /**
      *
      * @param type The type of the field
-     * @return value of the field
+     * @return value of the field, null if not found.
      */
     public String getField(FieldType type) {
         return fields.get(type);
@@ -160,13 +172,21 @@ public class Reference implements Cloneable{
 	}
 	
     /**
-     * Returns the citation key of this reference.
-     *
+     * Returns a human readable representation of the Reference. Builds it
+     * using the preferences provided in this class.
      * @return The citation key of this reference.
      */
     @Override
     public String toString() {
-        return this.citationKey;
+        String ret = "[" + this.citationKey + "]";
+        
+        for (FieldType ft : ToStringPreferenceList) {
+            String field = this.getField(ft);
+            if (field != null)
+                ret += " | " + field;
+        }
+        
+        return ret;
     }
 
 	protected String convertAccented(char c) {
@@ -237,7 +257,7 @@ public class Reference implements Cloneable{
         Edition,
         Editor,
         Howpublished,
-        Instituition,
+        Institution,
         Journal,
         Key,
         Keywords,
