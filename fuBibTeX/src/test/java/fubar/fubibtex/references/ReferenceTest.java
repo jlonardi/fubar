@@ -49,8 +49,12 @@ public class ReferenceTest extends TestCase {
         assertEquals("PL09", ref.getCitationKey());
     }
     
-    public void testReturnsCitationKeyOnToString() {
-        assertEquals("PL09", ref.toString());
+    public void testReturnsRightFieldsOnToString() {
+        String s = ref.toString();
+        
+        assertTrue(s.contains("PL09"));
+        assertTrue(s.contains("Petteri Linnakangas"));
+        assertTrue(s.contains("SysteemiJuttuja"));
     }
     
     public void testSavesCorrectly() {
