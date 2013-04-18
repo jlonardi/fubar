@@ -10,18 +10,21 @@ import fubar.gui.MainFrame;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
  * @author petteri
  */
 public class MainApp {
-    
+
     public static void main(String[] args) {
         System.out.println("");
         IGUIReferenceManager manager = new IGUIReferenceManager() {
             ArrayList<Reference> list = new ArrayList();
             ArrayList<Reference> exportList = new ArrayList();
+
             private void init() {
                 Reference ref = new Reference(Reference.Type.Inproceedings);
                 ref.setField(Reference.FieldType.Title, "Systeemihommia");
@@ -34,6 +37,7 @@ public class MainApp {
                 ref.setCitationKey("LoL3013");
                 list.add(ref);
             }
+
             @Override
             public boolean addReferenceToDatastore(Reference ref) {
                 list.add(ref);
@@ -79,48 +83,61 @@ public class MainApp {
                 return true;
             }
 
-			@Override
-			public void setDatastore(File file) {
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-			}
+            @Override
+            public void setDatastore(File file) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
 
             @Override
             public List<Reference> getExportList() {
                 return exportList;
             }
 
-			@Override
-			public boolean dataStoreContainsCitationKey(String citationKey) {
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-			}
-            
+            @Override
+            public boolean dataStoreContainsCitationKey(String citationKey) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
-        
+
+        try {
+            // Set the Look and Feel of the application to the operating
+            // system's look and feel.
+            UIManager.setLookAndFeel(
+                    UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println(e);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+        } catch (InstantiationException e) {
+            System.out.println(e);
+        } catch (IllegalAccessException e) {
+            System.out.println(e);
+        }
         GUIReferenceManagerF rm = new GUIReferenceManagerF();
         rm.setDatastore(new File("fubitex.data"));
         MainFrame frame = new MainFrame(rm);
         //frame.draw();
-        
+
         try {
             System.out.println("Opening file...");
             BufferedWriter file = new BufferedWriter(new FileWriter("bibtexfile.bib", true));
             System.out.println("File opened. Creating reference...");
             Reference ref = new Reference(Reference.Type.Inproceedings);
-            
+
             System.out.println("Adding fields to reference...");
             ref.setField(Reference.FieldType.Title, "Systeemihommia");
             ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
-            
+
             System.out.println("Saving reference to file.");
             ref.save(file);
-            
+
             System.out.println("Closing file.");
             file.close();
-            
+
         } catch (Exception e) {
             System.out.println("There was an exception: " + e.getMessage());
         }
-     
+
 //		System.out.println("Testi alkaa...");
 //		//Pieni demon ReferenceManagerin import & export -toiminnoista.
 //		IGUIReferenceManager m = new GUIReferenceManagerF();
@@ -151,8 +168,7 @@ public class MainApp {
 //		File output1 = new File("newbib2.bib");
 //
 //		m.exportToFile(output1);
-				
-		
+
+
     }
-    
 }

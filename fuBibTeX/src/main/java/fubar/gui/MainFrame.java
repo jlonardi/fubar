@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MainFrame extends JFrame{
-
+    
     private static JFrame frame;
     private ArrayList<View> views;
 //    private ArrayList<JPanel> panels;
