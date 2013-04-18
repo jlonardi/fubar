@@ -119,7 +119,7 @@ public class AddReferenceView extends View {
         label.setPreferredSize(new Dimension(80, 20));
         citationKeyField = new JTextField(20);
         citationKeyField.setName("citationKeyField");
-//        citationKeyField.getDocument().addDocumentListener(citationKeyListener);
+        citationKeyField.getDocument().addDocumentListener(citationKeyListener);
         panel.add(label);
         panel.add(citationKeyField);
 
