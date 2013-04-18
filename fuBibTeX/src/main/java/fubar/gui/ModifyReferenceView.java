@@ -28,6 +28,7 @@ public class ModifyReferenceView extends AddReferenceView {
         super(frame);
         super.typeList.setVisible(false);
         super.addButton.setVisible(false);
+        super.addButton.setName("not in use");
         super.typeList.setName("not in use");
         super.typeSelectionPanel.setName("typeSelectionPanelModify");
         super.citationKeyField.setName("citationKeyFieldModify");

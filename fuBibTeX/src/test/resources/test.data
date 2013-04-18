@@ -1,0 +1,14 @@
+
+@INPROCEEDINGS {LoL3013,
+	AUTHOR = {Jarno Lonardi},
+	BOOKTITLE = {Koodikirja},
+	TITLE = {Koodia koodia koodia...},
+	YEAR = {3013},
+}
+
+@INPROCEEDINGS {Petteri2012,
+	AUTHOR = {Petteri Linnakankas},
+	BOOKTITLE = {Systeemeit\"{a} systeemiss\"{a}},
+	TITLE = {Systeemihommia},
+	YEAR = {2012},
+}
