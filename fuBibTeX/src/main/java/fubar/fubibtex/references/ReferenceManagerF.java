@@ -111,12 +111,13 @@ public class ReferenceManagerF implements IReferenceManager {
 					referenceString = referenceString.substring(referenceString.indexOf(",") + 1);
 
 					fieldScanner = new Scanner(referenceString);
-
+                    // STRINGBUILDER OSAA POISTAA RIVINVAIHDOT VÄLISTÄ
 					StringBuilder sb = new StringBuilder();
 					while (fieldScanner.hasNext()) {
 						sb.append(fieldScanner.next());
 						sb.append(" ");
 					}
+                    // JOLLOIN TÄMÄ ON STRING ILMAN RIVINVAIHTOMERKKEJÄ
 					String delimiterFreeString = sb.toString();
 					if (delimiterFreeString.endsWith(",")) {
 						delimiterFreeString = delimiterFreeString.substring(0, delimiterFreeString.length() - 1);
