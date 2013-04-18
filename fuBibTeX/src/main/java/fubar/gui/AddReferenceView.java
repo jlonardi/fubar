@@ -125,6 +125,7 @@ public class AddReferenceView extends View {
 
         // Sets up the error label
         citationKeyError = new JLabel();
+        citationKeyError.setName("citationKeyErrorLabel");
         try {
             File imageFile = new File("src/main/resources/gui/error.png");
             BufferedImage img = ImageIO.read(imageFile);

@@ -28,9 +28,12 @@ public class ModifyReferenceView extends AddReferenceView {
         super(frame);
         super.typeList.setVisible(false);
         super.addButton.setVisible(false);
+        // Have to set different names for components that are going to be tested
+        // in FEST
         super.addButton.setName("not in use");
         super.typeList.setName("not in use");
         super.typeSelectionPanel.setName("typeSelectionPanelModify");
+        super.citationKeyError.setName("citationKeyErrorLabelModify");
         super.citationKeyField.setName("citationKeyFieldModify");
         super.requiredPanel.setName("requiredPanelModify");
         super.controlPanel.setName("controlPanelModify");

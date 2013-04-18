@@ -30,7 +30,7 @@ public class MainFrameTest extends TestCase {
     GUIReferenceManagerF manager = new GUIReferenceManagerF();
     
     private Robot robot;
-    private String ref1, ref2;
+    //private String ref1, ref2;
 
     @Override
     protected void setUp() throws Exception {
@@ -138,12 +138,7 @@ public class MainFrameTest extends TestCase {
         addReferenceViewBaseState();
 
         testFrame.comboBox("typeList").requireSelection(fubar.fubibtex.references.Reference.Type.Inproceedings.name());
-        testFrame.textBox("citationKeyField").requireText("");
-
-        testFrame.textBox("citationKeyField").enterText("t");
-        testFrame.textBox("citationKeyField").enterText("e");
-        testFrame.textBox("citationKeyField").enterText("s");
-        testFrame.textBox("citationKeyField").enterText("t");
+          
         testFrame.button("addButton").click();
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
         testFrame.panel("listView").requireNotVisible();
@@ -158,6 +153,25 @@ public class MainFrameTest extends TestCase {
                 testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText(fieldTypes.get(i).name());
             }
         }
+        
+        testFrame.label("citationKeyErrorLabel").requireNotVisible();
+        testFrame.textBox("citationKeyField").requireText("");
+        testFrame.textBox("citationKeyField").enterText("L");
+        testFrame.textBox("citationKeyField").enterText("o");
+        testFrame.textBox("citationKeyField").enterText("L");
+        testFrame.textBox("citationKeyField").enterText("3");
+        testFrame.textBox("citationKeyField").enterText("0");
+        testFrame.textBox("citationKeyField").enterText("1");
+        testFrame.textBox("citationKeyField").enterText("3");
+        testFrame.label("citationKeyErrorLabel").requireVisible();
+        testFrame.button("addButton").click();
+        JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
+        testFrame.textBox("citationKeyField").deleteText();
+        testFrame.label("citationKeyErrorLabel").requireNotVisible();
+        testFrame.textBox("citationKeyField").enterText("t");
+        testFrame.textBox("citationKeyField").enterText("e");
+        testFrame.textBox("citationKeyField").enterText("s");
+        testFrame.textBox("citationKeyField").enterText("t");
 
         testFrame.button("addButton").click();
         testFrame.panel("addReferenceView").requireNotVisible();
@@ -177,6 +191,15 @@ public class MainFrameTest extends TestCase {
         testFrame.list("exportList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
         testFrame.button("removeFromExportList").click();
         testFrame.list("exportList").requireItemCount(0);
+    }
+    
+    public void testModify() {
+        testFrame.button("editReferenceButton").requireDisabled();
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("editReferenceButton").requireEnabled();
+        testFrame.button("editReferenceButton").click();
+        testFrame.textBox(Reference.FieldType.Year.name() + "TextFieldModify").deleteText();
+        testFrame.textBox(Reference.FieldType.Year.name() + "TextFieldModify").enterText("2012");
     }
 
     private void listViewBaseState() {
