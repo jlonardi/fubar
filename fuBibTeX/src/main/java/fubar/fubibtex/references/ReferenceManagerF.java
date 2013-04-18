@@ -2,7 +2,8 @@ package fubar.fubibtex.references;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ReferenceManagerF implements IReferenceManager {
 		}
 
 		referenceList.add(ref);
-		
+
 		return true;
 	}
 
@@ -65,48 +66,93 @@ public class ReferenceManagerF implements IReferenceManager {
 
 	@Override
 	public boolean importFrom() {
-		String separator = System.getProperty("line.separator");
-		int separatorLen = separator.length();
-		
+
+		// SEPARATORIA EI KÄYTETÄ KOSKA SE ON JÄRJESTELMÄKOHTAINEN
+
+		//String separator = System.getProperty("line.separator");
+		//System.out.println("separator: " + separator);
+		//int separatorLen = separator.length();
+
 		Scanner referenceScanner;
 		Scanner fieldScanner;
 		try {
-			referenceScanner = new Scanner(new BufferedReader(new FileReader(importFile)));
-			referenceScanner.useDelimiter("@|"+ separator + "@");
+
+//----------------------- MUUTETTUA OSUUTTA ------------------------------------		
+
+			// LISÄTTY LUKEMAAN UTF8
+			referenceScanner = new Scanner(new BufferedReader(new InputStreamReader(
+					new FileInputStream(importFile), "UTF8")));
+			// MUUTETTU REGEX JA OTETTU POIS SEPARATOR
+			referenceScanner.useDelimiter("@");
+
+//---------------------- MUUTETTU OSUUS LOPPU ----------------------------------				
+
 
 			while (referenceScanner.hasNext()) {
 				String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
-				referenceString = cleanStringTerminators(referenceString);
-				referenceString = convertAccented(referenceString);
-				
-				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
-				String referenceType = buildReferenceType(referenceString);
+				if (!referenceString.equals("")) {
+					referenceString = cleanStringTerminators(referenceString);
+					referenceString = convertAccented(referenceString);
 
-				Reference r = new Reference(Reference.Type.getTypeByString(referenceType));
+					//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
+					String referenceType = buildReferenceType(referenceString);
 
-				referenceString = referenceString.substring(referenceType.length());
-				
-				String referenceCitation = buildCitation(referenceString);
+					Reference r = new Reference(Reference.Type.getTypeByString(referenceType));
 
-				r.setCitationKey(referenceCitation.toString());
+					referenceString = referenceString.substring(referenceType.length());
 
-				referenceString = referenceString.substring(referenceString.indexOf(separator));
-				
-				fieldScanner = new Scanner(referenceString);
-				fieldScanner.useDelimiter(separator);
+					String referenceCitation = buildCitation(referenceString);
 
-				while (fieldScanner.hasNext()) {
-					String field = fieldScanner.next();
-					String key = buildKey(field);
+					r.setCitationKey(referenceCitation.toString());
 
-					field = cleanField(field);
-					field = cleanStringTerminators(field);
+//----------------------- MUUTETTUA OSUUTTA ------------------------------------	
+
+					// MUUTETTU SEPARATORIN SIJASTA LUKEMAAN SEURAAVASTA PILKUSTA ETEENPÄIN
+					referenceString = referenceString.substring(referenceString.indexOf(",") + 1);
+
+					fieldScanner = new Scanner(referenceString);
+
+					StringBuilder sb = new StringBuilder();
+					while (fieldScanner.hasNext()) {
+						sb.append(fieldScanner.next());
+						sb.append(" ");
+					}
+					String delimiterFreeString = sb.toString();
+					if (delimiterFreeString.endsWith(",")) {
+						delimiterFreeString = delimiterFreeString.substring(0, delimiterFreeString.length() - 1);
+					}
+					fieldScanner = new Scanner(delimiterFreeString);
+
+					// EI SEPARATORIA DELIMITERIKSI
+					//fieldScanner.useDelimiter(separator);
 					
-					r.setField(Reference.FieldType.getFieldTypeByString(key), field);
-				}
-				fieldScanner.close();
+					// VAAN PILKUT, JOKAINEN KENTTÄ ON NIILLÄ EROTELTU JA NYT
+					// EI OLE VÄLIÄ MITEN BIBTEXT ON RIVITETTY JA POISTAA
+					// KÄYTTÖJÄRJESTELMIEN RIVINVAIHDON ERON
+					fieldScanner.useDelimiter(",");
 
-				referenceList.add(r);
+					while (fieldScanner.hasNext()) {
+						String field = fieldScanner.next();
+						/*
+						 *	Jos ei sisällä = merkkiä niin kyseessä on tapaus
+						 *	missä viimeisen attribuutin jälkeen on pilkku jolloin
+						 *	delimiter pistää viimeiseksi "nextiksi" tyhjän tai
+						 *	pelkkiä välilyöntejä sisältävän stringin
+						 */
+						if (field.contains("=")) {
+							String key = buildKey(field);
+
+							field = cleanField(field);
+							field = cleanStringTerminators(field);
+
+							r.setField(Reference.FieldType.getFieldTypeByString(key), field);
+						}
+					}
+//---------------------- MUUTETTU OSUUS LOPPU ----------------------------------						
+					fieldScanner.close();
+
+					referenceList.add(r);
+				}
 			}
 			referenceScanner.close();
 		} catch (Exception ex) {
@@ -115,20 +161,22 @@ public class ReferenceManagerF implements IReferenceManager {
 			referenceList.clear();
 			return false;
 		}
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean exportTo() {
 		try {
-			
-			//PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
-			PrintWriter pw = new PrintWriter(exportFile,"UTF-8");
 
-			for(Reference r : referenceList) r.save(pw);
+			//PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
+			PrintWriter pw = new PrintWriter(exportFile, "UTF-8");
+
+			for (Reference r : referenceList) {
+				r.save(pw);
+			}
 			pw.close();
-			
+
 		} catch (Exception ex) {
 			Logger.getLogger(ReferenceManagerF.class.getName()).log(Level.SEVERE, null, ex);
 			exportFile.delete();
@@ -174,9 +222,10 @@ public class ReferenceManagerF implements IReferenceManager {
 	// Arr, internal helper-methods be here, matey...
 	//
 	/////////////////////////////////////////////////
-
 	/**
-	 * Removes BibTex-leftovers/line separator from string-endings left by the Scanner  
+	 * Removes BibTex-leftovers/line separator from string-endings left by the
+	 * Scanner
+	 *
 	 * @param String to be cleaned
 	 * @ret Cleaned string.
 	 */
@@ -188,28 +237,27 @@ public class ReferenceManagerF implements IReferenceManager {
 			ret = string.substring(0, string.length() - 1);
 		}
 
-		if (string.endsWith(System.getProperty("line.separator"))) {
-			ret = string.substring(0, string.length() - System.getProperty("line.separator").length());
-		}
+
+		// POISTETTU TERMINATORIN PUHIDSTAMINEN
 
 		return ret;
 	}
 
 	/**
 	 * Builds a reference key string from the given input string.
+	 *
 	 * @param String Input data from the Scanner
 	 * @return reference key name as a string
 	 */
 	protected String buildKey(String field) {
 		StringBuilder key = new StringBuilder();
 		String ret = "";
-		
+
 		for (int i = 0; i < field.length(); i++) {
 			if (field.charAt(i) == '=') {
 				ret = key.toString().toUpperCase().trim();
 				break;
-			}
-			else {
+			} else {
 				key.append(field.charAt(i));
 			}
 		}
@@ -218,9 +266,10 @@ public class ReferenceManagerF implements IReferenceManager {
 
 	/**
 	 * Builds a reference type string from the given input string.
+	 *
 	 * @param String Input data from the Scanner
 	 * @return reference type name as a string
-	 */	
+	 */
 	protected String buildReferenceType(String referenceString) {
 		StringBuilder referenceType = new StringBuilder();
 		String ret = "";
@@ -229,9 +278,7 @@ public class ReferenceManagerF implements IReferenceManager {
 			if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(') {
 				ret = referenceType.toString().toUpperCase().trim();
 				break;
-			}
-			else 
-			{
+			} else {
 				referenceType.append(referenceString.charAt(i));
 			}
 		}
@@ -240,35 +287,33 @@ public class ReferenceManagerF implements IReferenceManager {
 
 	/**
 	 * Builds a reference citation string from the given input string.
+	 *
 	 * @param String Input data from the Scanner
 	 * @return reference citation name as a string
-	 */	
+	 */
 	protected String buildCitation(String referenceString) {
 		StringBuilder citationKey = new StringBuilder();
 		String ret = "";
-		
+
 		for (int i = 0; i < referenceString.length(); i++) {
 			if (referenceString.charAt(i) == ',') {
 				ret = citationKey.toString().trim();
 				break;
-			}
-			else if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(' || referenceString.charAt(i) == ' ')
-			{
+			} else if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(' || referenceString.charAt(i) == ' ') {
 				continue;
-			}
-			else
-			{
+			} else {
 				citationKey.append(referenceString.charAt(i));
 			}
 		}
-		
-		
-		
+
+
+
 		return ret;
 	}
 
 	/**
 	 * Cleans a string designated to be a reference field from unnecessary crap
+	 *
 	 * @param String string with crap
 	 * @return string without crap
 	 */
@@ -286,37 +331,40 @@ public class ReferenceManagerF implements IReferenceManager {
 
 	@Override
 	public boolean containsCitationKey(String citationKey) {
-		for (Reference reference : referenceList) 
-		{
-			if (reference.getCitationKey().compareTo(citationKey)==0)
-			{
+		for (Reference reference : referenceList) {
+			if (reference.getCitationKey().compareTo(citationKey) == 0) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	protected String convertAccented(String input){
-		
-		if(input.contains("\\\"{A}"))
-			input = input.replace("\\\"{A}", "Ä");
-		
-		if (input.contains("\\\"{a}"))
-			input = input.replace("\\\"{a}", "ä");
-		
-		if (input.contains("\\r{A}"))
-			input = input.replace("\\r{A}", "Å");
 
-		if (input.contains("\\r{a}"))
+	protected String convertAccented(String input) {
+
+		if (input.contains("\\\"{A}")) {
+			input = input.replace("\\\"{A}", "Ä");
+		}
+
+		if (input.contains("\\\"{a}")) {
+			input = input.replace("\\\"{a}", "ä");
+		}
+
+		if (input.contains("\\r{A}")) {
+			input = input.replace("\\r{A}", "Å");
+		}
+
+		if (input.contains("\\r{a}")) {
 			input = input.replace("\\r{a}", "å");
-		
-		if (input.contains("\\\"{O}"))
+		}
+
+		if (input.contains("\\\"{O}")) {
 			input = input.replace("\\\"{O}", "Ö");
-		
-		if (input.contains("\\\"{o}"))
+		}
+
+		if (input.contains("\\\"{o}")) {
 			input = input.replace("\\\"{o}", "ö");
-				
+		}
+
 		return input;
 	}
-	
 }

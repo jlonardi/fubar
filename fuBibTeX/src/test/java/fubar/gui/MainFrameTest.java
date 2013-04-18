@@ -28,13 +28,13 @@ public class MainFrameTest extends TestCase {
     private FrameFixture testFrame;
     private MainFrame frame;
     GUIReferenceManagerF manager = new GUIReferenceManagerF();
-    
     private Robot robot;
     //private String ref1, ref2;
 
     @Override
     protected void setUp() throws Exception {
-        manager.setDatastore(new File("src/test/resources/test.data"));
+        File file = new File("src/test/resources/test.data");
+        manager.setDatastore(file);
 //        Reference ref = new Reference(Reference.Type.Inproceedings);
 //        ref.setField(Reference.FieldType.Title, "Systeemihommia");
 //        ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
@@ -138,7 +138,7 @@ public class MainFrameTest extends TestCase {
         addReferenceViewBaseState();
 
         testFrame.comboBox("typeList").requireSelection(fubar.fubibtex.references.Reference.Type.Inproceedings.name());
-          
+
         testFrame.button("addButton").click();
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
         testFrame.panel("listView").requireNotVisible();
@@ -153,7 +153,7 @@ public class MainFrameTest extends TestCase {
                 testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText(fieldTypes.get(i).name());
             }
         }
-        
+
         testFrame.label("citationKeyErrorLabel").requireNotVisible();
         testFrame.textBox("citationKeyField").requireText("");
         testFrame.textBox("citationKeyField").enterText("L");
@@ -192,7 +192,7 @@ public class MainFrameTest extends TestCase {
         testFrame.button("removeFromExportList").click();
         testFrame.list("exportList").requireItemCount(0);
     }
-    
+
     public void testModify() {
         testFrame.button("editReferenceButton").requireDisabled();
         testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
@@ -238,7 +238,7 @@ public class MainFrameTest extends TestCase {
         return new IGUIReferenceManager() {
             ArrayList<Reference> list = new ArrayList();
             ArrayList<Reference> exportList = new ArrayList();
-           
+
             @Override
             public boolean addReferenceToDatastore(Reference ref) {
                 list.add(ref);
