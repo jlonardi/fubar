@@ -28,6 +28,14 @@ public class ModifyReferenceView extends AddReferenceView {
         super(frame);
         super.typeList.setVisible(false);
         super.addButton.setVisible(false);
+        super.typeList.setName("not in use");
+        super.typeSelectionPanel.setName("typeSelectionPanelModify");
+        super.citationKeyField.setName("citationKeyFieldModify");
+        super.requiredPanel.setName("requiredPanelModify");
+        super.controlPanel.setName("controlPanelModify");
+        super.returnButton.setName("returnButtonModify");
+        super.addButton.setName("addButtonModify");
+        super.citationBuilderButton.setName("citationBuilderButtonModify");
 
         modifyListeners();
         modifyButton = new JButton("Modify");

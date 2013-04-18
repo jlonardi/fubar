@@ -54,9 +54,15 @@ public class AddReferenceView extends View {
     protected EnumMap<FieldType, JTextField> map;
     protected Type selectedType;
     protected Dimension buttonSize;
+    private String className;
 
     public AddReferenceView(MainFrame frame) {
         this.frame = frame;
+        if(this.getClass().getName().contains("ModifyReferenceView")) {
+            this.className = "Modify";
+        } else {
+            this.className = "";
+        }
         this.setLayout(new BorderLayout());
         // A map that maps the field types into the textfields that are drawn
         map = new EnumMap(fubar.fubibtex.references.Reference.FieldType.class);
@@ -109,7 +115,7 @@ public class AddReferenceView extends View {
         // Sets up the input field for the citation key
         JLabel label = new JLabel();
         label.setText("Citation key");
-        label.setName("citationKeyLabel");
+//        label.setName("citationKeyLabel");
         label.setPreferredSize(new Dimension(80, 20));
         citationKeyField = new JTextField(20);
         citationKeyField.setName("citationKeyField");
@@ -207,9 +213,10 @@ public class AddReferenceView extends View {
         // Removes all the elements from the field panels
         requiredPanel.removeAll();
         requiredPanel.revalidate();
-        
+        requiredPanel.repaint();
         optionalPanel.removeAll();
         optionalPanel.revalidate();
+        optionalPanel.repaint();
 
         if (requiredFields == null && optionalFields == null) {
             return;
@@ -228,7 +235,7 @@ public class AddReferenceView extends View {
                 label.setName(type.name() + "Label");
                 label.setPreferredSize(new Dimension(80, 20));
                 JTextField textField = new JTextField(20);
-                textField.setName(type.name() + "TextField");
+                textField.setName(type.name() + "TextField" + className); //className for distinguish between the fields in add and modify views
                 panel.add(label);
                 panel.add(textField);
                 requiredPanel.add(panel);
@@ -245,7 +252,7 @@ public class AddReferenceView extends View {
                 label.setText(type.name());
                 label.setPreferredSize(new Dimension(80, 20));
                 JTextField textField = new JTextField(20);
-                textField.setName(type.name() + "TextField");
+                textField.setName(type.name() + "TextField"+ className);  //className for distinguish between the fields in add and modify views
                 panel.add(label);
                 panel.add(textField);
                 optionalPanel.add(panel);

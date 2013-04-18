@@ -28,9 +28,22 @@ public class MainFrameTest extends TestCase {
     private MainFrame frame;
     IGUIReferenceManager manager = createManagerStub();
     private Robot robot;
+    private String ref1, ref2;
 
     @Override
     protected void setUp() throws Exception {
+        Reference ref = new Reference(Reference.Type.Inproceedings);
+        ref.setField(Reference.FieldType.Title, "Systeemihommia");
+        ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
+        ref.setCitationKey("Petteri2012");
+        ref1 = ref.toString();
+        manager.addReferenceToDatastore(ref);
+        ref = new Reference(Reference.Type.Inproceedings);
+        ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
+        ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
+        ref.setCitationKey("LoL3013");
+        ref2 = ref.toString();
+        manager.addReferenceToDatastore(ref);
         super.setUp();
         robot = BasicRobot.robotWithNewAwtHierarchy();
         robot.settings().componentLookupScope(ComponentLookupScope.ALL);
@@ -40,7 +53,7 @@ public class MainFrameTest extends TestCase {
                 return new MainFrame(manager);
             }
         });
-        
+
         testFrame = new FrameFixture(robot, (JFrame) frame);
         testFrame.show();
     }
@@ -149,15 +162,15 @@ public class MainFrameTest extends TestCase {
         testFrame.button("save").click();
         testFrame.button("save").requireDisabled();
     }
-    
+
     public void testExportList() {
-       testFrame.list("exportList").requireItemCount(0);
-       testFrame.list("referenceList").selectItem("LoL3013");
-       testFrame.button("addToExportList").click();
-       testFrame.list("exportList").requireItemCount(1);
-       testFrame.list("exportList").selectItem("LoL3013");
-       testFrame.button("removeFromExportList").click();
-       testFrame.list("exportList").requireItemCount(0);
+        testFrame.list("exportList").requireItemCount(0);
+        testFrame.list("referenceList").selectItem(ref2);
+        testFrame.button("addToExportList").click();
+        testFrame.list("exportList").requireItemCount(1);
+        testFrame.list("exportList").selectItem(ref2);
+        testFrame.button("removeFromExportList").click();
+        testFrame.list("exportList").requireItemCount(0);
     }
 
     private void listViewBaseState() {
@@ -196,18 +209,7 @@ public class MainFrameTest extends TestCase {
         return new IGUIReferenceManager() {
             ArrayList<Reference> list = new ArrayList();
             ArrayList<Reference> exportList = new ArrayList();
-            private void init() {
-                Reference ref = new Reference(Reference.Type.Inproceedings);
-                ref.setField(Reference.FieldType.Title, "Systeemihommia");
-                ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
-                ref.setCitationKey("Petteri2012");
-                list.add(ref);
-                ref = new Reference(Reference.Type.Inproceedings);
-                ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
-                ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
-                ref.setCitationKey("LoL3013");
-                list.add(ref);
-            }
+           
             @Override
             public boolean addReferenceToDatastore(Reference ref) {
                 list.add(ref);
@@ -226,7 +228,6 @@ public class MainFrameTest extends TestCase {
 
             @Override
             public boolean loadFromDatastore() {
-                init();
                 return true;
             }
 
@@ -251,21 +252,20 @@ public class MainFrameTest extends TestCase {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
-			@Override
-			public void setDatastore(File file) {
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-			}
+            @Override
+            public void setDatastore(File file) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
 
             @Override
             public List<Reference> getExportList() {
                 return exportList;
             }
 
-			@Override
-			public boolean dataStoreContainsCitationKey(String citationKey) {
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-			}
-            
+            @Override
+            public boolean dataStoreContainsCitationKey(String citationKey) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
     }
 }
