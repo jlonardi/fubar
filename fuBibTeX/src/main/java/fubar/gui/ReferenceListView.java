@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -159,7 +160,10 @@ public class ReferenceListView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(referenceList.getSelectedValue() != null) {
-                    MainFrame.manager.addToExportList((Reference)referenceList.getSelectedValue());
+					List<Reference> rl = (List<Reference>)referenceList.getSelectedValuesList();
+					for(Reference r : rl) {
+						MainFrame.manager.addToExportList(r);
+					}
                     exportList.removeAll();
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
                 } 
@@ -170,8 +174,10 @@ public class ReferenceListView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(exportList.getSelectedValue() != null) {
-                    MainFrame.manager.getExportList().remove(
-                            (Reference)exportList.getSelectedValue());
+					List<Reference> rl = (List<Reference>)exportList.getSelectedValuesList();
+					for(Reference r : rl) {
+						MainFrame.manager.getExportList().remove(r);
+					}
                     exportList.removeAll();
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
                     exportList.validate();
