@@ -268,7 +268,7 @@ public class AddReferenceView extends View {
      *  is unique.
      */
     private void checkIfUnique() {
-        if (MainFrame.manager.dataStoreContainsCitationKey(citationKeyField.getText())) {
+        if (!citationKeyField.getText().equals("") && MainFrame.manager.dataStoreContainsCitationKey(citationKeyField.getText())) {
             citationKeyError.setVisible(true);
         } else {
             citationKeyError.setVisible(false);
@@ -303,7 +303,7 @@ public class AddReferenceView extends View {
                 Type type = (Type) typeList.getSelectedItem();
                 Reference ref = new Reference(type);
                 // Checks if the citation key is unique
-                if(MainFrame.manager.dataStoreContainsCitationKey(
+                if(!citationKeyField.getText().equals("") && MainFrame.manager.dataStoreContainsCitationKey(
                         citationKeyField.getText())) {
                     frame.showMessage(
                                 "Citation key is allready in use.",

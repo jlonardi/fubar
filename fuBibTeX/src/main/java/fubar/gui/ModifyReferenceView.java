@@ -92,12 +92,14 @@ public class ModifyReferenceView extends AddReferenceView {
             }
         }
     }
+
     /**
-     *  Cheks if the currently inserted value in the citation key field
-     *  is unique.
+     * Cheks if the currently inserted value in the citation key field is
+     * unique.
      */
     private void checkIfUnique() {
-        if (MainFrame.manager.dataStoreContainsCitationKey(
+        if (!citationKeyField.getText().equals("")
+                && MainFrame.manager.dataStoreContainsCitationKey(
                 citationKeyField.getText())
                 && !editedReference.getCitationKey().equals(citationKeyField.getText())) {
             citationKeyError.setVisible(true);
@@ -116,7 +118,8 @@ public class ModifyReferenceView extends AddReferenceView {
             public void actionPerformed(ActionEvent e) {
                 Type type = editedReference.getType();
 
-                if (MainFrame.manager.dataStoreContainsCitationKey(
+                if (!citationKeyField.getText().equals("")
+                        && MainFrame.manager.dataStoreContainsCitationKey(
                         citationKeyField.getText())
                         && !editedReference.getCitationKey().equals(citationKeyField.getText())) {
                     frame.showMessage(

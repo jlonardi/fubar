@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import junit.framework.TestCase;
 import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.ComponentLookupScope;
@@ -33,6 +35,20 @@ public class MainFrameTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
+        try {
+            // Set the Look and Feel of the application to the operating
+            // system's look and feel.
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println(e);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+        } catch (InstantiationException e) {
+            System.out.println(e);
+        } catch (IllegalAccessException e) {
+            System.out.println(e);
+        }
         File file = new File("src/test/resources/test.data");
         manager.setDatastore(file);
 //        Reference ref = new Reference(Reference.Type.Inproceedings);
@@ -89,10 +105,10 @@ public class MainFrameTest extends TestCase {
         fileChooser = JFileChooserFinder.findFileChooser().using(robot);
         fileChooser.requireVisible();
         fileChooser.cancel();
-        
+
         // EI PYSTY KUNNOLLA TESTAAMAAN POLUN TAKIA, FILECHOOSER AVAA
         // AINA NÄKYMÄKSI KOTIHAKEMISTON JOTEN POLKU TIEDOSTOON VAIHETELEE.
-        
+
 //        testFrame.button("importBibtext").click();
 //        fileChooser.requireVisible();
 //        fileChooser.approve();
