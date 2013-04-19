@@ -11,19 +11,22 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ButtonTray extends JPanel {
 
-    private JButton save, exportBibtext, importBibtext;
+    private JButton save, exportBibtext, exportByTag, importBibtext;
+	private ActionListener exportSingleListener, exportByTagListener, importListener;
     private final JFileChooser fc;
     private MainFrame mainFrame;
 
     public ButtonTray(MainFrame main) {
 
         mainFrame = main;
+		setupListeners();
         fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTeX files .bib", "bib");
@@ -62,7 +65,48 @@ public class ButtonTray extends JPanel {
             exportBibtext.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
-        exportBibtext.addActionListener(new ActionListener() {
+        exportBibtext.addActionListener(exportSingleListener);
+        this.add(exportBibtext);
+		
+		exportByTag = new JButton("By tag");
+		exportByTag.setName("exportByTag");
+		try {
+            File imageFile = new File("src/main/resources/gui/export.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            exportByTag.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
+		exportByTag.addActionListener(exportByTagListener);
+		this.add(exportByTag);
+
+        importBibtext = new JButton("Import");
+        importBibtext.setName("importBibtext");
+        try {
+            File imageFile = new File("src/main/resources/gui/import.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            importBibtext.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
+        importBibtext.addActionListener(importListener);
+        this.add(importBibtext);
+
+        this.setVisible(true);
+    }
+	
+	private void setupListeners() {
+		exportByTagListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Not supported yet.");
+				
+				String tag = JOptionPane.showInputDialog(null, "Give tag", 
+				"Import by tag", 1);
+				System.out.println("tag given: " + tag);
+			}
+			
+		};
+		
+		exportSingleListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int returnVal = fc.showSaveDialog(ButtonTray.this);
@@ -77,18 +121,9 @@ public class ButtonTray extends JPanel {
                 }
 
             }
-        });
-        this.add(exportBibtext);
-
-        importBibtext = new JButton("Import");
-        importBibtext.setName("importBibtext");
-        try {
-            File imageFile = new File("src/main/resources/gui/import.png");
-            BufferedImage img = ImageIO.read(imageFile);
-            importBibtext.setIcon(new ImageIcon(img));
-        } catch (IOException ex) {
-        }
-        importBibtext.addActionListener(new ActionListener() {
+		};
+		
+		importListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int returnVal = fc.showOpenDialog(ButtonTray.this);
@@ -104,12 +139,8 @@ public class ButtonTray extends JPanel {
                 }
 
             }
-        });
-        this.add(importBibtext);
-
-        this.setVisible(true);
-    }
-
+        };
+	}
     public void dataChanged() {
         save.setEnabled(true);
     }

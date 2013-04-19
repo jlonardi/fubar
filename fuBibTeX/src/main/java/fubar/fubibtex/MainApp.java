@@ -103,12 +103,12 @@ public class MainApp {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };
-
+		
         try {
             // Set the Look and Feel of the application to the operating
             // system's look and feel.
             UIManager.setLookAndFeel(
-                    UIManager.getCrossPlatformLookAndFeelClassName());
+                    UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println(e);
         } catch (ClassNotFoundException e) {
