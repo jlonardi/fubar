@@ -80,4 +80,12 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 	public boolean dataStoreContainsCitationKey(String citationKey) {
 		return dataStoreManager.containsCitationKey(citationKey);
 	}
+
+    @Override
+    public boolean importFromFile(File file) {
+        this.dataStoreManager.setImportFile(file);
+        if(!this.dataStoreManager.importFrom()) return false;
+        this.dataStoreManager.setImportFile(this.datastore);
+        return true;
+    }
 }

@@ -71,7 +71,7 @@ public class ButtonTray extends JPanel {
                     String path = file.getAbsoluteFile()+".bib";
                     file = new File(path);
                     MainFrame.manager.exportToFile(file);
-                    System.out.println("Saving: " + path);
+                    System.out.println("Exporting: " + path);
                 } else {
                     System.out.println("Save command cancelled by user.");
                 }
@@ -94,12 +94,11 @@ public class ButtonTray extends JPanel {
                 int returnVal = fc.showOpenDialog(ButtonTray.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
-                    // -----------TODO---------
-                    // GIVE FILE TO MANAGER FOR IMPORT
-                    // ------------------------
-                    
+                    String path = file.getAbsoluteFile()+"";
+                    file = new File(path);
+                    MainFrame.manager.importFromFile(file);
+                    System.out.println("Importing: " + path);
                     mainFrame.renderAll();
-                    System.out.println("Opening: " + file.getName());
                 } else {
                     System.out.println("Open command cancelled by user.");
                 }

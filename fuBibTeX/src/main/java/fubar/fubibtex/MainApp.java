@@ -97,6 +97,11 @@ public class MainApp {
             public boolean dataStoreContainsCitationKey(String citationKey) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
+
+            @Override
+            public boolean importFromFile(File file) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
 
         try {
