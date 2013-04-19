@@ -40,7 +40,7 @@ public class ModifyReferenceView extends AddReferenceView {
         super.returnButton.setName("returnButtonModify");
         super.addButton.setName("addButtonModify");
         super.citationBuilderButton.setName("citationBuilderButtonModify");
-
+        this.setName("");
         modifyListeners();
         modifyButton = new JButton("Modify");
         modifyButton.setName("modifyButton");

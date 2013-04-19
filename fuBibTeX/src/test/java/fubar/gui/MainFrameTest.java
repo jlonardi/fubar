@@ -186,6 +186,9 @@ public class MainFrameTest extends TestCase {
         testFrame.button("addButton").click();
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
         testFrame.textBox("citationKeyField").deleteText();
+        testFrame.button("citationBuilderButton").click();
+        testFrame.textBox("citationKeyField").requireText("Authorar");
+        testFrame.textBox("citationKeyField").deleteText();
         testFrame.label("citationKeyErrorLabel").requireNotVisible();
         testFrame.textBox("citationKeyField").enterText("t");
         testFrame.textBox("citationKeyField").enterText("e");
@@ -217,10 +220,43 @@ public class MainFrameTest extends TestCase {
         testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
         testFrame.button("editReferenceButton").requireEnabled();
         testFrame.button("editReferenceButton").click();
+        testFrame.panel("modifyReferenceView").requireVisible();
         testFrame.textBox(Reference.FieldType.Year.name() + "TextFieldModify").deleteText();
         testFrame.textBox(Reference.FieldType.Year.name() + "TextFieldModify").enterText("2012");
+        testFrame.button("citationBuilderButtonModify").click();
+        testFrame.button("modifyButton").click();
+        testFrame.panel("modifyReferenceView").requireNotVisible();
+        testFrame.list("referenceList").clickItem("[Jarno Lonardi12] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 2012");
+        testFrame.list("referenceList").requireSelection("[Jarno Lonardi12] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 2012");
     }
 
+    public void testSaveButton() {
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("editReferenceButton").click();
+        testFrame.button("modifyButton").click();
+        testFrame.button("save").requireEnabled();
+        testFrame.button("save").click();
+        testFrame.button("save").requireDisabled();
+    }
+    
+    public void testExportByTag() {
+        testFrame.button("exportByTag").click();
+        JOptionPaneFinder.findOptionPane().using(robot).textBox("OptionPane.textField").setText("test");
+        JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
+    }
+    
+    public void testReferenceDelete() {
+        testFrame.button("deleteReferenceButton").requireDisabled();
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("deleteReferenceButton").requireEnabled();
+        testFrame.button("editReferenceButton").click();
+        testFrame.button("returnButtonModify").click();
+        testFrame.button("deleteReferenceButton").requireDisabled();
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("deleteReferenceButton").requireEnabled();
+        testFrame.button("deleteReferenceButton").click();
+    }
+    
     private void listViewBaseState() {
         testFrame.panel("listView").requireVisible();
         testFrame.list("referenceList").requireVisible();
