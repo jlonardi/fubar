@@ -99,7 +99,7 @@ public class ButtonTray extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Not supported yet.");
 				
-				String tag = JOptionPane.showInputDialog(null, "Give tag", 
+				String tag = JOptionPane.showInputDialog(null, "Give tags (separate tags with \",\")", 
 				"Import by tag", 1);
 				System.out.println("tag given: " + tag);
 			}
