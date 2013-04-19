@@ -218,5 +218,7 @@ public class ReferenceListView extends View {
                 (int) (exportPanel.getHeight() * 0.8));
         referenceList.setListData(MainFrame.manager.getReferencesFromDatastore().toArray());
         referenceList.revalidate();
+		this.revalidate();
+		this.repaint();
     }
 }

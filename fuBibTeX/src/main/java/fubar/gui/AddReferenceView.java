@@ -394,5 +394,7 @@ public class AddReferenceView extends View {
         controlPanel.setBounds(0, (int) (basePanel.getSize().height * 0.9), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.15));
         requiredPanel.setBounds(0, (int) 0, (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75)) / 2);
         optionalPanel.setBounds(0, (int) (0 + requiredPanel.getHeight()), (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75)) / 2);
-    }
+		this.revalidate();
+		this.repaint();
+	}
 }
