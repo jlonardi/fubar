@@ -31,7 +31,6 @@ public class MainFrameTest extends TestCase {
     private MainFrame frame;
     GUIReferenceManagerF manager = new GUIReferenceManagerF();
     private Robot robot;
-    //private String ref1, ref2;
 
     @Override
     protected void setUp() throws Exception {
@@ -51,18 +50,6 @@ public class MainFrameTest extends TestCase {
         }
         File file = new File("src/test/resources/test.data");
         manager.setDatastore(file);
-//        Reference ref = new Reference(Reference.Type.Inproceedings);
-//        ref.setField(Reference.FieldType.Title, "Systeemihommia");
-//        ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
-//        ref.setCitationKey("Petteri2012");
-//        ref1 = ref.toString();
-//        manager.addReferenceToDatastore(ref);
-//        ref = new Reference(Reference.Type.Inproceedings);
-//        ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
-//        ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
-//        ref.setCitationKey("LoL3013");
-//        ref2 = ref.toString();
-//        manager.addReferenceToDatastore(ref);
         super.setUp();
         robot = BasicRobot.robotWithNewAwtHierarchy();
         robot.settings().componentLookupScope(ComponentLookupScope.ALL);
@@ -287,74 +274,5 @@ public class MainFrameTest extends TestCase {
         testFrame.button("save").requireEnabled();
         testFrame.button("exportBibtext").requireEnabled();
         testFrame.button("importBibtext").requireEnabled();
-    }
-
-    private IGUIReferenceManager createManagerStub() {
-        return new IGUIReferenceManager() {
-            ArrayList<Reference> list = new ArrayList();
-            ArrayList<Reference> exportList = new ArrayList();
-
-            @Override
-            public boolean addReferenceToDatastore(Reference ref) {
-                list.add(ref);
-                return true;
-            }
-
-            @Override
-            public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Reference> getReferencesFromDatastore() {
-                return list;
-            }
-
-            @Override
-            public boolean loadFromDatastore() {
-                return true;
-            }
-
-            @Override
-            public boolean saveToDatastore() {
-                return true;
-            }
-
-            @Override
-            public boolean addToExportList(Reference ref) {
-                exportList.add(ref);
-                return true;
-            }
-
-            @Override
-            public boolean exportToFile(File file) {
-                return true;
-            }
-
-            @Override
-            public boolean clearExportList() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void setDatastore(File file) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Reference> getExportList() {
-                return exportList;
-            }
-
-            @Override
-            public boolean dataStoreContainsCitationKey(String citationKey) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean importFromFile(File file) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
     }
 }

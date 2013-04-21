@@ -163,9 +163,12 @@ public class ReferenceListView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (referenceList.getSelectedValue() != null) {
-                    List<Reference> rl = (List<Reference>) referenceList.getSelectedValuesList();
-                    for (Reference r : rl) {
-                        MainFrame.manager.addToExportList(r);
+                    // Has to be done in an ugly manner since Jenkins does not
+                    // support JDK 1.7 and getSelectedValuesList() function
+                    Object[] rl =  referenceList.getSelectedValues();
+                    //List<Reference> rl = (List<Reference>) referenceList.getSelectedValuesList();
+                    for (Object r : rl) {
+                        MainFrame.manager.addToExportList((Reference)r);
                     }
                     exportList.removeAll();
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
@@ -177,9 +180,11 @@ public class ReferenceListView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (exportList.getSelectedValue() != null) {
-                    List<Reference> rl = (List<Reference>) exportList.getSelectedValuesList();
-                    for (Reference r : rl) {
-                        MainFrame.manager.getExportList().remove(r);
+                    // Same thing as above
+                    Object[] rl =  exportList.getSelectedValues();
+                    //List<Reference> rl = (List<Reference>) exportList.getSelectedValuesList();
+                    for (Object r : rl) {
+                        MainFrame.manager.getExportList().remove((Reference)r);
                     }
                     exportList.removeAll();
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
