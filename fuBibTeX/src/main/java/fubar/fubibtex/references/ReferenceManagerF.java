@@ -36,13 +36,15 @@ public class ReferenceManagerF implements IReferenceManager {
     @Override
     public boolean addReference(Reference ref) {
         List<Reference.FieldType> reqFields = ReferenceFields.getRequiredFields(ref.getType());
-
-        for (Reference.FieldType type : reqFields) {
-            if (ref.getField(type) == null) {
-                return false;
+        
+        if (reqFields != null) {
+            for (Reference.FieldType type : reqFields) {
+                if (ref.getField(type) == null) {
+                    return false;
+                }
             }
         }
-
+        
         referenceList.add(ref);
 
         return true;
@@ -164,12 +166,11 @@ public class ReferenceManagerF implements IReferenceManager {
     }
 
     /**
-     * Searches for references with filter keyword in a specific field.
-     *
-     * @param type The field used for filtering.
-     * @param filter The string to filter with.
-     * @return List of references found by filtering.
-     */
+	 * Searches for references with filter keyword in a specific field.
+	 * @param type The field used for filtering.
+	 * @param filter The string to filter with.
+	 * @return List of references found by filtering.
+	 */
     @Override
     public List<Reference> getReferencesByFilter(Reference.FieldType type, String filter) {
         ArrayList<Reference> refsFound = new ArrayList<Reference>();
@@ -178,6 +179,34 @@ public class ReferenceManagerF implements IReferenceManager {
             String val = ref.getField(type);
             if (val.contains(filter)) {
                 refsFound.add(ref);
+            }
+        }
+
+        return refsFound;
+    }
+    
+    /**
+	 * Searches for references with filter keyword in a specific field. Multiple
+         * filter words can be given by splitting them up with e.g. commas and
+         * specifying the splitBy parameter.
+	 * @param type The field used for filtering.
+	 * @param filter The string to filter with.
+         * @param splitBy If the splitBy is not null, filter will be split into
+         * multiple filter words to search with.
+	 * @return List of references found by filtering.
+	 */
+    @Override
+    public List<Reference> getReferencesByFilter(Reference.FieldType type, String filter, String splitBy) {
+        String[] filters = filter.split(splitBy);
+        
+        ArrayList<Reference> refsFound = new ArrayList<Reference>();
+        
+        for (Reference ref : referenceList) {
+            for (String filt : filters) {
+                String val = ref.getField(type).toLowerCase();
+                if (val.contains(filt) && !refsFound.contains(ref)) {
+                    refsFound.add(ref);
+                }
             }
         }
 
@@ -344,4 +373,11 @@ public class ReferenceManagerF implements IReferenceManager {
 
         return input;
     }
+
+	@Override
+	public boolean clearReferenceList() {
+		referenceList.clear();
+		return referenceList.isEmpty();
+	}
+
 }

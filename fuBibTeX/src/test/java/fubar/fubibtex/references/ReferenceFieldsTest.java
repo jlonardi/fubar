@@ -53,6 +53,7 @@ public class ReferenceFieldsTest extends TestCase {
         optFieldTypes.add(Reference.FieldType.Month);
         optFieldTypes.add(Reference.FieldType.Note);
         optFieldTypes.add(Reference.FieldType.Key);
+        optFieldTypes.add(Reference.FieldType.Keywords);
         
         List<Reference.FieldType> got = ReferenceFields.getOptionalFields(Reference.Type.Inproceedings);
         

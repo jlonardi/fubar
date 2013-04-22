@@ -39,6 +39,11 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
     public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter) {
         return dataStoreManager.getReferencesByFilter(type, filter);
     }
+    
+    @Override
+    public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter, String splitBy) {
+        return dataStoreManager.getReferencesByFilter(type, filter, splitBy);
+    }
 
     @Override
     public List<Reference> getReferencesFromDatastore() {
@@ -66,9 +71,9 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
         return exportManager.exportTo();
     }
 
-    @Override
-    public boolean clearExportList() {
-        throw new UnsupportedOperationException("Not supported yet.");
+	@Override
+	public boolean clearExportList() {
+		return exportManager.clearReferenceList();
     }
 
     @Override
@@ -79,6 +84,15 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 	@Override
 	public boolean dataStoreContainsCitationKey(String citationKey) {
 		return dataStoreManager.containsCitationKey(citationKey);
+	}
+
+	@Override
+	public boolean copyToExportList(List<Reference> referenceList) {
+		boolean retVal = false;
+		for (Reference reference : referenceList) {
+			retVal = exportManager.addReference(reference);
+		}
+		return retVal;
 	}
 
     @Override

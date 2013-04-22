@@ -13,6 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainApp {
 
     public static void main(String[] args) {
+
         try {
             // Set the Look and Feel of the application to the operating
             // system's look and feel.

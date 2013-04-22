@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import junit.framework.TestCase;
 
 /**
@@ -194,6 +195,55 @@ public class ReferenceManagerFTest extends TestCase {
 		
 		assertTrue(rl.isEmpty());
 	}
+        
+
+        public void testGetReferencesBySplitFiltersReturnsRightRefs()
+        {
+                rm = new ReferenceManagerF();
+		List<Reference> rl;
+                
+                Reference r1 = new Reference(Reference.Type.Misc);
+		r1.setCitationKey("TEST1");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		rm.addReference(r1);
+		
+		Reference r2 = new Reference(Reference.Type.Misc);
+		r2.setCitationKey("TEST2");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		rm.addReference(r2);
+		
+		Reference r3 = new Reference(Reference.Type.Misc);
+		r3.setCitationKey("TEST3");
+		r3.setField(Reference.FieldType.Title, "Testaa, testaa, hyvä tulee.");
+		rm.addReference(r3);
+                
+                rl = rm.getReferencesByFilter(Reference.FieldType.Title, "testaamisen,hyvä", ",");
+
+                assertTrue(rl.contains(r1));
+                assertTrue(rl.contains(r2));
+                assertTrue(rl.contains(r3));
+                
+        }
+        
+        public void testGetReferencesBySplitFiltersReturnsNoDuplicates()
+        {
+                rm = new ReferenceManagerF();
+		List<Reference> rl;
+                
+                Reference r1 = new Reference(Reference.Type.Misc);
+		r1.setCitationKey("TEST1");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		rm.addReference(r1);
+		
+		Reference r2 = new Reference(Reference.Type.Misc);
+		r2.setCitationKey("TEST2");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		rm.addReference(r2);
+                
+                rl = rm.getReferencesByFilter(Reference.FieldType.Title, "keveys,sietämätön", ",");
+                
+                assertEquals(2, rl.size());
+        }
 
 	//Test helper classes
 	public void testCleanStringTerminatosWithBracketAndComma() {

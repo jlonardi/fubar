@@ -186,7 +186,7 @@ public class MainFrameTest extends TestCase {
         testFrame.panel("addReferenceView").requireNotVisible();
         listViewBaseState();
 
-        testFrame.list("referenceList").item("[test] | Author | Title | Booktitle | Year");
+        //testFrame.list("referenceList").item("[test] | Author | Title | Booktitle | Year");
         testFrame.button("save").requireEnabled();
 //        testFrame.button("save").click();
 //        testFrame.button("save").requireDisabled();

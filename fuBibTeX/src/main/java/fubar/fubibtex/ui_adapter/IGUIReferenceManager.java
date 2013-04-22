@@ -29,6 +29,16 @@ public interface IGUIReferenceManager {
 	 * @return List of references found by filtering.
 	 */
 	List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter);
+        
+        /**
+	 * Searches for references with filter keyword in a specific field from the datamodel linked with the datastore and.
+         * Splits the filter parameter with the splitBy parameter.
+	 * @param type The field used for filtering.
+	 * @param filter The string to filter with.
+         * @param splitBy If
+	 * @return List of references found by filtering.
+	 */
+	List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter, String splitBy);
 	
 	/**
 	 * Returns all references contained in the data model
@@ -58,7 +68,7 @@ public interface IGUIReferenceManager {
 	
 	/**
 	 * Exports references in exportlist to a file. 
-	 * @return Boolean determining if the import succeeded.
+	 * @return Boolean determining if the export succeeded.
 	 */		
 	public boolean exportToFile(File file);
         
@@ -69,12 +79,22 @@ public interface IGUIReferenceManager {
 	public boolean importFromFile(File file);
 
 	/**
+	 * Copies the given list of References to the export list.
+	 * @param referenceList List of References to be copied to the export list
+	 * @return Boolean determining if the export succeeded.
+	 */		
+	public boolean copyToExportList(List<Reference> referenceList);
+	
+	/**
 	 * Empties the exportlist.
 	 * @return Boolean determining if the list was cleared.
 	 */
 	public boolean clearExportList();
-        
-        public List<Reference> getExportList();
+    
+	/**
+	 * Returns the list of References selected for export
+	 */
+	public List<Reference> getExportList();
 
 	/**
 	 * Set the datastore-file used by the manager
@@ -82,6 +102,17 @@ public interface IGUIReferenceManager {
 	 */
 	public void setDatastore(File file);
 	
+	/**
+	 * Checks if a citation key is already in a reference saved into the datastore
+	 * @param citationKey existance of which needs to be checked 
+	 * @return Boolean true if Reference with given key exists, otherwise false
+	 */
 	public boolean dataStoreContainsCitationKey(String citationKey);
+	
+	/**
+	 * 
+	 */
+	
+	
 	
 }
