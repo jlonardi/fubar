@@ -155,7 +155,7 @@ public class MainFrameTest extends TestCase {
         }
         fieldTypes = fubar.fubibtex.references.ReferenceFields.getOptionalFields(Reference.Type.Inproceedings);
         for (int i = 0; i < fieldTypes.size(); i++) {
-            if (i % 2 == 0) {
+            if (i < fieldTypes.size() / 2) {
                 testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText(fieldTypes.get(i).name());
             }
         }
@@ -186,7 +186,7 @@ public class MainFrameTest extends TestCase {
         testFrame.panel("addReferenceView").requireNotVisible();
         listViewBaseState();
 
-        //testFrame.list("referenceList").item("[test] | Author | Title | Booktitle | Year");
+        testFrame.list("referenceList").item("[test] | Author | Title | Booktitle | Year");
         testFrame.button("save").requireEnabled();
 //        testFrame.button("save").click();
 //        testFrame.button("save").requireDisabled();
