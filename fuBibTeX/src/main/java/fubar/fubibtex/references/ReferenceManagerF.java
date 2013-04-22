@@ -36,13 +36,15 @@ public class ReferenceManagerF implements IReferenceManager {
     @Override
     public boolean addReference(Reference ref) {
         List<Reference.FieldType> reqFields = ReferenceFields.getRequiredFields(ref.getType());
-
-        for (Reference.FieldType type : reqFields) {
-            if (ref.getField(type) == null) {
-                return false;
+        
+        if (reqFields != null) {
+            for (Reference.FieldType type : reqFields) {
+                if (ref.getField(type) == null) {
+                    return false;
+                }
             }
         }
-
+        
         referenceList.add(ref);
 
         return true;
