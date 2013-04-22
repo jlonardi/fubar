@@ -10,25 +10,27 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ButtonTray extends JPanel {
 
-    private JButton save, exportBibtext, importBibtext;
+    private JButton save, exportBibtext, exportByTag, importBibtext;
+    private ActionListener exportSingleListener, exportByTagListener, importListener;
     private final JFileChooser fc;
     private MainFrame mainFrame;
 
     public ButtonTray(MainFrame main) {
 
         mainFrame = main;
+        setupListeners();
         fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("BibTeX files .bib", "bib");
         fc.setFileFilter(filter);
-        
+
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
         this.setLayout(layout);
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -62,23 +64,19 @@ public class ButtonTray extends JPanel {
             exportBibtext.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
-        exportBibtext.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int returnVal = fc.showSaveDialog(ButtonTray.this);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fc.getSelectedFile();
-                    String path = file.getAbsoluteFile()+".bib";
-                    file = new File(path);
-                    MainFrame.manager.exportToFile(file);
-                    System.out.println("Saving: " + path);
-                } else {
-                    System.out.println("Save command cancelled by user.");
-                }
-
-            }
-        });
+        exportBibtext.addActionListener(exportSingleListener);
         this.add(exportBibtext);
+
+        exportByTag = new JButton("By tag");
+        exportByTag.setName("exportByTag");
+        try {
+            File imageFile = new File("src/main/resources/gui/export.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            exportByTag.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
+        exportByTag.addActionListener(exportByTagListener);
+        this.add(exportByTag);
 
         importBibtext = new JButton("Import");
         importBibtext.setName("importBibtext");
@@ -88,27 +86,58 @@ public class ButtonTray extends JPanel {
             importBibtext.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
-        importBibtext.addActionListener(new ActionListener() {
+        importBibtext.addActionListener(importListener);
+        this.add(importBibtext);
+
+        this.setVisible(true);
+    }
+
+    private void setupListeners() {
+        exportByTagListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Not supported yet.");
+
+                String tag = JOptionPane.showInputDialog(null, "Give tags (separate tags with \",\")",
+                        "Import by tag", 1);
+                System.out.println("tag given: " + tag);
+            }
+        };
+
+        exportSingleListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int returnVal = fc.showSaveDialog(ButtonTray.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    String path = file.getAbsoluteFile() + ".bib";
+                    file = new File(path);
+                    MainFrame.manager.exportToFile(file);
+                    System.out.println("Exporting: " + path);
+                } else {
+                    System.out.println("Save command cancelled by user.");
+                }
+
+            }
+        };
+
+        importListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int returnVal = fc.showOpenDialog(ButtonTray.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
-                    // -----------TODO---------
-                    // GIVE FILE TO MANAGER FOR IMPORT
-                    // ------------------------
-                    
+                    String path = file.getAbsoluteFile() + "";
+                    file = new File(path);
+                    MainFrame.manager.importFromFile(file);
+                    System.out.println("Importing: " + path);
                     mainFrame.renderAll();
-                    System.out.println("Opening: " + file.getName());
                 } else {
                     System.out.println("Open command cancelled by user.");
                 }
 
             }
-        });
-        this.add(importBibtext);
-
-        this.setVisible(true);
+        };
     }
 
     public void dataChanged() {

@@ -135,7 +135,7 @@ public class ReferenceManagerFTest extends TestCase {
 		ReferenceManagerF in = new ReferenceManagerF();
 		List<Reference> rl;
 		rmExp.exportTo();
-		
+		System.out.println("import file path: " + output.getAbsolutePath());
 		in.setImportFile(output);
 		in.importFrom();
 		
@@ -235,13 +235,13 @@ public class ReferenceManagerFTest extends TestCase {
 		assertEquals(result, "YEAR = 1978");
 		rm = null;
 	}
-
-	public void testCleanStringTerminatosWithLineTerminator() {
-		rm = new ReferenceManagerF();
-		String dirtyString = "{VPL11," + System.getProperty("line.separator");
-		String result = rm.cleanStringTerminators(dirtyString);
-		assertEquals(result, "{VPL11,");
-	}
+	// POISTETTU KÄYTÖSTÄ SEPARATORIN KÄYTÖN TAKIA
+//	public void testCleanStringTerminatosWithLineTerminator() {
+//		rm = new ReferenceManagerF();
+//		String dirtyString = "{VPL11," + System.getProperty("line.separator");
+//		String result = rm.cleanStringTerminators(dirtyString);
+//		assertEquals(result, "{VPL11,");
+//	}
 
 	public void testBuildKey() {
 		rm = new ReferenceManagerF();

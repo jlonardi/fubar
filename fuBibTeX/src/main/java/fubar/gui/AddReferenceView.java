@@ -17,7 +17,6 @@ import java.util.EnumMap;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -268,7 +267,7 @@ public class AddReferenceView extends View {
      *  is unique.
      */
     private void checkIfUnique() {
-        if (MainFrame.manager.dataStoreContainsCitationKey(citationKeyField.getText())) {
+        if (!citationKeyField.getText().equals("") && MainFrame.manager.dataStoreContainsCitationKey(citationKeyField.getText())) {
             citationKeyError.setVisible(true);
         } else {
             citationKeyError.setVisible(false);
@@ -303,7 +302,7 @@ public class AddReferenceView extends View {
                 Type type = (Type) typeList.getSelectedItem();
                 Reference ref = new Reference(type);
                 // Checks if the citation key is unique
-                if(MainFrame.manager.dataStoreContainsCitationKey(
+                if(!citationKeyField.getText().equals("") && MainFrame.manager.dataStoreContainsCitationKey(
                         citationKeyField.getText())) {
                     frame.showMessage(
                                 "Citation key is allready in use.",
@@ -394,5 +393,7 @@ public class AddReferenceView extends View {
         controlPanel.setBounds(0, (int) (basePanel.getSize().height * 0.9), (int) (basePanel.getSize().width), (int) (basePanel.getSize().height * 0.15));
         requiredPanel.setBounds(0, (int) 0, (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75)) / 2);
         optionalPanel.setBounds(0, (int) (0 + requiredPanel.getHeight()), (int) (basePanel.getSize().width), (int) ((basePanel.getSize().height * 0.75)) / 2);
-    }
+		this.revalidate();
+		this.repaint();
+	}
 }

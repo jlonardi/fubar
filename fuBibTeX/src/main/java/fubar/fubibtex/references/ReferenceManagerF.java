@@ -2,7 +2,8 @@ package fubar.fubibtex.references;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,307 +17,331 @@ import java.util.logging.Logger;
  */
 public class ReferenceManagerF implements IReferenceManager {
 
-	private ArrayList<Reference> referenceList;
-	//This referencemanager uses files as datastores.
-	private File importFile;
-	private File exportFile;
+    private ArrayList<Reference> referenceList;
+    //This referencemanager uses files as datastores.
+    private File importFile;
+    private File exportFile;
 
-	public ReferenceManagerF() {
-		referenceList = new ArrayList<Reference>();
-	}
+    public ReferenceManagerF() {
+        referenceList = new ArrayList<Reference>();
+    }
 
-	/**
-	 * Tries to add a reference. If the reference does not have all the required
-	 * fields, the addition will fail.
-	 *
-	 * @param ref
-	 * @return Boolean determining if the addition succeeded.
-	 */
-	@Override
-	public boolean addReference(Reference ref) {
-		List<Reference.FieldType> reqFields = ReferenceFields.getRequiredFields(ref.getType());
+    /**
+     * Tries to add a reference. If the reference does not have all the required
+     * fields, the addition will fail.
+     *
+     * @param ref
+     * @return Boolean determining if the addition succeeded.
+     */
+    @Override
+    public boolean addReference(Reference ref) {
+        List<Reference.FieldType> reqFields = ReferenceFields.getRequiredFields(ref.getType());
 
-		for (Reference.FieldType type : reqFields) {
-			if (ref.getField(type) == null) {
-				return false;
-			}
-		}
+        for (Reference.FieldType type : reqFields) {
+            if (ref.getField(type) == null) {
+                return false;
+            }
+        }
 
-		referenceList.add(ref);
-		
-		return true;
-	}
+        referenceList.add(ref);
 
-	public File getImportFile() {
-		return importFile;
-	}
+        return true;
+    }
 
-	public void setImportFile(File importFile) {
-		this.importFile = importFile;
-	}
+    public File getImportFile() {
+        return importFile;
+    }
 
-	public File getExportFile() {
-		return exportFile;
-	}
+    public void setImportFile(File importFile) {
+        this.importFile = importFile;
+    }
 
-	public void setExportFile(File exportFile) {
-		this.exportFile = exportFile;
-	}
+    public File getExportFile() {
+        return exportFile;
+    }
 
-	@Override
-	public boolean importFrom() {
-		String separator = System.getProperty("line.separator");
-		int separatorLen = separator.length();
-		
-		Scanner referenceScanner;
-		Scanner fieldScanner;
-		try {
-			referenceScanner = new Scanner(new BufferedReader(new FileReader(importFile)));
-			referenceScanner.useDelimiter("@|"+ separator + "@");
+    public void setExportFile(File exportFile) {
+        this.exportFile = exportFile;
+    }
 
-			while (referenceScanner.hasNext()) {
-				String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
-				referenceString = cleanStringTerminators(referenceString);
-				referenceString = convertAccented(referenceString);
-				
-				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
-				String referenceType = buildReferenceType(referenceString);
+    @Override
+    public boolean importFrom() {
 
-				Reference r = new Reference(Reference.Type.getTypeByString(referenceType));
+        // SEPARATORIA EI KÄYTETÄ KOSKA SE ON JÄRJESTELMÄKOHTAINEN
 
-				referenceString = referenceString.substring(referenceType.length());
-				
-				String referenceCitation = buildCitation(referenceString);
+        //String separator = System.getProperty("line.separator");
+        //System.out.println("separator: " + separator);
+        //int separatorLen = separator.length();
 
-				r.setCitationKey(referenceCitation.toString());
+        Scanner referenceScanner;
+        Scanner fieldScanner;
+        try {
 
-				referenceString = referenceString.substring(referenceString.indexOf(separator));
-				
-				fieldScanner = new Scanner(referenceString);
-				fieldScanner.useDelimiter(separator);
+//----------------------- MUUTETTUA OSUUTTA ------------------------------------		
 
-				while (fieldScanner.hasNext()) {
-					String field = fieldScanner.next();
-					String key = buildKey(field);
+            // LISÄTTY LUKEMAAN UTF8
+            referenceScanner = new Scanner(new BufferedReader(new InputStreamReader(
+                    new FileInputStream(importFile), "UTF8")));
+            // MUUTETTU REGEX JA OTETTU POIS SEPARATOR
+            referenceScanner.useDelimiter("@");
 
-					field = cleanField(field);
-					field = cleanStringTerminators(field);
-					
-					r.setField(Reference.FieldType.getFieldTypeByString(key), field);
-				}
-				fieldScanner.close();
+//---------------------- MUUTETTU OSUUS LOPPU ----------------------------------				
 
-				referenceList.add(r);
-			}
-			referenceScanner.close();
-		} catch (Exception ex) {
-			Logger.getLogger(ReferenceManagerF.class.getName()).log(Level.SEVERE, null, ex);
 
-			referenceList.clear();
-			return false;
-		}
-		
-		return true;
-	}
+            while (referenceScanner.hasNext()) {
+                String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
+                if (!referenceString.equals("")) {
+                    referenceString = cleanStringTerminators(referenceString);
+                    referenceString = convertAccented(referenceString);
 
-	@Override
-	public boolean exportTo() {
-		try {
-			
-			//PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
-			PrintWriter pw = new PrintWriter(exportFile,"UTF-8");
+                    //Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
+                    String referenceType = buildReferenceType(referenceString);
 
-			for(Reference r : referenceList) r.save(pw);
-			pw.close();
-			
-		} catch (Exception ex) {
-			Logger.getLogger(ReferenceManagerF.class.getName()).log(Level.SEVERE, null, ex);
-			exportFile.delete();
-			return false;
-		}
+                    Reference r = new Reference(Reference.Type.getTypeByString(referenceType));
 
-		return true;
-	}
+                    referenceString = referenceString.substring(referenceType.length());
 
-	/**
-	 * Searches for references with filter keyword in a specific field.
-	 *
-	 * @param type The field used for filtering.
-	 * @param filter The string to filter with.
-	 * @return List of references found by filtering.
-	 */
-	@Override
-	public List<Reference> getReferencesByFilter(Reference.FieldType type, String filter) {
-		ArrayList<Reference> refsFound = new ArrayList<Reference>();
+                    String referenceCitation = buildCitation(referenceString);
 
-		for (Reference ref : referenceList) {
-			String val = ref.getField(type);
-			if (val.contains(filter)) {
-				refsFound.add(ref);
-			}
-		}
+                    r.setCitationKey(referenceCitation.toString());
 
-		return refsFound;
-	}
+//----------------------- MUUTETTUA OSUUTTA ------------------------------------	
+                    fieldScanner = new Scanner(referenceString);
 
-	/**
-	 * Returns all references contained in the manager
-	 *
-	 * @return List of references.
-	 */
-	@Override
-	public List<Reference> getReferences() {
-		return referenceList;
-	}
+                    // EI TARVITA SEPARATORIA DELIMITERIKSI, KÄYTETÄÄN NEXTLINEÄ
+                    //fieldScanner.useDelimiter(separator);
 
-	/////////////////////////////////////////////////
-	//
-	// Arr, internal helper-methods be here, matey...
-	//
-	/////////////////////////////////////////////////
+                    while (fieldScanner.hasNext()) {
+                        // SCANNERI TUNNISTAA ERI JÄRJESTELMIEN VÄLISET RIVINVAIHDOT
+                        String field = fieldScanner.nextLine();
+                        /*
+                         *  Jos ei sisällä = merkkiä niin kyseessä on rivi
+                         *  jolla ei ole bibtextiä kiinnostavaa tietoa. Oletus
+                         *  on että tiedot ovat tallennettu riveittäin.
+                         */
+                        if (field.contains("=")) {
+                            String key = buildKey(field);
+                            field = cleanField(field);
+                            field = cleanStringTerminators(field);
+                            r.setField(Reference.FieldType.getFieldTypeByString(key), field);
+                        }
+                    }
+//---------------------- MUUTETTU OSUUS LOPPU ----------------------------------						
+                    fieldScanner.close();
+                    referenceList.add(r);
+                }
+            }
+            referenceScanner.close();
+        } catch (Exception ex) {
+            Logger.getLogger(ReferenceManagerF.class.getName()).log(Level.SEVERE, null, ex);
 
-	/**
-	 * Removes BibTex-leftovers/line separator from string-endings left by the Scanner  
-	 * @param String to be cleaned
-	 * @ret Cleaned string.
-	 */
-	protected String cleanStringTerminators(String string) {
-		String ret = string;
-		if (string.endsWith("\",") || string.endsWith("},")) {
-			ret = string.substring(0, string.length() - 2);
-		} else if (string.endsWith(",") || string.endsWith(")") || string.endsWith("}")) {
-			ret = string.substring(0, string.length() - 1);
-		}
+            referenceList.clear();
+            return false;
+        }
 
-		if (string.endsWith(System.getProperty("line.separator"))) {
-			ret = string.substring(0, string.length() - System.getProperty("line.separator").length());
-		}
+        return true;
+    }
 
-		return ret;
-	}
+    @Override
+    public boolean exportTo() {
+        try {
 
-	/**
-	 * Builds a reference key string from the given input string.
-	 * @param String Input data from the Scanner
-	 * @return reference key name as a string
-	 */
-	protected String buildKey(String field) {
-		StringBuilder key = new StringBuilder();
-		String ret = "";
-		
-		for (int i = 0; i < field.length(); i++) {
-			if (field.charAt(i) == '=') {
-				ret = key.toString().toUpperCase().trim();
-				break;
-			}
-			else {
-				key.append(field.charAt(i));
-			}
-		}
-		return ret;
-	}
+            //PrintWriter pw = new PrintWriter(new FileWriter(exportFile));
+            PrintWriter pw = new PrintWriter(exportFile, "UTF-8");
 
-	/**
-	 * Builds a reference type string from the given input string.
-	 * @param String Input data from the Scanner
-	 * @return reference type name as a string
-	 */	
-	protected String buildReferenceType(String referenceString) {
-		StringBuilder referenceType = new StringBuilder();
-		String ret = "";
+            for (Reference r : referenceList) {
+                r.save(pw);
+            }
+            pw.close();
 
-		for (int i = 0; i < referenceString.length(); i++) {
-			if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(') {
-				ret = referenceType.toString().toUpperCase().trim();
-				break;
-			}
-			else 
-			{
-				referenceType.append(referenceString.charAt(i));
-			}
-		}
-		return ret;
-	}
+        } catch (Exception ex) {
+            Logger.getLogger(ReferenceManagerF.class.getName()).log(Level.SEVERE, null, ex);
+            exportFile.delete();
+            return false;
+        }
 
-	/**
-	 * Builds a reference citation string from the given input string.
-	 * @param String Input data from the Scanner
-	 * @return reference citation name as a string
-	 */	
-	protected String buildCitation(String referenceString) {
-		StringBuilder citationKey = new StringBuilder();
-		String ret = "";
-		
-		for (int i = 0; i < referenceString.length(); i++) {
-			if (referenceString.charAt(i) == ',') {
-				ret = citationKey.toString().trim();
-				break;
-			}
-			else if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(' || referenceString.charAt(i) == ' ')
-			{
-				continue;
-			}
-			else
-			{
-				citationKey.append(referenceString.charAt(i));
-			}
-		}
-		
-		
-		
-		return ret;
-	}
+        return true;
+    }
 
-	/**
-	 * Cleans a string designated to be a reference field from unnecessary crap
-	 * @param String string with crap
-	 * @return string without crap
-	 */
-	protected String cleanField(String field) {
-		String ret = field;
-		if (field.indexOf('{') > 0) {
-			ret = field.substring(field.indexOf('{') + 1);
-		} else if (field.indexOf('"') > 0) {
-			ret = field.substring(field.indexOf('"') + 1);
-		} else if (field.indexOf("=") > 0) {
-			ret = field.substring(field.indexOf("=") + 1);
-		}
-		return ret;
-	}
+    /**
+     * Searches for references with filter keyword in a specific field.
+     *
+     * @param type The field used for filtering.
+     * @param filter The string to filter with.
+     * @return List of references found by filtering.
+     */
+    @Override
+    public List<Reference> getReferencesByFilter(Reference.FieldType type, String filter) {
+        ArrayList<Reference> refsFound = new ArrayList<Reference>();
 
-	@Override
-	public boolean containsCitationKey(String citationKey) {
-		for (Reference reference : referenceList) 
-		{
-			if (reference.getCitationKey().compareTo(citationKey)==0)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	protected String convertAccented(String input){
-		
-		if(input.contains("\\\"{A}"))
-			input = input.replace("\\\"{A}", "Ä");
-		
-		if (input.contains("\\\"{a}"))
-			input = input.replace("\\\"{a}", "ä");
-		
-		if (input.contains("\\r{A}"))
-			input = input.replace("\\r{A}", "Å");
+        for (Reference ref : referenceList) {
+            String val = ref.getField(type);
+            if (val.contains(filter)) {
+                refsFound.add(ref);
+            }
+        }
 
-		if (input.contains("\\r{a}"))
-			input = input.replace("\\r{a}", "å");
-		
-		if (input.contains("\\\"{O}"))
-			input = input.replace("\\\"{O}", "Ö");
-		
-		if (input.contains("\\\"{o}"))
-			input = input.replace("\\\"{o}", "ö");
-				
-		return input;
-	}
-	
+        return refsFound;
+    }
+
+    /**
+     * Returns all references contained in the manager
+     *
+     * @return List of references.
+     */
+    @Override
+    public List<Reference> getReferences() {
+        return referenceList;
+    }
+
+    /////////////////////////////////////////////////
+    //
+    // Arr, internal helper-methods be here, matey...
+    //
+    /////////////////////////////////////////////////
+    /**
+     * Removes BibTex-leftovers/line separator from string-endings left by the
+     * Scanner
+     *
+     * @param String to be cleaned
+     * @ret Cleaned string.
+     */
+    protected String cleanStringTerminators(String string) {
+        String ret = string;
+        if (string.endsWith("\",") || string.endsWith("},")) {
+            ret = string.substring(0, string.length() - 2);
+        } else if (string.endsWith(",") || string.endsWith(")") || string.endsWith("}")) {
+            ret = string.substring(0, string.length() - 1);
+        }
+
+
+        // POISTETTU TERMINATORIN PUHIDSTAMINEN
+
+        return ret;
+    }
+
+    /**
+     * Builds a reference key string from the given input string.
+     *
+     * @param String Input data from the Scanner
+     * @return reference key name as a string
+     */
+    protected String buildKey(String field) {
+        StringBuilder key = new StringBuilder();
+        String ret = "";
+
+        for (int i = 0; i < field.length(); i++) {
+            if (field.charAt(i) == '=') {
+                ret = key.toString().toUpperCase().trim();
+                break;
+            } else {
+                key.append(field.charAt(i));
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Builds a reference type string from the given input string.
+     *
+     * @param String Input data from the Scanner
+     * @return reference type name as a string
+     */
+    protected String buildReferenceType(String referenceString) {
+        StringBuilder referenceType = new StringBuilder();
+        String ret = "";
+
+        for (int i = 0; i < referenceString.length(); i++) {
+            if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(') {
+                ret = referenceType.toString().toUpperCase().trim();
+                break;
+            } else {
+                referenceType.append(referenceString.charAt(i));
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Builds a reference citation string from the given input string.
+     *
+     * @param String Input data from the Scanner
+     * @return reference citation name as a string
+     */
+    protected String buildCitation(String referenceString) {
+        StringBuilder citationKey = new StringBuilder();
+        String ret = "";
+
+        for (int i = 0; i < referenceString.length(); i++) {
+            if (referenceString.charAt(i) == ',') {
+                ret = citationKey.toString().trim();
+                break;
+            } else if (referenceString.charAt(i) == '{' || referenceString.charAt(i) == '(' || referenceString.charAt(i) == ' ') {
+                continue;
+            } else {
+                citationKey.append(referenceString.charAt(i));
+            }
+        }
+
+
+
+        return ret;
+    }
+
+    /**
+     * Cleans a string designated to be a reference field from unnecessary crap
+     *
+     * @param String string with crap
+     * @return string without crap
+     */
+    protected String cleanField(String field) {
+        String ret = field;
+        if (field.indexOf('{') > 0) {
+            ret = field.substring(field.indexOf('{') + 1);
+        } else if (field.indexOf('"') > 0) {
+            ret = field.substring(field.indexOf('"') + 1);
+        } else if (field.indexOf("=") > 0) {
+            ret = field.substring(field.indexOf("=") + 1);
+        }
+        return ret;
+    }
+
+    @Override
+    public boolean containsCitationKey(String citationKey) {
+        for (Reference reference : referenceList) {
+            if (reference.getCitationKey().compareTo(citationKey) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected String convertAccented(String input) {
+
+        if (input.contains("\\\"{A}")) {
+            input = input.replace("\\\"{A}", "Ä");
+        }
+
+        if (input.contains("\\\"{a}")) {
+            input = input.replace("\\\"{a}", "ä");
+        }
+
+        if (input.contains("\\r{A}")) {
+            input = input.replace("\\r{A}", "Å");
+        }
+
+        if (input.contains("\\r{a}")) {
+            input = input.replace("\\r{a}", "å");
+        }
+
+        if (input.contains("\\\"{O}")) {
+            input = input.replace("\\\"{O}", "Ö");
+        }
+
+        if (input.contains("\\\"{o}")) {
+            input = input.replace("\\\"{o}", "ö");
+        }
+
+        return input;
+    }
 }
