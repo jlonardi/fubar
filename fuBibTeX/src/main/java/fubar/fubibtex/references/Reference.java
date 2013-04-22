@@ -258,6 +258,7 @@ public class Reference implements Cloneable{
         Editor,
         Howpublished,
         Institution,
+        Isbn,
         Journal,
         Key,
         Keywords,

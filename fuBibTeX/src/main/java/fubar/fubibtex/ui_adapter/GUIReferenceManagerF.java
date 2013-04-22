@@ -89,4 +89,12 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 		}
 		return retVal;
 	}
+
+    @Override
+    public boolean importFromFile(File file) {
+        this.dataStoreManager.setImportFile(file);
+        if(!this.dataStoreManager.importFrom()) return false;
+        this.dataStoreManager.setImportFile(this.datastore);
+        return true;
+    }
 }

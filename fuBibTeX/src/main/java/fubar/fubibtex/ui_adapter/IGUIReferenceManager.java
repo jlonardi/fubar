@@ -61,6 +61,12 @@ public interface IGUIReferenceManager {
 	 * @return Boolean determining if the export succeeded.
 	 */		
 	public boolean exportToFile(File file);
+        
+        /**
+	 * Imports all references contained in the file in the datastore. 
+	 * @return Boolean determining if the import succeeded.
+	 */		
+	public boolean importFromFile(File file);
 
 	/**
 	 * Copies the given list of References to the export list.

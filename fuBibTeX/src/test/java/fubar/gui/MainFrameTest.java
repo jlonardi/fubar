@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import junit.framework.TestCase;
 import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.ComponentLookupScope;
@@ -28,25 +30,26 @@ public class MainFrameTest extends TestCase {
     private FrameFixture testFrame;
     private MainFrame frame;
     GUIReferenceManagerF manager = new GUIReferenceManagerF();
-    
     private Robot robot;
-    //private String ref1, ref2;
 
     @Override
     protected void setUp() throws Exception {
-        manager.setDatastore(new File("src/test/resources/test.data"));
-//        Reference ref = new Reference(Reference.Type.Inproceedings);
-//        ref.setField(Reference.FieldType.Title, "Systeemihommia");
-//        ref.setField(Reference.FieldType.Author, "Petteri Linnakangas");
-//        ref.setCitationKey("Petteri2012");
-//        ref1 = ref.toString();
-//        manager.addReferenceToDatastore(ref);
-//        ref = new Reference(Reference.Type.Inproceedings);
-//        ref.setField(Reference.FieldType.Title, "Koodia koodia koodia...");
-//        ref.setField(Reference.FieldType.Author, "Jarno Lonardi");
-//        ref.setCitationKey("LoL3013");
-//        ref2 = ref.toString();
-//        manager.addReferenceToDatastore(ref);
+        try {
+            // Set the Look and Feel of the application to the operating
+            // system's look and feel.
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println(e);
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+        } catch (InstantiationException e) {
+            System.out.println(e);
+        } catch (IllegalAccessException e) {
+            System.out.println(e);
+        }
+        File file = new File("src/test/resources/test.data");
+        manager.setDatastore(file);
         super.setUp();
         robot = BasicRobot.robotWithNewAwtHierarchy();
         robot.settings().componentLookupScope(ComponentLookupScope.ALL);
@@ -90,12 +93,15 @@ public class MainFrameTest extends TestCase {
         fileChooser.requireVisible();
         fileChooser.cancel();
 
-        testFrame.button("importBibtext").click();
-        fileChooser.requireVisible();
-        fileChooser.approve();
-        fileChooser.requireVisible();
-        fileChooser.selectFile(new File("test"));
-        fileChooser.approve();
+        // EI PYSTY KUNNOLLA TESTAAMAAN POLUN TAKIA, FILECHOOSER AVAA
+        // AINA NÄKYMÄKSI KOTIHAKEMISTON JOTEN POLKU TIEDOSTOON VAIHETELEE.
+
+//        testFrame.button("importBibtext").click();
+//        fileChooser.requireVisible();
+//        fileChooser.approve();
+//        fileChooser.requireVisible();
+//        fileChooser.selectFile(new File("src\test\resources\test.bib"));
+//        fileChooser.approve();
     }
 
     public void testExport() {
@@ -138,7 +144,7 @@ public class MainFrameTest extends TestCase {
         addReferenceViewBaseState();
 
         testFrame.comboBox("typeList").requireSelection(fubar.fubibtex.references.Reference.Type.Inproceedings.name());
-          
+
         testFrame.button("addButton").click();
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
         testFrame.panel("listView").requireNotVisible();
@@ -153,7 +159,7 @@ public class MainFrameTest extends TestCase {
                 testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText(fieldTypes.get(i).name());
             }
         }
-        
+
         testFrame.label("citationKeyErrorLabel").requireNotVisible();
         testFrame.textBox("citationKeyField").requireText("");
         testFrame.textBox("citationKeyField").enterText("L");
@@ -166,6 +172,9 @@ public class MainFrameTest extends TestCase {
         testFrame.label("citationKeyErrorLabel").requireVisible();
         testFrame.button("addButton").click();
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
+        testFrame.textBox("citationKeyField").deleteText();
+        testFrame.button("citationBuilderButton").click();
+        testFrame.textBox("citationKeyField").requireText("Authorar");
         testFrame.textBox("citationKeyField").deleteText();
         testFrame.label("citationKeyErrorLabel").requireNotVisible();
         testFrame.textBox("citationKeyField").enterText("t");
@@ -192,16 +201,49 @@ public class MainFrameTest extends TestCase {
         testFrame.button("removeFromExportList").click();
         testFrame.list("exportList").requireItemCount(0);
     }
-    
+
     public void testModify() {
         testFrame.button("editReferenceButton").requireDisabled();
         testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
         testFrame.button("editReferenceButton").requireEnabled();
         testFrame.button("editReferenceButton").click();
+        testFrame.panel("modifyReferenceView").requireVisible();
         testFrame.textBox(Reference.FieldType.Year.name() + "TextFieldModify").deleteText();
         testFrame.textBox(Reference.FieldType.Year.name() + "TextFieldModify").enterText("2012");
+        testFrame.button("citationBuilderButtonModify").click();
+        testFrame.button("modifyButton").click();
+        testFrame.panel("modifyReferenceView").requireNotVisible();
+        testFrame.list("referenceList").clickItem("[Jarno Lonardi12] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 2012");
+        testFrame.list("referenceList").requireSelection("[Jarno Lonardi12] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 2012");
     }
 
+    public void testSaveButton() {
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("editReferenceButton").click();
+        testFrame.button("modifyButton").click();
+        testFrame.button("save").requireEnabled();
+        testFrame.button("save").click();
+        testFrame.button("save").requireDisabled();
+    }
+    
+    public void testExportByTag() {
+        testFrame.button("exportByTag").click();
+        JOptionPaneFinder.findOptionPane().using(robot).textBox("OptionPane.textField").setText("test");
+        JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
+    }
+    
+    public void testReferenceDelete() {
+        testFrame.button("deleteReferenceButton").requireDisabled();
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("deleteReferenceButton").requireEnabled();
+        testFrame.button("editReferenceButton").click();
+        testFrame.button("returnButtonModify").click();
+        testFrame.button("deleteReferenceButton").requireDisabled();
+        testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
+        testFrame.button("deleteReferenceButton").requireEnabled();
+        testFrame.button("deleteReferenceButton").click();
+    }
+    
     private void listViewBaseState() {
         testFrame.panel("listView").requireVisible();
         testFrame.list("referenceList").requireVisible();
@@ -232,74 +274,5 @@ public class MainFrameTest extends TestCase {
         testFrame.button("save").requireEnabled();
         testFrame.button("exportBibtext").requireEnabled();
         testFrame.button("importBibtext").requireEnabled();
-    }
-
-    private IGUIReferenceManager createManagerStub() {
-        return new IGUIReferenceManager() {
-            ArrayList<Reference> list = new ArrayList();
-            ArrayList<Reference> exportList = new ArrayList();
-           
-            @Override
-            public boolean addReferenceToDatastore(Reference ref) {
-                list.add(ref);
-                return true;
-            }
-
-            @Override
-            public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Reference> getReferencesFromDatastore() {
-                return list;
-            }
-
-            @Override
-            public boolean loadFromDatastore() {
-                return true;
-            }
-
-            @Override
-            public boolean saveToDatastore() {
-                return true;
-            }
-
-            @Override
-            public boolean addToExportList(Reference ref) {
-                exportList.add(ref);
-                return true;
-            }
-
-            @Override
-            public boolean exportToFile(File file) {
-                return true;
-            }
-
-            @Override
-            public boolean clearExportList() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void setDatastore(File file) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Reference> getExportList() {
-                return exportList;
-            }
-
-            @Override
-            public boolean dataStoreContainsCitationKey(String citationKey) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-			@Override
-			public boolean copyToExportList(List<Reference> referenceList) {
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-			}
-        };
     }
 }
