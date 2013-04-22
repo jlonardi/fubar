@@ -19,13 +19,25 @@ public interface IReferenceManager {
 	 */
 	boolean addReference(Reference ref);
 
-	/**
+        /**
 	 * Searches for references with filter keyword in a specific field.
 	 * @param type The field used for filtering.
 	 * @param filter The string to filter with.
 	 * @return List of references found by filtering.
 	 */
 	List<Reference> getReferencesByFilter(Reference.FieldType type, String filter);
+        
+	/**
+	 * Searches for references with filter keyword in a specific field. Multiple
+         * filter words can be given by splitting them up with e.g. commas and
+         * specifying the splitBy parameter.
+	 * @param type The field used for filtering.
+	 * @param filter The string to filter with.
+         * @param splitBy If the splitBy is not null, filter will be split into
+         * multiple filter words to search with.
+	 * @return List of references found by filtering.
+	 */
+	List<Reference> getReferencesByFilter(Reference.FieldType type, String filter, String splitBy);
 
 	/**
 	 * Returns all references contained in the manager
@@ -48,7 +60,7 @@ public interface IReferenceManager {
 	
 	/**
 	 * Checks if a citation key is already in a reference saved into the manager
-	 * @param citationKey existance of which needs to be checked 
+	 * @param citationKey existence of which needs to be checked 
 	 * @return Boolean true if Reference with given key exists, otherwise false
 	 */
 	boolean containsCitationKey(String citationKey);

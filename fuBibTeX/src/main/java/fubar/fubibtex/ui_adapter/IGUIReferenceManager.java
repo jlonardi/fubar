@@ -29,6 +29,16 @@ public interface IGUIReferenceManager {
 	 * @return List of references found by filtering.
 	 */
 	List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter);
+        
+        /**
+	 * Searches for references with filter keyword in a specific field from the datamodel linked with the datastore and.
+         * Splits the filter parameter with the splitBy parameter.
+	 * @param type The field used for filtering.
+	 * @param filter The string to filter with.
+         * @param splitBy If
+	 * @return List of references found by filtering.
+	 */
+	List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter, String splitBy);
 	
 	/**
 	 * Returns all references contained in the data model
@@ -74,9 +84,6 @@ public interface IGUIReferenceManager {
 	 * @return Boolean determining if the export succeeded.
 	 */		
 	public boolean copyToExportList(List<Reference> referenceList);
-
-	
-	
 	
 	/**
 	 * Empties the exportlist.

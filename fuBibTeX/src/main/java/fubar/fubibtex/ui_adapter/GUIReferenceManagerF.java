@@ -39,6 +39,11 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
     public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter) {
         return dataStoreManager.getReferencesByFilter(type, filter);
     }
+    
+    @Override
+    public List<Reference> getReferencesByFilterFromDatastore(Reference.FieldType type, String filter, String splitBy) {
+        return dataStoreManager.getReferencesByFilter(type, filter, splitBy);
+    }
 
     @Override
     public List<Reference> getReferencesFromDatastore() {
