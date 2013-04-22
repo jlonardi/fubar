@@ -53,5 +53,11 @@ public interface IReferenceManager {
 	 */
 	boolean containsCitationKey(String citationKey);
 	
+	
+	/**
+	 * Clears the whole reference list saved into the manager.
+	 * 
+	 */
+	boolean clearReferenceList();
 }
 

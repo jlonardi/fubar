@@ -41,8 +41,9 @@ public class ReferenceManagerF implements IReferenceManager {
 				return false;
 			}
 		}
-
-		referenceList.add(ref);
+		
+		if(!referenceList.contains(ref))
+			referenceList.add(ref);
 		
 		return true;
 	}
@@ -78,6 +79,8 @@ public class ReferenceManagerF implements IReferenceManager {
 				String referenceString = referenceScanner.next().replaceAll("  ", " ").trim();
 				referenceString = cleanStringTerminators(referenceString);
 				referenceString = convertAccented(referenceString);
+				
+				System.out.println("ReferenceString:" + referenceString);
 				
 				//Before using the next scanner, let's get reference type and citation key and start creating our Reference object...
 				String referenceType = buildReferenceType(referenceString);
@@ -317,6 +320,12 @@ public class ReferenceManagerF implements IReferenceManager {
 			input = input.replace("\\\"{o}", "ö");
 				
 		return input;
+	}
+
+	@Override
+	public boolean clearReferenceList() {
+		referenceList.clear();
+		return referenceList.isEmpty();
 	}
 	
 }

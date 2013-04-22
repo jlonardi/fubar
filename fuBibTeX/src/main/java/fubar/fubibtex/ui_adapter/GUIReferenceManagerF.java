@@ -66,9 +66,9 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
         return exportManager.exportTo();
     }
 
-    @Override
-    public boolean clearExportList() {
-        throw new UnsupportedOperationException("Not supported yet.");
+	@Override
+	public boolean clearExportList() {
+		return exportManager.clearReferenceList();
     }
 
     @Override
@@ -79,5 +79,14 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
 	@Override
 	public boolean dataStoreContainsCitationKey(String citationKey) {
 		return dataStoreManager.containsCitationKey(citationKey);
+	}
+
+	@Override
+	public boolean copyToExportList(List<Reference> referenceList) {
+		boolean retVal = false;
+		for (Reference reference : referenceList) {
+			retVal = exportManager.addReference(reference);
+		}
+		return retVal;
 	}
 }

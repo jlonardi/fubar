@@ -295,6 +295,11 @@ public class MainFrameTest extends TestCase {
             public boolean dataStoreContainsCitationKey(String citationKey) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
+
+			@Override
+			public boolean copyToExportList(List<Reference> referenceList) {
+				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			}
         };
     }
 }
