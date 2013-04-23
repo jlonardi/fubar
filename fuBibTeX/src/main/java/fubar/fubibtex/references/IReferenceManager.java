@@ -71,5 +71,13 @@ public interface IReferenceManager {
 	 * 
 	 */
 	boolean clearReferenceList();
+
+	/**
+	 * Deletes a given reference from the manager
+	 * @param Reference the reference to be deleted
+	 * @return Boolean true if Reference was succesfully deleted, otherwise false
+	 */
+	boolean deleteReference(Reference ref);
+
 }
 

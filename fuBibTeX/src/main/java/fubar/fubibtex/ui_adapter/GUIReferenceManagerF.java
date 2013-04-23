@@ -102,4 +102,12 @@ public class GUIReferenceManagerF implements IGUIReferenceManager {
         this.dataStoreManager.setImportFile(this.datastore);
         return true;
     }
+
+	@Override
+	public boolean deleteReferenceFromDatastore(Reference ref) {
+		return dataStoreManager.deleteReference(ref);
+	}
+	
+	
+	
 }

@@ -113,6 +113,12 @@ public interface IGUIReferenceManager {
 	 * 
 	 */
 	
+	/**
+	 * Tries to delete a refence from the datamodel linked with the datastore.
+	 * @param ref
+	 * @return Boolean determining if the deletion succeeded.
+	 */
+	boolean deleteReferenceFromDatastore(Reference ref);
 	
 	
 }

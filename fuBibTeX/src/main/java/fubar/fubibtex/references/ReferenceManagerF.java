@@ -380,4 +380,9 @@ public class ReferenceManagerF implements IReferenceManager {
 		return referenceList.isEmpty();
 	}
 
+	@Override
+	public boolean deleteReference(Reference ref) {
+		return referenceList.remove(ref);
+	}
+
 }

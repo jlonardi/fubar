@@ -197,12 +197,12 @@ public class ReferenceManagerFTest extends TestCase {
 	}
         
 
-        public void testGetReferencesBySplitFiltersReturnsRightRefs()
-        {
-                rm = new ReferenceManagerF();
+	public void testGetReferencesBySplitFiltersReturnsRightRefs()
+	{
+		rm = new ReferenceManagerF();
 		List<Reference> rl;
                 
-                Reference r1 = new Reference(Reference.Type.Misc);
+		Reference r1 = new Reference(Reference.Type.Misc);
 		r1.setCitationKey("TEST1");
 		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
 		rm.addReference(r1);
@@ -217,20 +217,20 @@ public class ReferenceManagerFTest extends TestCase {
 		r3.setField(Reference.FieldType.Title, "Testaa, testaa, hyvä tulee.");
 		rm.addReference(r3);
                 
-                rl = rm.getReferencesByFilter(Reference.FieldType.Title, "testaamisen,hyvä", ",");
+		rl = rm.getReferencesByFilter(Reference.FieldType.Title, "testaamisen,hyvä", ",");
 
-                assertTrue(rl.contains(r1));
-                assertTrue(rl.contains(r2));
-                assertTrue(rl.contains(r3));
+		assertTrue(rl.contains(r1));
+		assertTrue(rl.contains(r2));
+		assertTrue(rl.contains(r3));
                 
-        }
+	}
         
-        public void testGetReferencesBySplitFiltersReturnsNoDuplicates()
-        {
-                rm = new ReferenceManagerF();
+	public void testGetReferencesBySplitFiltersReturnsNoDuplicates()
+	{
+		rm = new ReferenceManagerF();
 		List<Reference> rl;
-                
-                Reference r1 = new Reference(Reference.Type.Misc);
+
+		Reference r1 = new Reference(Reference.Type.Misc);
 		r1.setCitationKey("TEST1");
 		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
 		rm.addReference(r1);
@@ -239,11 +239,11 @@ public class ReferenceManagerFTest extends TestCase {
 		r2.setCitationKey("TEST2");
 		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
 		rm.addReference(r2);
-                
-                rl = rm.getReferencesByFilter(Reference.FieldType.Title, "keveys,sietämätön", ",");
-                
-                assertEquals(2, rl.size());
-        }
+
+		rl = rm.getReferencesByFilter(Reference.FieldType.Title, "keveys,sietämätön", ",");
+
+		assertEquals(2, rl.size());
+	}
 
 	//Test helper classes
 	public void testCleanStringTerminatosWithBracketAndComma() {
@@ -285,13 +285,6 @@ public class ReferenceManagerFTest extends TestCase {
 		assertEquals(result, "YEAR = 1978");
 		rm = null;
 	}
-	// POISTETTU KÄYTÖSTÄ SEPARATORIN KÄYTÖN TAKIA
-//	public void testCleanStringTerminatosWithLineTerminator() {
-//		rm = new ReferenceManagerF();
-//		String dirtyString = "{VPL11," + System.getProperty("line.separator");
-//		String result = rm.cleanStringTerminators(dirtyString);
-//		assertEquals(result, "{VPL11,");
-//	}
 
 	public void testBuildKey() {
 		rm = new ReferenceManagerF();
@@ -437,6 +430,57 @@ public class ReferenceManagerFTest extends TestCase {
 		assertEquals("Ääkkösten alkeet", rm.convertAccented("\\\"{A}\\\"{a}kk\\\"{o}sten alkeet"));
 		assertEquals("Öökkösten alkeet", rm.convertAccented("\\\"{O}\\\"{o}kk\\\"{o}sten alkeet"));
 		assertEquals("Örån Årmät",       rm.convertAccented("\\\"{O}r\\r{a}n \\r{A}rm\\\"{a}t"));
+	}
+	
+	public void testClearReferenceList(){
+		List<Reference> rl;
+		
+		Reference r1 = new Reference(Reference.Type.Inproceedings);
+		r1.setCitationKey("TEST1");
+		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r1.setField(Reference.FieldType.Year, "2010");
+		rm.addReference(r1);
+		
+		Reference r2 = new Reference(Reference.Type.Inproceedings);
+		r2.setCitationKey("TEST2");
+		r2.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		r2.setField(Reference.FieldType.Booktitle, "What made me the tester I am today.");
+		r2.setField(Reference.FieldType.Year, "2013");
+		rm.addReference(r2);
+		
+		rm.clearReferenceList();
+		assertFalse(rm.containsCitationKey("TEST1"));
+		assertFalse(rm.containsCitationKey("TEST2"));
+		rl = rm.getReferences();
+		assertEquals(0, rl.size());
+	}
+	
+	public void testDeleteReference(){
+		List<Reference> rl;
+		
+		Reference r1 = new Reference(Reference.Type.Inproceedings);
+		r1.setCitationKey("TEST1");
+		r1.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r1.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys");
+		r1.setField(Reference.FieldType.Booktitle, "How I stopped worrying and learned to love unit testing.");
+		r1.setField(Reference.FieldType.Year, "2010");
+		rm.addReference(r1);
+		
+		Reference r2 = new Reference(Reference.Type.Inproceedings);
+		r2.setCitationKey("TEST2");
+		r2.setField(Reference.FieldType.Author, "Timo Testaaja");
+		r2.setField(Reference.FieldType.Title, "Testaamisen sietämätön keveys, part II - Paluu");
+		r2.setField(Reference.FieldType.Booktitle, "What made me the tester I am today.");
+		r2.setField(Reference.FieldType.Year, "2013");
+		rm.addReference(r2);	
+		
+		rm.deleteReference(r2);
+		assertFalse(rm.containsCitationKey("TEST2"));
+		rl = rm.getReferences();
+		assertEquals(1, rl.size());
 	}
 	
 }
