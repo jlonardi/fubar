@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
@@ -25,12 +26,13 @@ public class ReferenceListView extends View {
     private JScrollPane listScroller, exportScroller;
     private JPanel listPanel, controlPanel, exportPanel, exportListHolder;
     private JButton addReferenceButton, modifyReferenceButton, addToExportList,
-            removeFromExportList, deleteReferenceButton;
+            removeFromExportList, deleteReferenceButton, exportByTagButton;
     private JLabel exportLabel;
     private MainFrame frame;
     private Reference selectedReference;
     private ActionListener addReferenceListener, modifyReferenceListener,
-            addToExportListener, removeFromExportListener, deleteReferenceListener;
+            addToExportListener, removeFromExportListener, deleteReferenceListener
+            ,exportByTagListener;
     private ListSelectionListener referenceListListener;
 
     public ReferenceListView(final MainFrame frame) {
@@ -121,11 +123,22 @@ public class ReferenceListView extends View {
         removeFromExportList.setPreferredSize(buttonSize);
         removeFromExportList.setName("removeFromExportList");
         removeFromExportList.addActionListener(removeFromExportListener);
+        
+        exportByTagButton = new JButton("By tag");
+        exportByTagButton.setName("exportByTag");
+        try {
+            File imageFile = new File("src/main/resources/gui/add.png");
+            BufferedImage img = ImageIO.read(imageFile);
+            exportByTagButton.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+        }
+        exportByTagButton.addActionListener(exportByTagListener);
 
         controlPanel.add(addReferenceButton);
         controlPanel.add(modifyReferenceButton);
         controlPanel.add(deleteReferenceButton);
         controlPanel.add(addToExportList);
+        controlPanel.add(exportByTagButton);
         controlPanel.add(removeFromExportList);
 
         this.add(listPanel);
@@ -209,9 +222,24 @@ public class ReferenceListView extends View {
         deleteReferenceListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Deleting not supported yet.");
                 Reference r = (Reference) referenceList.getSelectedValue();
                 System.out.println("Removing reference: " + r);
+                MainFrame.manager.deleteReferenceFromDatastore(r);
+                referenceList.revalidate();
+                referenceList.repaint();
+                frame.dataUpdated();
+                frame.showView(ViewType.REFERENCE_LIST);
+            }
+        };
+       
+        exportByTagListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Not supported yet.");
+
+                String tag = JOptionPane.showInputDialog(null, "Give tags (separate tags with \",\")",
+                        "Import by tag", 1);
+                System.out.println("tag given: " + tag);
             }
         };
     }
