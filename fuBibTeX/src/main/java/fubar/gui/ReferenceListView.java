@@ -239,6 +239,7 @@ public class ReferenceListView extends View {
                 String tag = JOptionPane.showInputDialog(null, "Give tags (separate tags with \",\")",
                         "Import by tag", 1);
                 System.out.println("tag given: " + tag);
+                if(tag == null) return;
                 List<Reference> rl = MainFrame.manager.getReferencesByFilterFromDatastore(
                         Reference.FieldType.Keywords, tag, ",");
                 //List<Reference> rl = (List<Reference>) referenceList.getSelectedValuesList();

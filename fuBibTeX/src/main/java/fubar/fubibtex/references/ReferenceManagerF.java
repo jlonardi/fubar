@@ -44,8 +44,9 @@ public class ReferenceManagerF implements IReferenceManager {
                 }
             }
         }
-
-        referenceList.add(ref);
+        if(!referenceList.contains(ref)) {
+            referenceList.add(ref);
+        }
 
         return true;
     }
