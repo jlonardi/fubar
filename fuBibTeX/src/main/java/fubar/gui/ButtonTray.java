@@ -17,8 +17,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ButtonTray extends JPanel {
 
-    private JButton save, exportBibtext, exportByTag, importBibtext;
-    private ActionListener exportSingleListener, exportByTagListener, importListener;
+    private JButton save, exportBibtext, importBibtext;
+    private ActionListener exportSingleListener, importListener;
     private final JFileChooser fc;
     private MainFrame mainFrame;
 
@@ -67,17 +67,6 @@ public class ButtonTray extends JPanel {
         exportBibtext.addActionListener(exportSingleListener);
         this.add(exportBibtext);
 
-        exportByTag = new JButton("By tag");
-        exportByTag.setName("exportByTag");
-        try {
-            File imageFile = new File("src/main/resources/gui/export.png");
-            BufferedImage img = ImageIO.read(imageFile);
-            exportByTag.setIcon(new ImageIcon(img));
-        } catch (IOException ex) {
-        }
-        exportByTag.addActionListener(exportByTagListener);
-        this.add(exportByTag);
-
         importBibtext = new JButton("Import");
         importBibtext.setName("importBibtext");
         try {
@@ -93,16 +82,6 @@ public class ButtonTray extends JPanel {
     }
 
     private void setupListeners() {
-        exportByTagListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Not supported yet.");
-
-                String tag = JOptionPane.showInputDialog(null, "Give tags (separate tags with \",\")",
-                        "Import by tag", 1);
-                System.out.println("tag given: " + tag);
-            }
-        };
 
         exportSingleListener = new ActionListener() {
             @Override

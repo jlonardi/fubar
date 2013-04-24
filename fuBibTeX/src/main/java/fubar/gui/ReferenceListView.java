@@ -31,8 +31,7 @@ public class ReferenceListView extends View {
     private MainFrame frame;
     private Reference selectedReference;
     private ActionListener addReferenceListener, modifyReferenceListener,
-            addToExportListener, removeFromExportListener, deleteReferenceListener
-            ,exportByTagListener;
+            addToExportListener, removeFromExportListener, deleteReferenceListener, exportByTagListener;
     private ListSelectionListener referenceListListener;
 
     public ReferenceListView(final MainFrame frame) {
@@ -123,7 +122,7 @@ public class ReferenceListView extends View {
         removeFromExportList.setPreferredSize(buttonSize);
         removeFromExportList.setName("removeFromExportList");
         removeFromExportList.addActionListener(removeFromExportListener);
-        
+
         exportByTagButton = new JButton("By tag");
         exportByTagButton.setName("exportByTag");
         try {
@@ -178,10 +177,10 @@ public class ReferenceListView extends View {
                 if (referenceList.getSelectedValue() != null) {
                     // Has to be done in an ugly manner since Jenkins does not
                     // support JDK 1.7 and getSelectedValuesList() function
-                    Object[] rl =  referenceList.getSelectedValues();
+                    Object[] rl = referenceList.getSelectedValues();
                     //List<Reference> rl = (List<Reference>) referenceList.getSelectedValuesList();
                     for (Object r : rl) {
-                        MainFrame.manager.addToExportList((Reference)r);
+                        MainFrame.manager.addToExportList((Reference) r);
                     }
                     exportList.removeAll();
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
@@ -194,10 +193,10 @@ public class ReferenceListView extends View {
             public void actionPerformed(ActionEvent e) {
                 if (exportList.getSelectedValue() != null) {
                     // Same thing as above
-                    Object[] rl =  exportList.getSelectedValues();
+                    Object[] rl = exportList.getSelectedValues();
                     //List<Reference> rl = (List<Reference>) exportList.getSelectedValuesList();
                     for (Object r : rl) {
-                        MainFrame.manager.getExportList().remove((Reference)r);
+                        MainFrame.manager.getExportList().remove((Reference) r);
                     }
                     exportList.removeAll();
                     exportList.setListData(MainFrame.manager.getExportList().toArray());
@@ -231,7 +230,7 @@ public class ReferenceListView extends View {
                 frame.showView(ViewType.REFERENCE_LIST);
             }
         };
-       
+
         exportByTagListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -240,6 +239,16 @@ public class ReferenceListView extends View {
                 String tag = JOptionPane.showInputDialog(null, "Give tags (separate tags with \",\")",
                         "Import by tag", 1);
                 System.out.println("tag given: " + tag);
+                List<Reference> rl = MainFrame.manager.getReferencesByFilterFromDatastore(
+                        Reference.FieldType.Keywords, tag, ",");
+                //List<Reference> rl = (List<Reference>) referenceList.getSelectedValuesList();
+                for (Object r : rl) {
+                    MainFrame.manager.addToExportList((Reference) r);
+                }
+                exportList.removeAll();
+                exportList.setListData(MainFrame.manager.getExportList().toArray());
+                exportList.validate();
+                exportList.repaint();
             }
         };
     }
