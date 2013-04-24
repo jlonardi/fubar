@@ -227,9 +227,42 @@ public class MainFrameTest extends TestCase {
     }
     
     public void testExportByTag() {
+        
+        testFrame.button("addReferenceButton").click();
+
+       testFrame.comboBox("typeList").click();
+        testFrame.comboBox("typeList").selectItem(fubar.fubibtex.references.Reference.Type.Misc.name());
+        testFrame.comboBox("typeList").selectItem(fubar.fubibtex.references.Reference.Type.Inproceedings.name());
+
+        List<FieldType> fieldTypes = fubar.fubibtex.references.ReferenceFields.getRequiredFields(Reference.Type.Inproceedings);
+        for (FieldType type : fieldTypes) {
+            testFrame.textBox(type.name() + "TextField").setText(type.name());
+        }
+        fieldTypes = fubar.fubibtex.references.ReferenceFields.getOptionalFields(Reference.Type.Inproceedings);
+        for (int i = 0; i < fieldTypes.size(); i++) {
+            if (i < fieldTypes.size() / 2) {
+                testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText(fieldTypes.get(i).name());
+            }
+            if(fieldTypes.get(i).name().contains("eyword")) {
+                testFrame.textBox(fieldTypes.get(i).name() + "TextField").setText("test");
+            }
+        }
+
+        testFrame.button("citationBuilderButton").click();
+        testFrame.textBox("citationKeyField").requireText("Authorar");
+        testFrame.textBox("citationKeyField").deleteText();
+        testFrame.label("citationKeyErrorLabel").requireNotVisible();
+        testFrame.textBox("citationKeyField").enterText("t");
+        testFrame.textBox("citationKeyField").enterText("e");
+        testFrame.textBox("citationKeyField").enterText("s");
+        testFrame.textBox("citationKeyField").enterText("t");
+        testFrame.button("addButton").click();
+        
         testFrame.button("exportByTag").click();
         JOptionPaneFinder.findOptionPane().using(robot).textBox("OptionPane.textField").setText("test");
         JOptionPaneFinder.findOptionPane().using(robot).okButton().click();
+        testFrame.list("exportList").requireItemCount(1);
+     
     }
     
     public void testReferenceDelete() {
@@ -242,6 +275,7 @@ public class MainFrameTest extends TestCase {
         testFrame.list("referenceList").selectItem("[LoL3013] | Jarno Lonardi | Koodia koodia koodia... | Koodikirja | 3013");
         testFrame.button("deleteReferenceButton").requireEnabled();
         testFrame.button("deleteReferenceButton").click();
+        testFrame.list("referenceList").requireItemCount(1);
     }
     
     private void listViewBaseState() {
