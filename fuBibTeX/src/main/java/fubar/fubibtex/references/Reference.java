@@ -229,7 +229,7 @@ public class Reference implements Cloneable{
         Incollection,
         Inproceedings,
         Manual,
-        Masterthesis,
+        Mastersthesis,
         Misc,
         Phdthesis,
         Proceedings,
