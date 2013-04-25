@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -84,18 +83,18 @@ public class ReferenceListView extends View {
 
         // Set up the buttons
         Dimension buttonSize = new Dimension(120, 35);
-        addReferenceButton = new JButton("New reference");
+        addReferenceButton = new JButton("New");
         addReferenceButton.setName("addReferenceButton");
         addReferenceButton.setPreferredSize(buttonSize);
         addReferenceButton.addActionListener(addReferenceListener);
 
-        modifyReferenceButton = new JButton("Edit reference");
+        modifyReferenceButton = new JButton("Edit");
         modifyReferenceButton.setName("editReferenceButton");
         modifyReferenceButton.setPreferredSize(buttonSize);
         modifyReferenceButton.setEnabled(false);
         modifyReferenceButton.addActionListener(modifyReferenceListener);
 
-        deleteReferenceButton = new JButton("Delete reference");
+        deleteReferenceButton = new JButton("Delete");
         deleteReferenceButton.setName("deleteReferenceButton");
         deleteReferenceButton.setPreferredSize(buttonSize);
         deleteReferenceButton.setEnabled(false);
@@ -103,8 +102,7 @@ public class ReferenceListView extends View {
 
         addToExportList = new JButton();
         try {
-            File imageFile = new File("src/main/resources/gui/add.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/add.png"));
             addToExportList.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
@@ -114,8 +112,7 @@ public class ReferenceListView extends View {
 
         removeFromExportList = new JButton();
         try {
-            File imageFile = new File("src/main/resources/gui/remove.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/remove.png"));
             removeFromExportList.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
@@ -123,11 +120,11 @@ public class ReferenceListView extends View {
         removeFromExportList.setName("removeFromExportList");
         removeFromExportList.addActionListener(removeFromExportListener);
 
-        exportByTagButton = new JButton("By tag");
+        exportByTagButton = new JButton("Tag");
         exportByTagButton.setName("exportByTag");
+        exportByTagButton.setPreferredSize(buttonSize);
         try {
-            File imageFile = new File("src/main/resources/gui/add.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/add.png"));
             exportByTagButton.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }

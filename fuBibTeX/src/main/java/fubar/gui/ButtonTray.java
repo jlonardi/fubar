@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,8 +42,7 @@ public class ButtonTray extends JPanel {
         save = new JButton("Save");
         save.setName("save");
         try {
-            File imageFile = new File("src/main/resources/gui/save.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/save.png"));
             save.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
@@ -59,8 +59,7 @@ public class ButtonTray extends JPanel {
         exportBibtext = new JButton("Export");
         exportBibtext.setName("exportBibtext");
         try {
-            File imageFile = new File("src/main/resources/gui/export.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/export.png"));
             exportBibtext.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
@@ -70,8 +69,7 @@ public class ButtonTray extends JPanel {
         importBibtext = new JButton("Import");
         importBibtext.setName("importBibtext");
         try {
-            File imageFile = new File("src/main/resources/gui/import.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/export.png"));
             importBibtext.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }

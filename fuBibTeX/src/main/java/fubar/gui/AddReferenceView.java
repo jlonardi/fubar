@@ -11,7 +11,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.List;
@@ -126,8 +125,7 @@ public class AddReferenceView extends View {
         citationKeyError = new JLabel();
         citationKeyError.setName("citationKeyErrorLabel");
         try {
-            File imageFile = new File("src/main/resources/gui/error.png");
-            BufferedImage img = ImageIO.read(imageFile);
+            BufferedImage img = ImageIO.read(this.getClass().getResourceAsStream("/gui/error.png"));
             citationKeyError.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
